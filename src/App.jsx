@@ -1,8 +1,9 @@
 //import { useState } from 'react'
 import { Outlet, Route, Routes } from "react-router-dom";
 import './App.css'
-import NavBar from "./styledComponents/NavBar.jsx";
-import Search from "./styledComponents/Search.jsx";
+import NavBar from "./styledComponents/NavBar2.jsx";
+import Search from "./styledComponents/Search2.jsx";
+import UserMenu from "./styledComponents/UserMenu.jsx";
 import { ThemeProvider } from "styled-components";
 import { booklyTheme } from "./theme";
 import { Provider } from "./components/ui/provider";
@@ -25,13 +26,15 @@ function App() {
             </div>
 
             <div className="navbar">
-              <nav>
+              {/* <nav>
                 <Search />
               </nav>
               <Avatar.Root colorPalette="grey">
                 <Avatar.Fallback name="Segun Adebayo" />
                 <Avatar.Image src="https://bit.ly/sage-adebayo" />
-              </Avatar.Root>
+              </Avatar.Root> */}
+              <Search />
+              <UserMenu />
             </div>
           </header>
 
