@@ -4,13 +4,29 @@
   padding: 2rem;
   text-align: center;
   font-family: "Andika";
-  background-image: url("./assets/background2.png");
+  /* background-image: url("./assets/background2.png");
   background-size: cover;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; */
+  background: #836e99;
+  /* background: radial-gradient(
+    circle,
+    rgba(131, 110, 153, 1) 0%,
+    rgba(116, 150, 163, 1) 9%,
+    rgba(133, 104, 161, 1) 100%
+  ); */
 }
 body {
   margin: 0;
+  padding: 0;
+  background: #836e99;
+  background: radial-gradient(
+    circle,
+    rgba(131, 110, 153, 1) 0%,
+    rgba(116, 150, 163, 1) 9%,
+    rgba(133, 104, 161, 1) 100%
+  );
+  background-repeat: no-repeat;
 }
 
 @font-face {
