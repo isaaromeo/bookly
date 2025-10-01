@@ -1,17 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  Avatar,
-  Card,
-  VStack,
-  HStack,
-  Text,
-  Portal,
-  Box,
-  Menu,
-  Separator,
-} from "@chakra-ui/react";
+import { Button, Avatar, Menu, VStack, HStack, Text } from "@chakra-ui/react";
 import {
   LuUser,
   LuLogOut,
@@ -20,15 +9,11 @@ import {
   LuLogIn,
   LuSettings,
 } from "react-icons/lu";
-import { useClickOutside } from "../hooks/useClickOutside";
 
 export const UserMenu = () => {
   const [user, setUser] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const menuRef = useRef();
 
-  // Cargar usuario al montar el componente
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -36,84 +21,40 @@ export const UserMenu = () => {
     }
   }, []);
 
-  // Hook para cerrar al hacer clic fuera
-  useClickOutside(menuRef, () => setIsOpen(false));
-
-  const handleLogin = () => {
-    setIsOpen(false);
-    navigate("/login");
-  };
-
-  const handleRegister = () => {
-    setIsOpen(false);
-    navigate("/register");
-  };
-
-  const handleProfile = () => {
-    setIsOpen(false);
-    navigate("/profile");
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    setIsOpen(false);
-    window.location.href = "/";
-  };
-
-  const handleBooks = () => {
-    setIsOpen(false);
-    navigate("/books");
-  };
-
   return (
-    <Box position="relative" ref={menuRef}>
-      {/* Botón de usuario */}
-      <Button
-        variant="ghost"
-        onClick={() => setIsOpen(!isOpen)}
-        padding="2"
-        borderRadius="full"
-      >
-        <Avatar.Root size="sm" colorPalette="purple">
-          {user ? (
-            <>
-              <Avatar.Fallback name={user.username} />
-              {user.profilePic && <Avatar.Image src={user.profilePic} />}
-            </>
-          ) : (
-            <Avatar.Fallback>
-              <LuUser />
-            </Avatar.Fallback>
-          )}
-        </Avatar.Root>
-      </Button>
+    <Menu.Root>
+      <Menu.Trigger asChild>
+        <Button variant="ghost" padding="2" borderRadius="full">
+          <Avatar.Root size="sm" colorPalette="purple">
+            {user ? (
+              <>
+                <Avatar.Fallback name={user.username} />
+                {user.profilePic && <Avatar.Image src={user.profilePic} />}
+              </>
+            ) : (
+              <Avatar.Fallback>
+                <LuUser />
+              </Avatar.Fallback>
+            )}
+          </Avatar.Root>
+        </Button>
+      </Menu.Trigger>
 
-      {/* Menú desplegable */}
-      {isOpen && (
-        <Portal>
-          <Card.Root
-            position="absolute"
-            top="100%"
-            right="0"
-            marginTop="2"
-            zIndex="dropdown"
-            minWidth="240px"
-          >
-            <Card.Body padding="3">
-              {user ? (
-                // Usuario autenticado
-                <VStack gap="2" align="stretch">
-                  {/* Información del usuario */}
-                  <HStack gap="3" padding="2">
+      <Menu.Positioner>
+        <Menu.Content minWidth="200px" zIndex="dropdown">
+          {user ? (
+            // Usuario autenticado
+            <>
+              <Menu.ItemGroup id="user-info">
+                <Menu.Item value="user-header" closeOnSelect={false}>
+                  <HStack gap="3" width="100%">
                     <Avatar.Root size="sm" colorPalette="purple">
                       <Avatar.Fallback name={user.username} />
                       {user.profilePic && (
                         <Avatar.Image src={user.profilePic} />
                       )}
                     </Avatar.Root>
-                    <VStack align="start" gap="0">
+                    <VStack align="start" gap="0" flex="1">
                       <Text fontWeight="semibold" fontSize="sm">
                         {user.username}
                       </Text>
@@ -122,79 +63,73 @@ export const UserMenu = () => {
                       </Text>
                     </VStack>
                   </HStack>
+                </Menu.Item>
+              </Menu.ItemGroup>
 
-                  <Separator />
+              <Menu.Separator />
 
-                  {/* Opciones del menú */}
-                  <Menu.Group>
-                    <Menu.Item value="profile" onClick={handleProfile}>
-                      <LuUser />
-                      Mi Perfil
-                    </Menu.Item>
-                    <Menu.Item value="books" onClick={handleBooks}>
-                      <LuBook />
-                      Explorar Libros
-                    </Menu.Item>
-                    <Menu.Item value="settings">
-                      <LuSettings />
-                      Configuración
-                    </Menu.Item>
-                  </Menu.Group>
+              <Menu.Item value="profile" onClick={() => navigate("/profile")}>
+                <LuUser />
+                Mi Perfil
+              </Menu.Item>
+              <Menu.Item value="books" onClick={() => navigate("/books")}>
+                <LuBook />
+                Explorar Libros
+              </Menu.Item>
+              <Menu.Item value="settings">
+                <LuSettings />
+                Configuración
+              </Menu.Item>
 
-                  <Separator />
+              <Menu.Separator />
 
-                  <Menu.Item
-                    value="logout"
-                    onClick={handleLogout}
-                    colorPalette="red"
-                  >
-                    <LuLogOut />
-                    Cerrar Sesión
-                  </Menu.Item>
-                </VStack>
-              ) : (
-                // Usuario no autenticado
-                <VStack gap="3" align="stretch">
-                  <Text fontWeight="semibold" fontSize="sm" paddingX="2">
+              <Menu.Item
+                value="logout"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("user");
+                  setUser(null);
+                  window.location.href = "/";
+                }}
+                colorPalette="red"
+              >
+                <LuLogOut />
+                Cerrar Sesión
+              </Menu.Item>
+            </>
+          ) : (
+            // Usuario no autenticado
+            <>
+              <Menu.ItemGroup id="welcome">
+                <Menu.Item value="welcome" closeOnSelect={false}>
+                  <Text fontWeight="semibold" fontSize="sm">
                     Bienvenido a Bookly
                   </Text>
+                </Menu.Item>
+              </Menu.ItemGroup>
 
-                  <Button
-                    colorPalette="purple"
-                    onClick={handleLogin}
-                    leftIcon={<LuLogIn />}
-                    size="sm"
-                  >
-                    Iniciar Sesión
-                  </Button>
+              <Menu.Separator />
 
-                  <Button
-                    variant="outline"
-                    onClick={handleRegister}
-                    leftIcon={<LuUserPlus />}
-                    size="sm"
-                  >
-                    Registrarse
-                  </Button>
+              <Menu.Item value="login" onClick={() => navigate("/login")}>
+                <LuLogIn />
+                Iniciar Sesión
+              </Menu.Item>
+              <Menu.Item value="register" onClick={() => navigate("/register")}>
+                <LuUserPlus />
+                Registrarse
+              </Menu.Item>
 
-                  <Separator />
+              <Menu.Separator />
 
-                  <Button
-                    variant="ghost"
-                    onClick={handleBooks}
-                    leftIcon={<LuBook />}
-                    size="sm"
-                    justifyContent="start"
-                  >
-                    Explorar Libros
-                  </Button>
-                </VStack>
-              )}
-            </Card.Body>
-          </Card.Root>
-        </Portal>
-      )}
-    </Box>
+              <Menu.Item value="books" onClick={() => navigate("/books")}>
+                <LuBook />
+                Explorar Libros
+              </Menu.Item>
+            </>
+          )}
+        </Menu.Content>
+      </Menu.Positioner>
+    </Menu.Root>
   );
 };
 
