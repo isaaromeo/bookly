@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { Button, Avatar, Menu, VStack, HStack, Text } from "@chakra-ui/react";
 import {
@@ -9,17 +9,34 @@ import {
   LuLogIn,
   LuSettings,
 } from "react-icons/lu";
+import { useAuth } from "../hooks/useAuth.jsx";
 
 export const UserMenu = () => {
-  const [user, setUser] = useState(null);
+const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
+  const handleAction = (action) => {
+    switch (action) {
+      case "profile":
+        navigate("/profile");
+        break;
+      case "books":
+        navigate("/books");
+        break;
+      case "login":
+        navigate("/login");
+        break;
+      case "register":
+        navigate("/register");
+        break;
+      case "logout":
+        logout();
+        window.location.href = "/";
+        break;
+      default:
+        break;
     }
-  }, []);
+  };
 
   return (
     <Menu.Root>
@@ -29,7 +46,12 @@ export const UserMenu = () => {
             {user ? (
               <>
                 <Avatar.Fallback name={user.username} />
-                {user.profilePic && <Avatar.Image src={user.profilePic} />}
+                {user.profilePic && (
+                  <Avatar.Image
+                    src={user.profilePic}
+                    alt={`${user.username} profile picture`}
+                  />
+                )}
               </>
             ) : (
               <Avatar.Fallback>
@@ -51,7 +73,10 @@ export const UserMenu = () => {
                     <Avatar.Root size="sm" colorPalette="purple">
                       <Avatar.Fallback name={user.username} />
                       {user.profilePic && (
-                        <Avatar.Image src={user.profilePic} />
+                        <Avatar.Image
+                          src={user.profilePic}
+                          alt={`${user.username} profile picture`}
+                        />
                       )}
                     </Avatar.Root>
                     <VStack align="start" gap="0" flex="1">
@@ -70,20 +95,24 @@ export const UserMenu = () => {
 
               <Menu.Item value="profile" onClick={() => navigate("/profile")}>
                 <LuUser />
-                Mi Perfil
+                My Profile
               </Menu.Item>
               <Menu.Item value="books" onClick={() => navigate("/books")}>
                 <LuBook />
-                Explorar Libros
+                Explore Books
+              </Menu.Item>
+              <Menu.Item value="home" onClick={() => navigate("/")}>
+                <LuSettings />
+                Home
               </Menu.Item>
               <Menu.Item value="settings">
                 <LuSettings />
-                Configuración
+                Settings
               </Menu.Item>
 
               <Menu.Separator />
 
-              <Menu.Item
+              {/* <Menu.Item
                 value="logout"
                 onClick={() => {
                   localStorage.removeItem("token");
@@ -91,6 +120,15 @@ export const UserMenu = () => {
                   setUser(null);
                   window.location.href = "/";
                 }}
+                colorPalette="red"
+              >
+                <LuLogOut />
+                Cerrar Sesión
+              </Menu.Item> */}
+
+              <Menu.Item
+                value="logout"
+                onClick={() => handleAction("logout")}
                 colorPalette="red"
               >
                 <LuLogOut />

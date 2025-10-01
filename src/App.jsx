@@ -8,6 +8,7 @@ import { ThemeProvider } from "styled-components";
 import { booklyTheme } from "./theme";
 import { Provider } from "./components/ui/provider";
 import { Avatar, Stack, Text } from "@chakra-ui/react";
+import { AuthProvider } from "./context/AuthContext";
 //import { colorPalettes } from "compositions/lib/color-palettes";
 
 
@@ -18,6 +19,7 @@ function App() {
   return (
     <Provider>
       <ThemeProvider theme={booklyTheme}>
+      <AuthProvider>
         <div>
           <header className="header">
             <div className="logo">
@@ -34,7 +36,7 @@ function App() {
                 <Avatar.Image src="https://bit.ly/sage-adebayo" />
               </Avatar.Root> */}
               <Search />
-              <UserMenu />
+              <UserMenu/>
             </div>
           </header>
 
@@ -53,6 +55,7 @@ function App() {
           </div>
           <footer>Created by Isa 🧚💻</footer>
         </div>
+        </AuthProvider>
       </ThemeProvider>
     </Provider>
   );
