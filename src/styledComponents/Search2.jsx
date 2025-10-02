@@ -81,12 +81,13 @@ export const Search = () => {
   };
 
   return (
-    <Box position="relative" width="100%" maxWidth="400px" ref={searchRef}>
+    <Box position="relative" width="100%" maxWidth="500px" ref={searchRef}>
       <form onSubmit={handleSearchSubmit}>
         <InputGroup startElement={<LuSearch />}>
           <Input
             placeholder="Buscar libros por título, autor o ISBN..."
             value={searchQuery}
+            rounded="full"
             onChange={handleSearchChange}
             onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
           />

@@ -1,10 +1,12 @@
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import { useEffect } from "react";
 import { Button, Avatar, Menu, VStack, HStack, Text } from "@chakra-ui/react";
 import {
   LuUser,
   LuLogOut,
   LuBook,
+  LuHouse,
   LuUserPlus,
   LuLogIn,
   LuSettings,
@@ -12,8 +14,30 @@ import {
 import { useAuth } from "../hooks/useAuth.jsx";
 
 export const UserMenu = () => {
-const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("user logged:", user);
+  }, [user]);
+
+  // 🔥 AÑADE ESTE EFECTO para ver cuándo se monta/desmonta
+  useEffect(() => {
+    console.log("🚀 UserMenu - COMPONENTE MONTADO");
+
+    return () => {
+      console.log("💥 UserMenu - COMPONENTE DESMONTADO");
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("🔍 UserMenu - Contexto recibido:", {
+      user: user?.username || "null",
+      loading,
+    });
+  }, [user, loading]);
+
+  console.log("🔄 UserMenu - RENDERIZANDO, user:", user, "loading:", loading);
 
   const handleAction = (action) => {
     switch (action) {
@@ -29,9 +53,12 @@ const { user, logout } = useAuth();
       case "register":
         navigate("/register");
         break;
+      case "home":
+        navigate("/");
+        break;
       case "logout":
         logout();
-        window.location.href = "/";
+        navigate("/");
         break;
       default:
         break;
@@ -39,9 +66,9 @@ const { user, logout } = useAuth();
   };
 
   return (
-    <Menu.Root>
+    <Menu.Root positioning={{ placement: "bottom-start" }}>
       <Menu.Trigger asChild>
-        <Button variant="ghost" padding="2" borderRadius="full">
+        <Button variant="ghost" size="md" padding="0.5" rounded="full">
           <Avatar.Root size="sm" colorPalette="purple">
             {user ? (
               <>
@@ -63,9 +90,8 @@ const { user, logout } = useAuth();
       </Menu.Trigger>
 
       <Menu.Positioner>
-        <Menu.Content minWidth="200px" zIndex="dropdown">
+        <Menu.Content minWidth="200px">
           {user ? (
-            // Usuario autenticado
             <>
               <Menu.ItemGroup id="user-info">
                 <Menu.Item value="user-header" closeOnSelect={false}>
@@ -93,16 +119,19 @@ const { user, logout } = useAuth();
 
               <Menu.Separator />
 
-              <Menu.Item value="profile" onClick={() => navigate("/profile")}>
+              <Menu.Item
+                value="profile"
+                onClick={() => handleAction("profile")}
+              >
                 <LuUser />
                 My Profile
               </Menu.Item>
-              <Menu.Item value="books" onClick={() => navigate("/books")}>
+              <Menu.Item value="books" onClick={() => handleAction("books")}>
                 <LuBook />
                 Explore Books
               </Menu.Item>
-              <Menu.Item value="home" onClick={() => navigate("/")}>
-                <LuSettings />
+              <Menu.Item value="home" onClick={() => handleAction("home")}>
+                <LuHouse />
                 Home
               </Menu.Item>
               <Menu.Item value="settings">
@@ -112,27 +141,14 @@ const { user, logout } = useAuth();
 
               <Menu.Separator />
 
-              {/* <Menu.Item
-                value="logout"
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("user");
-                  setUser(null);
-                  window.location.href = "/";
-                }}
-                colorPalette="red"
-              >
-                <LuLogOut />
-                Cerrar Sesión
-              </Menu.Item> */}
-
               <Menu.Item
                 value="logout"
                 onClick={() => handleAction("logout")}
-                colorPalette="red"
+                color="fg.error"
+                _hover={{ bg: "bg.error", color: "fg.error" }}
               >
                 <LuLogOut />
-                Cerrar Sesión
+                Logout
               </Menu.Item>
             </>
           ) : (
