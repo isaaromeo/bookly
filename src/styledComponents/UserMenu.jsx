@@ -1,6 +1,5 @@
 
 import { useNavigate} from "react-router-dom";
-import { useEffect } from "react";
 import { Button, Avatar, Menu, VStack, HStack, Text } from "@chakra-ui/react";
 import {
   LuUser,
@@ -14,30 +13,9 @@ import {
 import { useAuth } from "../hooks/useAuth.jsx";
 
 export const UserMenu = () => {
-  const { user, logout, loading } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("user logged:", user);
-  }, [user]);
-
-  // 🔥 AÑADE ESTE EFECTO para ver cuándo se monta/desmonta
-  useEffect(() => {
-    console.log("🚀 UserMenu - COMPONENTE MONTADO");
-
-    return () => {
-      console.log("💥 UserMenu - COMPONENTE DESMONTADO");
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log("🔍 UserMenu - Contexto recibido:", {
-      user: user?.username || "null",
-      loading,
-    });
-  }, [user, loading]);
-
-  console.log("🔄 UserMenu - RENDERIZANDO, user:", user, "loading:", loading);
 
   const handleAction = (action) => {
     switch (action) {
