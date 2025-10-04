@@ -1,7 +1,6 @@
 //import { useState } from 'react'
 import { Outlet, Route, Routes } from "react-router-dom";
 import './App.css'
-import NavBar from "./styledComponents/NavBar2.jsx";
 import Search from "./styledComponents/Search.jsx";
 import UserMenu from "./styledComponents/UserMenu.jsx";
 import { ThemeProvider } from "styled-components";
