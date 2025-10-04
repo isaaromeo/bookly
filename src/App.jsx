@@ -1,4 +1,3 @@
-//import { useState } from 'react'
 import { Outlet, Route, Routes } from "react-router-dom";
 import './App.css'
 import Search from "./styledComponents/Search.jsx";
@@ -6,7 +5,6 @@ import UserMenu from "./styledComponents/UserMenu.jsx";
 import { ThemeProvider } from "styled-components";
 import { booklyTheme } from "./theme";
 import { Provider } from "./components/ui/provider";
-import { Avatar, Stack, Text } from "@chakra-ui/react";
 import { AuthProvider } from "./context/AuthContext";
 //import { colorPalettes } from "compositions/lib/color-palettes";
 
@@ -27,13 +25,6 @@ function App() {
             </div>
 
             <div className="navbar">
-              {/* <nav>
-                <Search />
-              </nav>
-              <Avatar.Root colorPalette="grey">
-                <Avatar.Fallback name="Segun Adebayo" />
-                <Avatar.Image src="https://bit.ly/sage-adebayo" />
-              </Avatar.Root> */}
               <Search />
               <UserMenu/>
             </div>
