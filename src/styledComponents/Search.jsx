@@ -2,7 +2,10 @@ import { useEffect, useState} from "react";
 import { Input, InputGroup, Kbd } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 import { useClickOutside } from "../hooks/useClickOutside";
-
+import { BookResult } from "./BookResult.jsx"
+import {
+  Box
+} from "@chakra-ui/react";
 
 export const Search = () => {
 
@@ -63,16 +66,19 @@ export const Search = () => {
   };
 
   return (
-    <form onSubmit={handleSearchSubmit}>
-      <InputGroup startElement={<LuSearch />}>
-        <Input
-          placeholder="Search books by author, title, isbn..."
-          value={searchQuery}
-          rounded="full"
-          onChange={handleSearchChange}
-        />
-      </InputGroup>
-    </form>
+    <Box>
+      <form onSubmit={handleSearchSubmit}>
+        <InputGroup startElement={<LuSearch />}>
+          <Input
+            placeholder="Search books by author, title, isbn..."
+            value={searchQuery}
+            rounded="full"
+            onChange={handleSearchChange}
+          />
+        </InputGroup>
+      </form>
+      <BookResult books={searchResults} isLoading={isLoading} />
+    </Box>
   );
 };
 
