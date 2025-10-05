@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState, useRef} from "react";
 import { Input, InputGroup, Kbd } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 import { useClickOutside } from "../hooks/useClickOutside";
@@ -12,13 +12,17 @@ export const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef();
 
+  useClickOutside(searchRef, () => setShowResults(false));
 
   //TODO: Hacer hook personalizado para el search
   useEffect(() => {
     const searchBooks = async () => {
       if (searchQuery.length < 2) {
         setSearchResults([]);
+        setShowResults(false); 
         return;
       }
 
@@ -37,7 +41,8 @@ export const Search = () => {
               book.isbn?.includes(searchQuery)
           );
 
-          setSearchResults(filteredBooks.slice(0, 5));
+          setSearchResults(filteredBooks);
+          setShowResults(true);
           console.log("results: ", searchResults);
         }
       } catch (error) {
@@ -47,7 +52,7 @@ export const Search = () => {
       }
     };
 
-    const timeoutId = setTimeout(searchBooks, 3000);
+    const timeoutId = setTimeout(searchBooks, 300);
     
     return () => clearTimeout(timeoutId);
     
@@ -62,8 +67,10 @@ export const Search = () => {
     e.preventDefault();
     if (searchResults.length > 0) {
       console.log("results: ", searchResults)
+      setShowResults(true);
     }
   };
+
 
   return (
     <Box>
@@ -74,10 +81,13 @@ export const Search = () => {
             value={searchQuery}
             rounded="full"
             onChange={handleSearchChange}
+            onFocus={() => searchQuery.length >= 2 && setShowResults(true)}
           />
         </InputGroup>
       </form>
-      <BookResult books={searchResults} isLoading={isLoading} />
+      {showResults && (
+        <BookResult books={searchResults} isLoading={isLoading} />
+      )}
     </Box>
   );
 };

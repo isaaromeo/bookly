@@ -14,9 +14,10 @@ import {
 
 export const BookResult = ({books, isLoading}) => {
     const navigate = useNavigate();
+    console.log("📖 BookResult renderizado con", books?.length, "libros");
+
   return (
 
-        <Portal>
           <Card.Root
             position="absolute"
             top="100%"
@@ -30,7 +31,7 @@ export const BookResult = ({books, isLoading}) => {
             <Card.Body padding="0">
               {isLoading ? (
                 <Box padding="4">
-                    <Text color="fg.subtle">Buscando...</Text>
+                    <Text color="fg.subtle">Loanding results...</Text>
                 </Box>
               ) : books.length > 0 ? (
                 <VStack gap="6" align="stretch" mb="8">
@@ -95,7 +96,6 @@ export const BookResult = ({books, isLoading}) => {
               )}
             </Card.Body>
           </Card.Root>
-        </Portal>
       )}
 
 export default BookResult;
