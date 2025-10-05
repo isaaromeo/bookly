@@ -6,6 +6,13 @@ export const useBookSearch = (initialQuery = "") => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  //para sincronizar el estado query si este cambia
+  useEffect(() => {
+    if (initialQuery !== query) {
+      setQuery(initialQuery);
+    }
+  }, [initialQuery]);
+
   useEffect(() => {
     const searchBooks = async () => {
       if (query.trim().length < 2) {

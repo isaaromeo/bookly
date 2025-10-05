@@ -32,6 +32,7 @@ export const SearchResults = () => {
 
   return (
     <Box minHeight="100vh" bg="bg.canvas" padding="6">
+        
         <BookGrid
           books={results}
           loading={loading}
