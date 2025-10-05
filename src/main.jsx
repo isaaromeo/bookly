@@ -10,6 +10,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import BookDetail from "./pages/BookDetail.jsx";
+import SearchResults from "./pages/SearchResults.jsx";
 import { AuthProvider } from "./context/AuthContext";
 
 createRoot(document.getElementById("root")).render(
@@ -21,6 +22,7 @@ createRoot(document.getElementById("root")).render(
             <Route index element={<Home />} />
             <Route path="books" element={<Books />} />
             <Route path="books/:id" element={<BookDetail />} />
+            <Route path="search" element={<SearchResults />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="profile" element={<Profile />} />
