@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef} from "react";
+import {  useState, useRef} from "react";
 import { Input, InputGroup, Kbd, Text, IconButton } from "@chakra-ui/react";
 import { LuSearch, LuX } from "react-icons/lu";
 import { useClickOutside } from "../hooks/useClickOutside";
@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { useBookSearch } from "../hooks/useBookSearch";
 import SearchInput from "./SearchInput";
 import BookList from "./BookList";
-import BookGrid from "./BookGrid";
 
 export const Search = () => {
 
@@ -62,7 +61,7 @@ export const Search = () => {
       </form>
 
       {query && !showAllResults && (
-        <BookList.Variants.Dropdown
+        <BookList
           books={results}
           loading={loading}
           onBookSelect={handleBookSelect}
