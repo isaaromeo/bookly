@@ -1,12 +1,29 @@
 
 import { useApiData } from "../hooks/useApiData";
 import { useNavigate } from "react-router-dom";
-import { Blockquote } from "@chakra-ui/react";
-import { RatingGroup } from "@chakra-ui/react";
-import { Grid, GridItem } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  Text,
+  VStack,
+  HStack,
+  Grid,
+  RatingGroup,
+  Button,
+} from "@chakra-ui/react";
 
-//import { colorPalettes } from "compositions/lib/color-palettes";
+import BookGrid from "../styledComponents/BookGrid";
+import { useBookSearch } from "../hooks/useBookSearch";
 
+import styled from "styled-components";
+
+const HeroSection = styled.div`
+  background: linear-gradient(135deg, #836e99 0%, #45385a 100%);
+  padding: 4rem 2rem;
+  text-align: center;
+  border-radius: 12px;
+  margin-bottom: 3rem;
+`;
 
 const Home = () => {
 
@@ -17,69 +34,35 @@ const Home = () => {
   console.log(books)
   const navigate = useNavigate();
 
-  const handleClick = (section, id) => {
-    navigate(`/${section}/${id}`);
+  const handleBookSelect = (book) => {
+    navigate(`/books/${book._id}`);
   };
 
-
+  const featuredBooks = books.slice(0, 6);
   return (
-    <div>
-      <h1>Welcome to Bookly</h1>
+    <Box>
+      <HeroSection>
+              <Text fontSize="4xl" fontWeight="bold" color="white" mb="4">
+                Discover your next book obsession!
+              </Text>
+              <Text fontSize="xl" color="white" mb="6" opacity="0.9">
+                Find recomendtion, share your reviews and connect with other readers.
+              </Text>
+              <Button size="lg" colorPalette="purple">
+                Explore Books
+              </Button>
+            </HeroSection>
 
-      <Grid
-        h="500px"
-        templateRows="repeat(2, 1fr)"
-        templateColumns="repeat(5, 1fr)"
-        gap={4}
-      >
-        <GridItem rowSpan={2} colSpan={3}>
-          <ul>
-            {books.map((book) => (
-              <li key={book._id} onClick={() => handleClick("books", book._id)}>
-                <img
-                  src={book.cover}
-                  alt={book.name}
-                  onError={(e) => {
-                    e.target.src =
-                      "https://via.placeholder.com/300x200?text=Character+Image";
-                  }}
-                />
-                <h3>{book.name}</h3>
-                <p>Author:{book.author}</p>
-                <RatingGroup.Root
-                  readOnly
-                  allowHalf
-                  count={5}
-                  defaultValue={book.rating}
-                  size="sm"
-                  colorPalette={"yellow"}
-                >
-                  <RatingGroup.HiddenInput />
-                  <RatingGroup.Control />
-                </RatingGroup.Root>
-
-                <Blockquote.Root>
-                  <Blockquote.Content cite="https://chakra-ui.com/docs/components/blockquote">
-                    {book.sinopsis}
-                  </Blockquote.Content>
-                  <Blockquote.Caption>
-                    <cite>{book.author}</cite>
-                  </Blockquote.Caption>
-                </Blockquote.Root>
-              </li>
-            ))}
-          </ul>
-        </GridItem>
-        <GridItem colSpan={2}>
-          <p>colSpan=2</p>
-        </GridItem>
-        <GridItem colSpan={2}>
-          <p>colSpan=4</p>
-        </GridItem>
-      </Grid>
-
-      <h2>Books</h2>
-    </div>
+            <Box minHeight="100vh" bg="bg.canvas" padding="6">
+                    
+                    <BookGrid
+                      books={featuredBooks}
+                      onBookSelect={handleBookSelect}
+                    />
+                  
+              </Box>
+    </Box>
+    
   );
 };
 

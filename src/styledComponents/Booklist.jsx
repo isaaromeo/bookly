@@ -4,9 +4,7 @@ import {
   Text,
   VStack,
   HStack,
-  Avatar,
-  Spinner,
-  Alert,
+  Avatar
 } from "@chakra-ui/react";
 import { LuBook } from "react-icons/lu";
 
@@ -74,40 +72,6 @@ export const BookList = ({books}) => {
       </Card.Body>
     </Card.Root>
   );
-};
-
-// Variantes predefinidas
-BookList.Variants = {
-  Dropdown: (props) => (
-    <Card.Root
-      position="absolute"
-      top="100%"
-      left="0"
-      right="0"
-      marginTop="1"
-      zIndex="dropdown"
-      maxHeight="400px"
-      overflowY="auto"
-      boxShadow="lg"
-      {...props}
-    >
-      <Card.Body padding="0">
-        <BookList {...props} />
-      </Card.Body>
-    </Card.Root>
-  ),
-
-  Inline: (props) => (
-    <Box
-      border="1px solid"
-      borderColor="border.subtle"
-      borderRadius="md"
-      overflow="hidden"
-      {...props}
-    >
-      <BookList {...props} />
-    </Box>
-  ),
 };
 
 export default BookList;
