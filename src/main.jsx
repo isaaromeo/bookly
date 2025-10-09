@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.jsx";
-import Books from "./components/Books.jsx";
+import Explore from "./pages/Explore.jsx";
 import NotFound from "./components/NotFound.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -20,7 +20,7 @@ createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
-            <Route path="books" element={<Books />} />
+            <Route path="books" element={<Explore />} />
             <Route path="books/:id" element={<BookDetail />} />
             <Route path="search" element={<SearchResults />} />
             <Route path="login" element={<Login />} />
