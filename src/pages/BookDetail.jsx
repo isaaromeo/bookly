@@ -11,6 +11,7 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import styled from "styled-components";
+import { useBooklyApi } from "../hooks/useBooklyApi";
 
 const BookDetailContainer = styled.div`
   max-width: 1200px;
@@ -20,29 +21,30 @@ const BookDetailContainer = styled.div`
 
 const BookDetail = () => {
   const { id } = useParams();
-  const [book, setBook] = useState(null);
+  // const [book, setBook] = useState(null);
+  const { data: book, loading, error } = useBooklyApi.useBook(id);
 
-  useEffect(() => {
-    fetchBook();
-  }, [id]);
+  // useEffect(() => {
+  //   fetchBook();
+  // }, [id]);
 
-  //actualizar el useA`piData para meter este fetch
-  const fetchBook = async () => {
-    try {
-      const response = await fetch(
-        `https://bookly-back.onrender.com/api/books/${id}`
-      );
-      if (response.ok) {
-        const bookData = await response.json();
-        setBook(bookData);
-      }
-    } catch (error) {
-      console.error("Error fetching book:", error);
-    }
-  };
+  //TODO actualizar el useApiData para meter este fetch
+  // const fetchBook = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `https://bookly-back.onrender.com/api/books/${id}`
+  //     );
+  //     if (response.ok) {
+  //       const bookData = await response.json();
+  //       setBook(bookData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching book:", error);
+  //   }
+  // };
 
-  if (!book) {
-    return <div>Cargando...</div>;
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (
@@ -92,10 +94,10 @@ const BookDetail = () => {
 
             <HStack gap="4" flexWrap="wrap">
               <Badge colorPalette="blue">
-                <strong>Páginas:</strong> {book.pages}
+                <strong>Pages:</strong> {book.pages}
               </Badge>
               <Badge colorPalette="green">
-                <strong>Géneros:</strong> {book.genres?.join(", ")}
+                <strong>Genres:</strong> {book.genres?.join(", ")}
               </Badge>
               <Badge colorPalette="purple">
                 <strong>ISBN:</strong> {book.isbn}
@@ -103,9 +105,9 @@ const BookDetail = () => {
             </HStack>
 
             <HStack gap="4">
-              <Button colorPalette="purple">Añadir a Biblioteca</Button>
-              <Button variant="outline">Añadir a Por Leer</Button>
-              <Button variant="outline">Escribir Reseña</Button>
+              <Button colorPalette="purple">Add to Library</Button>
+              <Button variant="outline">Add to TBR</Button>
+              <Button variant="outline">Review</Button>
             </HStack>
           </VStack>
         </Box>
