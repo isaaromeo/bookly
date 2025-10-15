@@ -9,7 +9,7 @@ import {
   Alert,
 } from "@chakra-ui/react";
 import BookGrid from "../styledComponents/BookGrid";
-import { useCategoryBooks } from "../hooks/useCategoryBooks";
+import { useBooklyApi } from "../hooks/useBooklyApi";
 import styled from "styled-components";
 
 const HeroSection = styled.div`
@@ -20,7 +20,6 @@ const HeroSection = styled.div`
   margin-bottom: 3rem;
 `;
 
-const genres = ["fantasy", "adventure", "romance"]
 
 const CategorySection = ({
   title,
@@ -70,10 +69,22 @@ const Explore = () => {
   const navigate = useNavigate();
 
 
-  const fantasy = useCategoryBooks("fantasy");
-  const adventure = useCategoryBooks("adventure");
-  const romance = useCategoryBooks("romance");
- //TODO version de useCateory con cache tarda mucho en cargar
+ //Con nuevo hook useApi general
+ const {
+   data: fantasyBooks,
+   loading: fantasyLoading,
+   error: fantasyError,
+ } = useBooklyApi.useBooksByGenre("fantasy");
+ const {
+   data: adventureBooks,
+   loading: adventureLoading,
+   error: adventureError,
+ } = useBooklyApi.useBooksByGenre("adventure");
+ const {
+   data: romanceBooks,
+   loading: romanceLoading,
+   error: romanceError,
+ } = useBooklyApi.useBooksByGenre("romance");
 
   const handleBookSelect = (book) => {
     navigate(`/books/${book._id}`);
@@ -82,7 +93,6 @@ const Explore = () => {
 
   return (
     <Box minHeight="100vh" bg="bg.canvas">
-
       <HeroSection>
         <Text fontSize="4xl" fontWeight="bold" color="white" mb="4">
           Discover New Worlds
@@ -92,37 +102,31 @@ const Explore = () => {
         </Text>
       </HeroSection>
 
-
       <Box padding="6" maxWidth="1200px" margin="0 auto">
         <VStack gap="8" align="stretch">
-
           <CategorySection
             title="Fantasy"
-            books={fantasy.results}
-            loading={fantasy.loading}
-            error={fantasy.error}
+            books={fantasyBooks}
+            loading={fantasyLoading}
+            error={fantasyError}
             onBookSelect={handleBookSelect}
           />
 
-
           <CategorySection
             title="Adventure"
-            books={adventure.results}
-            loading={adventure.loading}
-            error={adventure.error}
+            books={adventureBooks}
+            loading={adventureLoading}
+            error={adventureError}
             onBookSelect={handleBookSelect}
-
           />
 
           <CategorySection
             title="Romance"
-            books={romance.results}
-            loading={romance.loading}
-            error={romance.error}
+            books={romanceBooks}
+            loading={romanceLoading}
+            error={romanceError}
             onBookSelect={handleBookSelect}
-
           />
-
         </VStack>
       </Box>
     </Box>

@@ -4,19 +4,17 @@ import { useApi } from "./useApi";
 
 export const useBooklyApi = {
   //books
-  useBook: (bookId) =>
-    useApi(`/books/${bookId}`),
+  useBook: (bookId) => useApi(`/books/${bookId}`),
 
   useBooks: () => useApi("/books"),
 
   useBooksByGenre: (genre) => useApi(`/books/genre/${genre}`),
 
-  useBooksByAuthor: (author) =>
-    useApi(`/books/author/${author}`),
+  useBooksByAuthor: (author) => useApi(`/books/author/${author}`),
 
   //users
   useUser: (userId) =>
-    useApi(`/user/${userId}`, {
+    useApi(userId ? `/user/${userId}` : null, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

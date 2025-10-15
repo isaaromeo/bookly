@@ -1,5 +1,5 @@
 
-import { useApiData } from "../hooks/useApiData";
+import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 
 import BookGrid from "../styledComponents/BookGrid";
-import { useBookSearch } from "../hooks/useBookSearch";
+
 
 import styled from "styled-components";
 
@@ -26,43 +26,37 @@ const HeroSection = styled.div`
 `;
 
 const Home = () => {
-
-  const books = useApiData(
-    "https://bookly-back.onrender.com/api/books",
-    "books"
-  );
-  console.log(books)
+  //Con nuevo hook useApi general
+  const { data: books, loading, error } = useBooklyApi.useBooks();
+  console.log(books);
   const navigate = useNavigate();
 
   const handleBookSelect = (book) => {
     navigate(`/books/${book._id}`);
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   const featuredBooks = books.slice(0, 6);
   return (
     <Box>
       <HeroSection>
-              <Text fontSize="4xl" fontWeight="bold" color="white" mb="4">
-                Discover your next book obsession!
-              </Text>
-              <Text fontSize="xl" color="white" mb="6" opacity="0.9">
-                Find recomendtion, share your reviews and connect with other readers.
-              </Text>
-              <Button size="lg" colorPalette="purple">
-                Explore Books
-              </Button>
-            </HeroSection>
+        <Text fontSize="4xl" fontWeight="bold" color="white" mb="4">
+          Discover your next book obsession!
+        </Text>
+        <Text fontSize="xl" color="white" mb="6" opacity="0.9">
+          Find recomendtion, share your reviews and connect with other readers.
+        </Text>
+        <Button size="lg" colorPalette="purple">
+          Explore Books
+        </Button>
+      </HeroSection>
 
-            <Box minHeight="100vh" bg="bg.canvas" padding="6">
-                    
-                    <BookGrid
-                      books={featuredBooks}
-                      onBookSelect={handleBookSelect}
-                    />
-                  
-              </Box>
+      <Box minHeight="100vh" bg="bg.canvas" padding="6">
+        <BookGrid books={featuredBooks} onBookSelect={handleBookSelect} />
+      </Box>
     </Box>
-    
   );
 };
 

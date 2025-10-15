@@ -22,26 +22,9 @@ const BookDetailContainer = styled.div`
 const BookDetail = () => {
   const { id } = useParams();
   // const [book, setBook] = useState(null);
+
+  //Con nuevo hook useApi general
   const { data: book, loading, error } = useBooklyApi.useBook(id);
-
-  // useEffect(() => {
-  //   fetchBook();
-  // }, [id]);
-
-  //TODO actualizar el useApiData para meter este fetch
-  // const fetchBook = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://bookly-back.onrender.com/api/books/${id}`
-  //     );
-  //     if (response.ok) {
-  //       const bookData = await response.json();
-  //       setBook(bookData);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching book:", error);
-  //   }
-  // };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -82,7 +65,6 @@ const BookDetail = () => {
                 size="md"
                 colorPalette="yellow"
               >
-
                 <RatingGroup.Control />
               </RatingGroup.Root>
               <Text>({book.rating}/5)</Text>
@@ -112,7 +94,6 @@ const BookDetail = () => {
           </VStack>
         </Box>
       </HStack>
-
     </BookDetailContainer>
   );
 };

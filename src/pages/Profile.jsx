@@ -15,6 +15,9 @@ import {
 import styled from "styled-components";
 import { FaBook, FaBookmark, FaEdit } from "react-icons/fa";
 import { Tab } from "../styledComponents/Tab.jsx";
+import { useBooklyApi } from "../hooks/useBooklyApi";
+import { useAuth } from "../hooks/useAuth";
+
 
 const ProfileContainer = styled.div`
   max-width: 1200px;
@@ -23,38 +26,55 @@ const ProfileContainer = styled.div`
 `;
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("library");
+  const { user: authUser, logout } = useAuth();
+  console.log("user: ", authUser._id)
+
+//con nuevo hook useApi general
+  const {
+    data: user,
+    loading,
+    error,
+  } = useBooklyApi.useUser(authUser._id);
+
+  useEffect(() => {
+    if (!authUser && !loading) {
+      navigate("/login");
+    }
+  }, [authUser, loading, navigate]);
+
+  
 
   //actualizar useApiData para traer todo tipo d atos no solo books
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+  // useEffect(() => {
+  //   const userData = localStorage.getItem("user");
+  //   const token = localStorage.getItem("token");
 
-    setUser(JSON.parse(userData));
-    fetchUserData(JSON.parse(userData)._id, token);
-  }, [navigate]);
+  //   setUser(JSON.parse(userData));
+  //   fetchUserData(JSON.parse(userData)._id, token);
+  // }, [navigate]);
 
-  const fetchUserData = async (userId, token) => {
-    try {
-      const response = await fetch(
-        `https://bookly-back.onrender.com/api/user/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  // const fetchUserData = async (userId, token) => {
+  //   try {
+  //     const response = await fetch(
+  //       `https://bookly-back.onrender.com/api/user/${userId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
 
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
+  //     if (response.ok) {
+  //       const userData = await response.json();
+  //       setUser(userData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching user data:", error);
+  //   }
+  // };
 
   if (!user) {
     return <div>Loading...</div>;

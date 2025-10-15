@@ -9,22 +9,26 @@ import {
 } from "@chakra-ui/react";
 import { LuArrowLeft, LuHouse } from "react-icons/lu";
 import BookGrid from "../styledComponents/BookGrid";
-import { useBookSearch } from "../hooks/useBookSearch";
+import { useBooklyApi } from "../hooks/useBooklyApi";
 
 export const SearchResults = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
-  const { 
-    results, 
-    loading, 
-  } = useBookSearch(query);
- 
+  // const {
+  //   results,
+  //   loading,
+  // } = useBookSearch(query);
+  //
+
+  //Con nuevo hook useApi general
+  const { data: results, loading, error } = useBooklyApi.useSearch(query);
   useEffect(() => {
     if (!query) {
       navigate("/");
       return;
-    }})
+    }
+  });
 
   const handleBookSelect = (book) => {
     navigate(`/books/${book._id}`);
@@ -32,14 +36,12 @@ export const SearchResults = () => {
 
   return (
     <Box minHeight="100vh" bg="bg.canvas" padding="6">
-        
-        <BookGrid
-          books={results}
-          loading={loading}
-          onBookSelect={handleBookSelect}
-          emptyMessage={`No books found for "${query}". Try another search!`}
-        />
-      
+      <BookGrid
+        books={results}
+        loading={loading}
+        onBookSelect={handleBookSelect}
+        emptyMessage={`No books found for "${query}". Try another search!`}
+      />
     </Box>
   );
 };
