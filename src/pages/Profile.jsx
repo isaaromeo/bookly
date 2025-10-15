@@ -26,7 +26,7 @@ const ProfileContainer = styled.div`
 `;
 
 const Profile = () => {
-  // const [user, setUser] = useState(null);
+
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("library");
   const { user: authUser, logout } = useAuth();

@@ -62,12 +62,12 @@ const Login = () => {
       } else {
         const errorData = await response.json();
         setError(
-          errorData.message || "Error en el login. Verifica tus credenciales."
+          errorData.message || "Login error. Verify your credentials"
         );
       }
     } catch (error) {
       console.error("Error:", error);
-      setError("Error en el servidor");
+      setError(error.message);
     } finally {
       setLoading(false);
     }

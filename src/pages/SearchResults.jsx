@@ -15,11 +15,6 @@ export const SearchResults = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
-  // const {
-  //   results,
-  //   loading,
-  // } = useBookSearch(query);
-  //
 
   //Con nuevo hook useApi general
   const { data: results, loading, error } = useBooklyApi.useSearch(query);

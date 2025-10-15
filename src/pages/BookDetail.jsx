@@ -9,9 +9,13 @@ import {
   RatingGroup,
   Button,
   Badge,
+  Tabs,
+  Field,
+  Input
 } from "@chakra-ui/react";
 import styled from "styled-components";
 import { useBooklyApi } from "../hooks/useBooklyApi";
+
 
 const BookDetailContainer = styled.div`
   max-width: 1200px;
@@ -21,12 +25,37 @@ const BookDetailContainer = styled.div`
 
 const BookDetail = () => {
   const { id } = useParams();
-  // const [book, setBook] = useState(null);
+ const [newReview, setNewReview] = useState({
+   rating: 5,
+   content: "",
+   title: "",
+ });
 
   //Con nuevo hook useApi general
-  const { data: book, loading, error } = useBooklyApi.useBook(id);
+  //info libro
+  const { data: book, loading: loadBook, error: bookErr } = useBooklyApi.useBook(id);
 
-  if (loading) {
+  //info reviews del libro
+  const {
+    data: reviews,
+    loading: loadReview,
+    error: reviewErr,
+  } = useBooklyApi.useBookReviews(id);
+
+  const handleSubmitReview = async () => {
+    
+    try {
+      useBooklyApi.usePostReview(id, newReview);
+
+      setNewReview({ rating: 5, content: "", title: "" });
+      alert("Review submitted successfully!");
+    } catch (err) {
+      console.error("Error submitting review:", err);
+      alert(`Error: ${err.message}`);
+    } 
+  };
+
+  if (loadBook) {
     return <div>Loading...</div>;
   }
 
@@ -94,6 +123,108 @@ const BookDetail = () => {
           </VStack>
         </Box>
       </HStack>
+      {/* Reviews */}
+
+      <Box mt="8">
+        <Tabs.Root defaultValue="reviews">
+          <Tabs.List>
+            <Tabs.Trigger value="reviews">
+              Reviews ({reviews ? reviews.length : 0})
+            </Tabs.Trigger>
+            <Tabs.Trigger value="add-review">Review book</Tabs.Trigger>
+          </Tabs.List>
+
+          <Tabs.Content value="reviews">
+            <VStack gap="4" mt="4">
+              {reviews.map((review) => (
+                <Card.Root key={review._id} width="100%">
+                  <Card.Body>
+                    <HStack justify="space-between" mb="2">
+                      <Text fontWeight="semibold">{review.title}</Text>
+                      <RatingGroup.Root
+                        readOnly
+                        count={5}
+                        defaultValue={review.rating}
+                        size="sm"
+                        colorPalette="yellow"
+                      >
+                        <RatingGroup.HiddenInput />
+                        <RatingGroup.Control />
+                      </RatingGroup.Root>
+                    </HStack>
+                    <Text>{review.content}</Text>
+                    <Text fontSize="sm" color="fg.muted" mt="2">
+                      By {review.user?.username} •{" "}
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </Text>
+                  </Card.Body>
+                </Card.Root>
+              ))}
+            </VStack>
+          </Tabs.Content>
+
+          <Tabs.Content value="add-review">
+            <Card.Root mt="4">
+              <Card.Body>
+                <VStack gap="4">
+                  <Field.Root>
+                    <Field.Label>Review title</Field.Label>
+                    <Input
+                      placeholder="Title"
+                      value={newReview.title}
+                      onChange={(e) =>
+                        setNewReview({ ...newReview, title: e.target.value })
+                      }
+                    />
+                  </Field.Root>
+
+                  <Field.Root>
+                    <Field.Label>Rating</Field.Label>
+                    <RatingGroup.Root
+                      count={5}
+                      value={newReview.rating}
+                      onValueChange={(e) =>
+                        setNewReview({ ...newReview, rating: e.value })
+                      }
+                      colorPalette="yellow"
+                    >
+                      <RatingGroup.HiddenInput />
+                      <RatingGroup.Control />
+                    </RatingGroup.Root>
+                  </Field.Root>
+
+                  <Field.Root>
+                    <Field.Label>Review</Field.Label>
+                    <Input
+                      as="textarea"
+                      rows={4}
+                      placeholder="Write your thoughts on this book..."
+                      value={newReview.content}
+                      onChange={(e) =>
+                        setNewReview({
+                          ...newReview,
+                          content: e.target.value,
+                        })
+                      }
+                    />
+                  </Field.Root>
+
+                  <Button
+                    alignSelf="end"
+                    colorPalette="purple"
+                    OnClick={handleSubmitReview}
+                  >
+                    Submit Review
+                  </Button>
+                </VStack>
+              </Card.Body>
+            </Card.Root>
+          </Tabs.Content>
+        </Tabs.Root>
+      </Box>
+
+      {/*Add Reivew*/}
+      <Box></Box>
     </BookDetailContainer>
   );
 };

@@ -41,19 +41,19 @@ const Register = () => {
 
   const validateForm = () => {
     if (formData.password.length < 8) {
-      setError("La contraseña debe tener al menos 8 caracteres");
+      setError("password must be atleast 8 characters long");
       return false;
     }
     if (formData.password !== formData.confirmPassword) {
-      setError("Las contraseñas no coinciden");
+      setError("password mismacth");
       return false;
     }
     if (!formData.email.includes("@")) {
-      setError("Por favor ingresa un email válido");
+      setError("use a valid email");
       return false;
     }
     if (formData.username.length < 3) {
-      setError("El nombre de usuario debe tener al menos 3 caracteres");
+      setError("Username must be more than 3 charaters long");
       return false;
     }
     return true;
@@ -86,14 +86,14 @@ const Register = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("¡Registro exitoso! Por favor inicia sesión.");
+        alert("Sign in sucessful");
         navigate("/login");
       } else {
-        setError(data.message || "Error en el registro. Intenta nuevamente.");
+        setError(data.message || "Sign in error");
       }
     } catch (error) {
       console.error("Error:", error);
-      setError("Error de conexión. Intenta nuevamente.");
+      setError(error.message);
     } finally {
       setLoading(false);
     }

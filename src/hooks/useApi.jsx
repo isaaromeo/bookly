@@ -9,6 +9,7 @@ export const useApi = (endpoint, options = {}) => {
     method = "GET",
     body = null,
     headers = {},
+    cacheKey = null //añadimos control de cache
   } = options;
 
   useEffect(() => {
@@ -47,6 +48,10 @@ export const useApi = (endpoint, options = {}) => {
         const result = await response.json();
         setData(result);
 
+        if (cacheKey) {
+          localStorage.setItem(cacheKey, JSON.stringify(result));
+        }
+
         
       } catch (err) {
         console.error("API Error:", err);
@@ -58,7 +63,7 @@ export const useApi = (endpoint, options = {}) => {
     };
 
     fetchData();
-  }, [endpoint, method, body]);
+  }, [endpoint, method, body, cacheKey]);
 
 
   return {
