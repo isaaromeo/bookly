@@ -11,7 +11,8 @@ import {
   Badge,
   Tabs,
   Field,
-  Input
+  Input,
+  Spinner
 } from "@chakra-ui/react";
 import styled from "styled-components";
 import { useBooklyApi } from "../hooks/useBooklyApi";
@@ -24,28 +25,36 @@ const BookDetailContainer = styled.div`
 `;
 
 const BookDetail = () => {
+  //datos necesarios para post review
+  const { id } = useParams();
+  const { user: authUser } = useAuth();
 
- //datos necesarios para post review
- const { id } = useParams();
- const { user: authUser } = useAuth();
+  //info new review a enviar en post
+  const [newReview, setNewReview] = useState({
+    rating: 5,
+    content: "",
+    title: "",
+  });
 
- //info new review a enviar en post
- const [newReview, setNewReview] = useState({
-   rating: 5,
-   content: "",
-   title: "",
- });
- 
- //hook para post review
-const {
-  postReview,
-  loading: postingReview,
-  error: postError,
-} = useBooklyApi.usePostReview();
+  //hook para post review
+  const {
+    postReview,
+    loading: postingReview,
+    error: postError,
+  } = useBooklyApi.usePostReview();
+
+  //hook para add to library y tbr
+  const { addToLibrary, loading: addingToLibrary } =
+    useBooklyApi.useAddToLibrary();
+  const { addToTBR, loading: addingToTBR } = useBooklyApi.useAddToTBR();
 
   //Con nuevo hook useApi general
   //info libro
-  const { data: book, loading: loadBook, error: bookErr } = useBooklyApi.useBook(id);
+  const {
+    data: book,
+    loading: loadBook,
+    error: bookErr,
+  } = useBooklyApi.useBook(id);
 
   //info reviews del libro
   const {
@@ -55,23 +64,64 @@ const {
   } = useBooklyApi.useBookReviews(id);
 
   const handleSubmitReview = async () => {
-    console.log("book id:", id,"review",newReview)
+    console.log("book id:", id, "review", newReview);
 
     //si no estas loggeado no puedes hacer review
+    //añadir que un user no puede reseñar el mismo libro 2 veces
     if (!authUser) {
       alert("Please log in to submit a review");
       return;
     }
 
-     try {
-       
-       await postReview(id, newReview, authUser._id);
-       setNewReview({ rating: 5, content: "", title: "" });
-       alert("Review submitted successfully!");
-     } catch (err) {
-       console.error("Error submitting review:", err);
-       alert(`Error: ${err.message}`);
-     }
+    try {
+      await postReview(id, newReview, authUser._id);
+      setNewReview({ rating: 5, content: "", title: "" });
+      alert("Review submitted successfully!");
+    } catch (err) {
+      console.error("Error submitting review:", err);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
+  const handleAddToLibrary = async () => {
+  if (!authUser) {
+    alert("Please log in to add books to your library");
+    return;
+  }
+
+  console.log("🔍 DEEP DEBUG - JUST BEFORE CALL:");
+  console.log("User ID:", authUser._id);
+  console.log("Book ID:", id);
+  console.log("Book ID === '68d1aff3ce9bd04b5b72a1d2':", id === '68d1aff3ce9bd04b5b72a1d2');
+  console.log("Book ID stringified:", JSON.stringify(id));
+
+  // 👇 Pasa los IDs directamente como strings
+  const userIdStr = String(authUser._id);
+  const bookIdStr = String(id);
+  
+  console.log("Stringified IDs - User:", userIdStr, "Book:", bookIdStr);
+
+  try {
+    await addToLibrary(userIdStr, bookIdStr);
+    alert("Book added to your library!");
+  } catch (err) {
+    console.error("Error adding to library:", err);
+    alert(`Error: ${err.message}`);
+  }
+};
+  const handleAddToTBR = async () => {
+    if (!authUser) {
+      alert("Please log in to add books to your TBR");
+      return;
+    }
+
+    try {
+      await addToTBR(authUser._id, id);
+      alert("Book added to your TBR!");
+    } catch (err) {
+      console.error("Error adding to TBR:", err);
+      alert(`Error: ${err.message}`);
+    }
   };
 
   if (loadBook) {
@@ -135,8 +185,12 @@ const {
             </HStack>
 
             <HStack gap="4">
-              <Button colorPalette="purple">Add to Library</Button>
-              <Button variant="outline">Add to TBR</Button>
+              <Button colorPalette="purple" onClick={handleAddToLibrary}>
+                Add to Library
+              </Button>
+              <Button variant="outline" onClick={handleAddToTBR}>
+                Add to TBR
+              </Button>
               <Button variant="outline">Review</Button>
             </HStack>
           </VStack>
@@ -154,32 +208,50 @@ const {
           </Tabs.List>
 
           <Tabs.Content value="reviews">
-            <VStack gap="4" mt="4">
-              {reviews.map((review) => (
-                <Card.Root key={review._id} width="100%">
-                  <Card.Body>
-                    <HStack justify="space-between" mb="2">
-                      <Text fontWeight="semibold">{review.title}</Text>
-                      <RatingGroup.Root
-                        readOnly
-                        count={5}
-                        defaultValue={review.rating}
-                        size="sm"
-                        colorPalette="yellow"
-                      >
-                        <RatingGroup.HiddenInput />
-                        <RatingGroup.Control />
-                      </RatingGroup.Root>
-                    </HStack>
-                    <Text>{review.content}</Text>
-                    <Text fontSize="sm" color="fg.muted" mt="2">
-                      By {authUser?.username} •{" "}
-                      {new Date(review.createdAt).toLocaleDateString()}
-                    </Text>
-                  </Card.Body>
-                </Card.Root>
-              ))}
-            </VStack>
+            {loadReview ? (
+              <Box display="flex" justifyContent="center" padding="8">
+                <Spinner size="lg" />
+              </Box>
+            ) : reviewErr ? (
+              <Alert.Root status="error">
+                <Alert.Indicator />
+                <Alert.Title>Error loading reviews: {reviewErr}</Alert.Title>
+              </Alert.Root>
+            ) : reviews && reviews.length > 0 ? (
+              <VStack gap="4" mt="4">
+                {reviews.map((review) => (
+                  <Card.Root key={review._id} width="100%">
+                    <Card.Body>
+                      <HStack justify="space-between" mb="2">
+                        <Text fontWeight="semibold">{review.title}</Text>
+                        <RatingGroup.Root
+                          readOnly
+                          count={5}
+                          defaultValue={review.rating}
+                          size="sm"
+                          colorPalette="yellow"
+                        >
+                          <RatingGroup.HiddenInput />
+                          <RatingGroup.Control />
+                        </RatingGroup.Root>
+                      </HStack>
+                      <Text>{review.content}</Text>
+                      <Text fontSize="sm" color="fg.muted" mt="2">
+                        By {review.user?.username} •{" "}
+                        {new Date(review.createdAt).toLocaleDateString()}
+                      </Text>
+                    </Card.Body>
+                  </Card.Root>
+                ))}
+              </VStack>
+            ) : (
+      
+              <Box textAlign="center" padding="8">
+                <Text color="fg.muted">
+                  No reviews yet. Be the first to review this book!
+                </Text>
+              </Box>
+            )}
           </Tabs.Content>
 
           <Tabs.Content value="add-review">
@@ -232,18 +304,23 @@ const {
                     alignSelf="end"
                     colorPalette="purple"
                     onClick={handleSubmitReview}
+                    loading={postingReview}
                   >
                     Submit Review
                   </Button>
+
+                  {postError && (
+                    <Alert.Root status="error">
+                      <Alert.Indicator />
+                      <Alert.Title>{postError}</Alert.Title>
+                    </Alert.Root>
+                  )}
                 </VStack>
               </Card.Body>
             </Card.Root>
           </Tabs.Content>
         </Tabs.Root>
       </Box>
-
-      {/*Add Reivew*/}
-      <Box></Box>
     </BookDetailContainer>
   );
 };

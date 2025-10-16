@@ -44,10 +44,6 @@ export const useBooklyApi = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     }),
 
-  //   usePostReview: () => {
-  //     const { mutate, loading, error, data } = useMutation();
-  //     return { mutate, loading, error, data };
-  //   },
   usePostReview: () => {
     const { mutate, loading, error, data } = useMutation();
 
@@ -64,6 +60,131 @@ export const useBooklyApi = {
 
     return {
       postReview,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useUpdateReview: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const updateReview = (reviewId, reviewData) => {
+      return mutate(`/reviews/${reviewId}`, {
+        method: "PUT",
+        body: reviewData,
+      });
+    };
+
+    return {
+      updateReview,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useDeleteReview: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const deleteReview = (reviewId) => {
+      return mutate(`/reviews/${reviewId}`, {
+        method: "DELETE",
+      });
+    };
+
+    return {
+      deleteReview,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useAddToLibrary: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const addToLibrary = (userId, bookId) => {
+      
+      const url = `/user/${userId}/library/${bookId}`;
+      console.log("Final URL:", url);
+
+      return mutate(url, {
+        method: "POST",
+      });
+    };
+
+    return {
+      addToLibrary,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useRemoveFromLibrary: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const removeFromLibrary = (userId, bookId) => {
+      return mutate(`/user/${userId}/library/${bookId}`, {
+        method: "DELETE",
+      });
+    };
+
+    return {
+      removeFromLibrary,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useAddToTBR: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const addToTBR = (userId, bookId) => {
+      return mutate(`/user/${userId}/tbr/${bookId}`, {
+        method: "POST",
+      });
+    };
+
+    return {
+      addToTBR,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useRemoveFromTBR: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const removeFromTBR = (userId, bookId) => {
+      return mutate(`/user/${userId}/tbr/${bookId}`, {
+        method: "DELETE",
+      });
+    };
+
+    return {
+      removeFromTBR,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useUpdateUser: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const updateUser = (userId, userData) => {
+      return mutate(`/user/${userId}`, {
+        method: "PUT",
+        body: userData,
+      });
+    };
+
+    return {
+      updateUser,
       loading,
       error,
       data,
