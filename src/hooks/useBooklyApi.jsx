@@ -44,8 +44,31 @@ export const useBooklyApi = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     }),
 
-  usePostReview: (bookId, reviewData) => useMutation(`/reviews/${bookId}`, "POST", reviewData),
-    
+  //   usePostReview: () => {
+  //     const { mutate, loading, error, data } = useMutation();
+  //     return { mutate, loading, error, data };
+  //   },
+  usePostReview: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const postReview = (bookId, reviewData, userId) => {
+      return mutate(`/reviews`, {
+        method: "POST",
+        body: {
+          ...reviewData,
+          book: bookId,
+          user: userId,
+        },
+      });
+    };
+
+    return {
+      postReview,
+      loading,
+      error,
+      data,
+    };
+  },
 
   //search
   useSearch: (query, type = "books") =>

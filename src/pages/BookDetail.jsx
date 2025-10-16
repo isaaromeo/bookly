@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import styled from "styled-components";
 import { useBooklyApi } from "../hooks/useBooklyApi";
-
+import { useAuth } from "../hooks/useAuth"; 
 
 const BookDetailContainer = styled.div`
   max-width: 1200px;
@@ -24,12 +24,24 @@ const BookDetailContainer = styled.div`
 `;
 
 const BookDetail = () => {
-  const { id } = useParams();
+
+ //datos necesarios para post review
+ const { id } = useParams();
+ const { user: authUser } = useAuth();
+
+ //info new review a enviar en post
  const [newReview, setNewReview] = useState({
    rating: 5,
    content: "",
    title: "",
  });
+ 
+ //hook para post review
+const {
+  postReview,
+  loading: postingReview,
+  error: postError,
+} = useBooklyApi.usePostReview();
 
   //Con nuevo hook useApi general
   //info libro
@@ -43,16 +55,23 @@ const BookDetail = () => {
   } = useBooklyApi.useBookReviews(id);
 
   const handleSubmitReview = async () => {
-    
-    try {
-      useBooklyApi.usePostReview(id, newReview);
+    console.log("book id:", id,"review",newReview)
 
-      setNewReview({ rating: 5, content: "", title: "" });
-      alert("Review submitted successfully!");
-    } catch (err) {
-      console.error("Error submitting review:", err);
-      alert(`Error: ${err.message}`);
-    } 
+    //si no estas loggeado no puedes hacer review
+    if (!authUser) {
+      alert("Please log in to submit a review");
+      return;
+    }
+
+     try {
+       
+       await postReview(id, newReview, authUser._id);
+       setNewReview({ rating: 5, content: "", title: "" });
+       alert("Review submitted successfully!");
+     } catch (err) {
+       console.error("Error submitting review:", err);
+       alert(`Error: ${err.message}`);
+     }
   };
 
   if (loadBook) {
@@ -154,7 +173,7 @@ const BookDetail = () => {
                     </HStack>
                     <Text>{review.content}</Text>
                     <Text fontSize="sm" color="fg.muted" mt="2">
-                      By {review.user?.username} •{" "}
+                      By {authUser?.username} •{" "}
                       {new Date(review.createdAt).toLocaleDateString()}
                     </Text>
                   </Card.Body>
@@ -212,7 +231,7 @@ const BookDetail = () => {
                   <Button
                     alignSelf="end"
                     colorPalette="purple"
-                    OnClick={handleSubmitReview}
+                    onClick={handleSubmitReview}
                   >
                     Submit Review
                   </Button>
