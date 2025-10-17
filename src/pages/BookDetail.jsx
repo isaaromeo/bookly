@@ -27,7 +27,7 @@ const BookDetailContainer = styled.div`
 const BookDetail = () => {
   //datos necesarios para post review
   const { id } = useParams();
-  const { user: authUser } = useAuth();
+  const { user: authUser, login } = useAuth();
 
   //info new review a enviar en post
   const [newReview, setNewReview] = useState({
@@ -90,9 +90,16 @@ const BookDetail = () => {
   }
 
   const bookIdStr = JSON.stringify(id);
+  const userIdStr = JSON.stringify(authUser._id);
+  console.log("bookId + user stringified: ",bookIdStr, userIdStr)
   
   try {
-    await addToLibrary(authUser, bookIdStr);
+    const result = await addToLibrary(authUser._id, id);
+
+    if (result && result.user) {
+      const token = localStorage.getItem("token");
+      login(result.user, token); // Actualiza el contexto
+    }
     alert("Book added to your library!");
   } catch (err) {
     console.error("Error adding to library:", err);

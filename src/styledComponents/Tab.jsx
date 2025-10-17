@@ -6,6 +6,7 @@ import {
 } from "@chakra-ui/react";
 
 export const Tab = ({ content, tabTitle }) => {
+  
     return (
       <Box>
         <Text fontSize="xl" mb="4">
