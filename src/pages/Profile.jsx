@@ -144,11 +144,21 @@ const Profile = () => {
 
         <Card.Body>
           {activeTab === "library" && (
-            <Tab content={user.library} tabTitle="Library" />
+            <Tab
+              content={user.library}
+              contentType={"books"}
+              tabTitle="Library"
+            />
           )}
-          {activeTab === "tbr" && <Tab content={user.tbr} tabTitle="TBR" />}
+          {activeTab === "tbr" && (
+            <Tab content={user.tbr} contentType={"books"} tabTitle="TBR" />
+          )}
           {activeTab === "reviews" && (
-            <Tab content={user.reviews} tabTitle="Reviews" />
+            <Tab
+              content={user.reviews}
+              contentType={"reviews"}
+              tabTitle="Reviews"
+            />
           )}
         </Card.Body>
       </Card.Root>
