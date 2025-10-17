@@ -9,7 +9,7 @@ export const useApi = (endpoint, options = {}) => {
     method = "GET",
     body = null,
     headers = {},
-    cacheKey = null //añadimos control de cache
+    cacheKey = null //añadimos control de cache porque a veces tarda en cargar los datos
   } = options;
 
   useEffect(() => {
@@ -33,6 +33,15 @@ export const useApi = (endpoint, options = {}) => {
 
         if (body && method !== "GET") {
           config.body = JSON.stringify(body);
+        }
+
+        if (cacheKey) {
+          const cached = localStorage.getItem(cacheKey);
+          if (cached) {
+            setData(JSON.parse(cached));
+            console.log("cache used")
+            setLoading(false);
+          }
         }
 
 

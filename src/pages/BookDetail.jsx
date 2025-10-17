@@ -89,20 +89,10 @@ const BookDetail = () => {
     return;
   }
 
-  console.log("🔍 DEEP DEBUG - JUST BEFORE CALL:");
-  console.log("User ID:", authUser._id);
-  console.log("Book ID:", id);
-  console.log("Book ID === '68d1aff3ce9bd04b5b72a1d2':", id === '68d1aff3ce9bd04b5b72a1d2');
-  console.log("Book ID stringified:", JSON.stringify(id));
-
-  // 👇 Pasa los IDs directamente como strings
-  const userIdStr = String(authUser._id);
-  const bookIdStr = String(id);
+  const bookIdStr = JSON.stringify(id);
   
-  console.log("Stringified IDs - User:", userIdStr, "Book:", bookIdStr);
-
   try {
-    await addToLibrary(userIdStr, bookIdStr);
+    await addToLibrary(authUser, bookIdStr);
     alert("Book added to your library!");
   } catch (err) {
     console.error("Error adding to library:", err);

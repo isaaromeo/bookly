@@ -28,14 +28,14 @@ export const useBooklyApi = {
       },
     }),
 
-  //   useUserLibrary: (userId) =>
-  //     useApi(userId ? `/user/${userId}/library` : null, {
-  //       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  //     }),
-  //   useUserTBR: (userId) =>
-  //     useApi(userId ? `/user/${userId}/tbr` : null, {
-  //       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  //     }),
+     useUserLibrary: (userId) =>
+       useApi(userId ? `/user/${userId}/library` : null, {
+         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+       }),
+     useUserTBR: (userId) =>
+       useApi(userId ? `/user/${userId}/tbr` : null, {
+         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+       }),
 
   //reviews
   useBookReviews: (bookId) => useApi(bookId ? `/reviews/${bookId}` : null),
