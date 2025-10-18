@@ -12,11 +12,13 @@ import {
   Tabs,
   Field,
   Input,
-  Spinner
+  Spinner,
+  IconButton
 } from "@chakra-ui/react";
 import styled from "styled-components";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth"; 
+import { Tab } from "../styledComponents/Tab"; 
 
 const BookDetailContainer = styled.div`
   max-width: 1200px;
@@ -89,16 +91,16 @@ const BookDetail = () => {
     return;
   }
 
-  const bookIdStr = JSON.stringify(id);
-  const userIdStr = JSON.stringify(authUser._id);
-  console.log("bookId + user stringified: ",bookIdStr, userIdStr)
+  // const bookIdStr = JSON.stringify(id);
+  // const userIdStr = JSON.stringify(authUser._id);
+  // console.log("bookId + user stringified: ",bookIdStr, userIdStr)
   
   try {
     const result = await addToLibrary(authUser._id, id);
 
     if (result && result.user) {
       const token = localStorage.getItem("token");
-      login(result.user, token); // Actualiza el contexto
+      login(result.user, token); // Actualiza el contexto user
     }
     alert("Book added to your library!");
   } catch (err) {
@@ -122,7 +124,11 @@ const BookDetail = () => {
   };
 
   if (loadBook) {
-    return <div>Loading...</div>;
+    return (
+      <Box display="flex" justifyContent="center" padding="8">
+        <Spinner size="lg" />
+      </Box>
+    );
   }
 
   return (
@@ -215,34 +221,8 @@ const BookDetail = () => {
                 <Alert.Title>Error loading reviews: {reviewErr}</Alert.Title>
               </Alert.Root>
             ) : reviews && reviews.length > 0 ? (
-              <VStack gap="4" mt="4">
-                {reviews.map((review) => (
-                  <Card.Root key={review._id} width="100%">
-                    <Card.Body>
-                      <HStack justify="space-between" mb="2">
-                        <Text fontWeight="semibold">{review.title}</Text>
-                        <RatingGroup.Root
-                          readOnly
-                          count={5}
-                          defaultValue={review.rating}
-                          size="sm"
-                          colorPalette="yellow"
-                        >
-                          <RatingGroup.HiddenInput />
-                          <RatingGroup.Control />
-                        </RatingGroup.Root>
-                      </HStack>
-                      <Text>{review.content}</Text>
-                      <Text fontSize="sm" color="fg.muted" mt="2">
-                        By {review.user?.username} •{" "}
-                        {new Date(review.createdAt).toLocaleDateString()}
-                      </Text>
-                    </Card.Body>
-                  </Card.Root>
-                ))}
-              </VStack>
+              <Tab content={reviews} tabTitle="Reviews" contentType="reviews" />
             ) : (
-      
               <Box textAlign="center" padding="8">
                 <Text color="fg.muted">
                   No reviews yet. Be the first to review this book!
