@@ -28,84 +28,19 @@ export const useBooklyApi = {
       },
     }),
 
-     useUserLibrary: (userId) =>
-       useApi(userId ? `/user/${userId}/library` : null, {
-         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-       }),
-     useUserTBR: (userId) =>
-       useApi(userId ? `/user/${userId}/tbr` : null, {
-         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-       }),
-
-  //reviews
-  useBookReviews: (bookId) => useApi(bookId ? `/reviews/${bookId}` : null),
-  useUserReviews: (userId) =>
-    useApi(userId ? `/user/${userId}/reviews` : null, {
+  useUserLibrary: (userId) =>
+    useApi(userId ? `/user/${userId}/library` : null, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     }),
-
-  usePostReview: () => {
-    const { mutate, loading, error, data } = useMutation();
-
-    const postReview = (bookId, reviewData, userId) => {
-      return mutate(`/reviews`, {
-        method: "POST",
-        body: {
-          ...reviewData,
-          book: bookId,
-          user: userId,
-        },
-      });
-    };
-
-    return {
-      postReview,
-      loading,
-      error,
-      data,
-    };
-  },
-
-  useUpdateReview: () => {
-    const { mutate, loading, error, data } = useMutation();
-
-    const updateReview = (reviewId, reviewData) => {
-      return mutate(`/reviews/${reviewId}`, {
-        method: "PUT",
-        body: reviewData,
-      });
-    };
-
-    return {
-      updateReview,
-      loading,
-      error,
-      data,
-    };
-  },
-
-  useDeleteReview: () => {
-    const { mutate, loading, error, data } = useMutation();
-
-    const deleteReview = (reviewId) => {
-      return mutate(`/reviews/${reviewId}`, {
-        method: "DELETE",
-      });
-    };
-
-    return {
-      deleteReview,
-      loading,
-      error,
-      data,
-    };
-  },
+  useUserTBR: (userId) =>
+    useApi(userId ? `/user/${userId}/tbr` : null, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }),
 
   useAddToLibrary: () => {
     const { mutate, loading, error, data } = useMutation();
 
     const addToLibrary = (userId, bookId) => {
-      
       const url = `/user/${userId}/library/${bookId}`;
       console.log("Final URL:", url);
 
@@ -190,6 +125,90 @@ export const useBooklyApi = {
       data,
     };
   },
+
+  //reviews
+  useBookReviews: (bookId) => useApi(bookId ? `/reviews/${bookId}` : null),
+  useUserReviews: (userId) =>
+    useApi(userId ? `/user/${userId}/reviews` : null, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    }),
+
+  usePostReview: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const postReview = (bookId, reviewData, userId) => {
+      return mutate(`/reviews`, {
+        method: "POST",
+        body: {
+          ...reviewData,
+          book: bookId,
+          user: userId,
+        },
+      });
+    };
+
+    return {
+      postReview,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useUpdateReview: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const updateReview = (reviewId, reviewData) => {
+      return mutate(`/reviews/${reviewId}`, {
+        method: "PUT",
+        body: reviewData,
+      });
+    };
+
+    return {
+      updateReview,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useDeleteReview: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const deleteReview = (reviewId) => {
+      return mutate(`/reviews/${reviewId}`, {
+        method: "DELETE",
+      });
+    };
+
+    return {
+      deleteReview,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useLikeReview: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const likeReview = (reviewId) => {
+      return mutate(`/reviews/${reviewId}/like`, {
+        method: "POST",
+      });
+    };
+
+    return {
+      likeReview,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useGetReviewLikes: (reviewId) =>
+    useApi(reviewId ? `/reviews/${reviewId}/likes` : null),
 
   //search
   useSearch: (query, type = "books") =>

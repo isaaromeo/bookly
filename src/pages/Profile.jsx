@@ -7,7 +7,8 @@ import {
   Avatar,
   VStack,
   HStack,
-  Grid,
+  Spinner,
+  Alert,
   Button,
   Tabs,
   Badge,
@@ -29,57 +30,65 @@ const Profile = () => {
 
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("library");
-  const { user: authUser, logout } = useAuth();
-  console.log("user: ", authUser._id)
+  const { user: authUser, logout, loading: authLoading } = useAuth();
+  //console.log("user: ", authUser._id)
 
 //con nuevo hook useApi general
   const {
     data: user,
-    loading,
+    loading: userLoading,
     error,
-  } = useBooklyApi.useUser(authUser._id);
+  } = useBooklyApi.useUser(authUser?._id);//solo ejecutar si hay user
 
   useEffect(() => {
-    if (!authUser && !loading) {
+    if (!authUser && !authLoading) {
       navigate("/login");
     }
-  }, [authUser, loading, navigate]);
+  }, [authUser, authLoading, navigate]);
 
-  
+  const loading = authLoading || userLoading;
 
-  //actualizar useApiData para traer todo tipo d atos no solo books
-  // useEffect(() => {
-  //   const userData = localStorage.getItem("user");
-  //   const token = localStorage.getItem("token");
+if (loading) {
+  return (
+    <Box display="flex" justifyContent="center" padding="8">
+      <Spinner size="lg" />
+    </Box>
+  );
+}
+//si no hay user autenticado
+if (!authUser) {
+  return (
+    <Alert.Root status="warning">
+      <Alert.Indicator />
+      <Alert.Title>Please log in to view your profile</Alert.Title>
+      <Button
+        onClick={() => navigate("/login")}
+        colorPalette="purple"
+        size="sm"
+      >
+        Login
+      </Button>
+    </Alert.Root>
+  );
+}
 
-  //   setUser(JSON.parse(userData));
-  //   fetchUserData(JSON.parse(userData)._id, token);
-  // }, [navigate]);
+if (error) {
+  return (
+    <Alert.Root status="error">
+      <Alert.Indicator />
+      <Alert.Title>Error loading profile: {error}</Alert.Title>
+    </Alert.Root>
+  );
+}
 
-  // const fetchUserData = async (userId, token) => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://bookly-back.onrender.com/api/user/${userId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       const userData = await response.json();
-  //       setUser(userData);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching user data:", error);
-  //   }
-  // };
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
+if (!user) {
+  return (
+    <Alert.Root status="error">
+      <Alert.Indicator />
+      <Alert.Title>User not found</Alert.Title>
+    </Alert.Root>
+  );
+}
   return (
     <ProfileContainer>
       <Card.Root id="profile-header">
