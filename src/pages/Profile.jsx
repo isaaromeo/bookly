@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Card,
@@ -14,10 +14,18 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import styled from "styled-components";
-import { FaBook, FaBookmark, FaEdit } from "react-icons/fa";
+import {
+  FaBook,
+  FaBookmark,
+  FaEdit,
+  FaUserFriends,
+  FaUserPlus,
+} from "react-icons/fa";
 import { Tab } from "../styledComponents/Tab.jsx";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
+import { FollowTab } from "../styledComponents/FollowTab.jsx";
+//import { ProfileHead } from "./ProfileHead.jsx";
 
 
 const ProfileContainer = styled.div`
@@ -30,8 +38,41 @@ const Profile = () => {
 
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("library");
-  const { user: authUser, logout, loading: authLoading } = useAuth();
-  //console.log("user: ", authUser._id)
+  const { user: authUser, logout, login, loading: authLoading } = useAuth();
+  const { userId } = useParams();
+
+  //follow
+  const { mutate: followUser, isLoading: followLoading } =
+    useBooklyApi.useFollowUser();
+  const isFollowing = authUser?.following?.includes(userId);
+  const handleFollow = async () => {
+    if (!authUser) {
+      alert("You must be logged in to follow users");
+      return;
+    }
+
+    followUser(user._id, {
+      onSuccess: (data) => {
+        // Actualizar el contexto de autenticación si es el usuario actual
+        if (data.user._id === authUser._id) {
+          const token = localStorage.getItem("token");
+          login(data.user, token);
+        }
+      },
+      onError: (error) => {
+        console.error("Error following user:", error);
+        alert(`Error: ${error.message}`);
+      },
+    });
+  };
+
+  const handleEditProfile = () => {
+    navigate("/edit-profile");
+  };
+
+  //Para ver si estamos en nuestro perfil
+  const profileUserId = userId || authUser?._id;
+  const isOwnProfile = !userId || userId === authUser?._id;
 
 //con nuevo hook useApi general
   const {
@@ -91,6 +132,7 @@ if (!user) {
 }
   return (
     <ProfileContainer>
+      {/* <ProfileHead user={user} isOwnProfile={isOwnProfile} /> */}
       <Card.Root id="profile-header">
         <Card.Body>
           <HStack gap="6">
@@ -108,9 +150,27 @@ if (!user) {
                   <Text color="gray.500">{user.email}</Text>
                   <Badge colorPalette="purple">{user.rol}</Badge>
                 </VStack>
-                <Button variant="outline" leftIcon={<FaEdit />}>
+                {/* <Button variant="outline" leftIcon={<FaEdit />}>
                   Edit Profile
-                </Button>
+                </Button> */}
+                {isOwnProfile ? (
+                                <Button
+                                  variant="outline"
+                                  leftIcon={<FaEdit />}
+                                  onClick={handleEditProfile}
+                                >
+                                  Edit Profile
+                                </Button>
+                              ) : (
+                                <Button
+                                  colorPalette={isFollowing ? "gray" : "purple"}
+                                  leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
+                                  loading={followLoading}
+                                  onClick={handleFollow}
+                                >
+                                  {isFollowing ? "Following" : "Follow"}
+                                </Button>
+                              )}
               </HStack>
 
               <HStack gap="6">
@@ -126,7 +186,7 @@ if (!user) {
             </VStack>
           </HStack>
         </Card.Body>
-      </Card.Root>
+      </Card.Root> 
 
       <Card.Root>
         <Card.Header>
@@ -146,6 +206,14 @@ if (!user) {
               <Tabs.Trigger value="reviews">
                 <FaBook style={{ marginRight: "8px" }} />
                 Reviews
+              </Tabs.Trigger>
+              <Tabs.Trigger value="followers">
+                <FaUserFriends style={{ marginRight: "8px" }} />
+                Followers ({user.followers?.length || 0})
+              </Tabs.Trigger>
+              <Tabs.Trigger value="following">
+                <FaUserPlus style={{ marginRight: "8px" }} />
+                Following ({user.following?.length || 0})
               </Tabs.Trigger>
             </Tabs.List>
           </Tabs.Root>
@@ -168,6 +236,12 @@ if (!user) {
               contentType={"reviews"}
               tabTitle="Reviews"
             />
+          )}
+          {activeTab === "followers" && (
+            <FollowTab userId={user._id} tabType="followers" />
+          )}
+          {activeTab === "following" && (
+            <FollowTab userId={user._id} tabType="following" />
           )}
         </Card.Body>
       </Card.Root>

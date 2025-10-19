@@ -126,6 +126,26 @@ export const useBooklyApi = {
     };
   },
 
+  useFollowUser: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const followUser = (followedUserId) => {
+      return mutate(`/user/follow/${followedUserId}`, {
+        method: "POST",
+      });
+    };
+
+    return {
+      followUser,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useUserFollowData: (userId) =>
+    useApi(userId ? `/user/${userId}/followData` : null),
+
   //reviews
   useBookReviews: (bookId) => useApi(bookId ? `/reviews/${bookId}` : null),
   useUserReviews: (userId) =>
