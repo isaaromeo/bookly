@@ -25,7 +25,7 @@ import { Tab } from "../styledComponents/Tab.jsx";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import { FollowTab } from "../styledComponents/FollowTab.jsx";
-//import { ProfileHead } from "./ProfileHead.jsx";
+// import { ProfileHead } from "./ProfileHead.jsx";
 
 
 const ProfileContainer = styled.div`
@@ -35,51 +35,50 @@ const ProfileContainer = styled.div`
 `;
 
 const Profile = () => {
-
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("library");
   const { user: authUser, logout, login, loading: authLoading } = useAuth();
   const { userId } = useParams();
 
+  //Para ver si estamos en nuestro perfil
+  const isOwnProfile = !userId || userId === authUser?._id;
+  const profileUserId = userId || authUser?._id;
+
   //follow
   const { mutate: followUser, isLoading: followLoading } =
     useBooklyApi.useFollowUser();
   const isFollowing = authUser?.following?.includes(userId);
+
+  //con nuevo hook useApi general
+  const {
+    data: user,
+    loading: userLoading,
+    error,
+  } = useBooklyApi.useUser(profileUserId); //solo ejecutar si hay user
+
+  //user follow data
+  // const { followers, following } =
+  //   useBooklyApi.useUserFollowData(userId);
+
   const handleFollow = async () => {
     if (!authUser) {
       alert("You must be logged in to follow users");
       return;
     }
 
-    followUser(user._id, {
-      onSuccess: (data) => {
-        // Actualizar el contexto de autenticación si es el usuario actual
-        if (data.user._id === authUser._id) {
-          const token = localStorage.getItem("token");
-          login(data.user, token);
-        }
-      },
-      onError: (error) => {
-        console.error("Error following user:", error);
-        alert(`Error: ${error.message}`);
-      },
-    });
+    try {
+      const result = await followUser(userId); 
+      
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
   };
+
+  
 
   const handleEditProfile = () => {
-    navigate("/edit-profile");
+    navigate("/edit");
   };
-
-  //Para ver si estamos en nuestro perfil
-  const profileUserId = userId || authUser?._id;
-  const isOwnProfile = !userId || userId === authUser?._id;
-
-//con nuevo hook useApi general
-  const {
-    data: user,
-    loading: userLoading,
-    error,
-  } = useBooklyApi.useUser(authUser?._id);//solo ejecutar si hay user
 
   useEffect(() => {
     if (!authUser && !authLoading) {
@@ -89,47 +88,47 @@ const Profile = () => {
 
   const loading = authLoading || userLoading;
 
-if (loading) {
-  return (
-    <Box display="flex" justifyContent="center" padding="8">
-      <Spinner size="lg" />
-    </Box>
-  );
-}
-//si no hay user autenticado
-if (!authUser) {
-  return (
-    <Alert.Root status="warning">
-      <Alert.Indicator />
-      <Alert.Title>Please log in to view your profile</Alert.Title>
-      <Button
-        onClick={() => navigate("/login")}
-        colorPalette="purple"
-        size="sm"
-      >
-        Login
-      </Button>
-    </Alert.Root>
-  );
-}
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" padding="8">
+        <Spinner size="lg" />
+      </Box>
+    );
+  }
+  //si no hay user autenticado
+  if (!authUser && !userId) {
+    return (
+      <Alert.Root status="warning">
+        <Alert.Indicator />
+        <Alert.Title>Please log in to view your profile</Alert.Title>
+        <Button
+          onClick={() => navigate("/login")}
+          colorPalette="purple"
+          size="sm"
+        >
+          Login
+        </Button>
+      </Alert.Root>
+    );
+  }
 
-if (error) {
-  return (
-    <Alert.Root status="error">
-      <Alert.Indicator />
-      <Alert.Title>Error loading profile: {error}</Alert.Title>
-    </Alert.Root>
-  );
-}
+  if (error) {
+    return (
+      <Alert.Root status="error">
+        <Alert.Indicator />
+        <Alert.Title>Error loading profile: {error}</Alert.Title>
+      </Alert.Root>
+    );
+  }
 
-if (!user) {
-  return (
-    <Alert.Root status="error">
-      <Alert.Indicator />
-      <Alert.Title>User not found</Alert.Title>
-    </Alert.Root>
-  );
-}
+  if (!user) {
+    return (
+      <Alert.Root status="error">
+        <Alert.Indicator />
+        <Alert.Title>User not found</Alert.Title>
+      </Alert.Root>
+    );
+  }
   return (
     <ProfileContainer>
       {/* <ProfileHead user={user} isOwnProfile={isOwnProfile} /> */}
@@ -150,27 +149,27 @@ if (!user) {
                   <Text color="gray.500">{user.email}</Text>
                   <Badge colorPalette="purple">{user.rol}</Badge>
                 </VStack>
-                {/* <Button variant="outline" leftIcon={<FaEdit />}>
+                <Button variant="outline" leftIcon={<FaEdit />}>
                   Edit Profile
-                </Button> */}
+                </Button>
                 {isOwnProfile ? (
-                                <Button
-                                  variant="outline"
-                                  leftIcon={<FaEdit />}
-                                  onClick={handleEditProfile}
-                                >
-                                  Edit Profile
-                                </Button>
-                              ) : (
-                                <Button
-                                  colorPalette={isFollowing ? "gray" : "purple"}
-                                  leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
-                                  loading={followLoading}
-                                  onClick={handleFollow}
-                                >
-                                  {isFollowing ? "Following" : "Follow"}
-                                </Button>
-                              )}
+                  <Button
+                    variant="outline"
+                    leftIcon={<FaEdit />}
+                    onClick={handleEditProfile}
+                  >
+                    Edit Profile
+                  </Button>
+                ) : (
+                  <Button
+                    colorPalette={isFollowing ? "gray" : "purple"}
+                    leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
+                    loading={followLoading}
+                    onClick={handleFollow}
+                  >
+                    {isFollowing ? "Following" : "Follow"}
+                  </Button>
+                )}
               </HStack>
 
               <HStack gap="6">
@@ -186,7 +185,7 @@ if (!user) {
             </VStack>
           </HStack>
         </Card.Body>
-      </Card.Root> 
+      </Card.Root>
 
       <Card.Root>
         <Card.Header>
@@ -238,10 +237,18 @@ if (!user) {
             />
           )}
           {activeTab === "followers" && (
-            <FollowTab userId={user._id} tabType="followers" />
+            <Tab
+              content={user.followers}
+              contentType="users"
+              tabTitle="Followers"
+            />
           )}
           {activeTab === "following" && (
-            <FollowTab userId={user._id} tabType="following" />
+            <Tab
+              content={user.following}
+              contentType="users"
+              tabTitle="Following"
+            />
           )}
         </Card.Body>
       </Card.Root>

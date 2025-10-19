@@ -7,26 +7,36 @@ import {
   HStack,
   RatingGroup,
   IconButton,
+  Avatar,
+  Button
 } from "@chakra-ui/react";
 
 import { useNavigate } from "react-router-dom";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaUserPlus } from "react-icons/fa";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect } from "react";
 
 export const Tab = ({ content, tabTitle, contentType }) => {
-
   const navigate = useNavigate();
   const { user: authUser } = useAuth();
   const { likeReview } = useBooklyApi.useLikeReview();
-  const [localReviews, setLocalReviews] = useState([]);//para poder ver el cambio del like irl
+  const { followUser } = useBooklyApi.useFollowUser();
+  const [localReviews, setLocalReviews] = useState([]); //para poder ver el cambio del like irl
+  const [localUsers, setLocalUsers] = useState([]); //para poder ver el cambio del follow irl
 
+  
   useEffect(() => {
-    if (content && contentType == "reviews") {
-      setLocalReviews(content);
+    if (content) {
+      if (contentType === "reviews") {
+        setLocalReviews(content);
+        console.log("reseñas");
+      } else if (contentType === "users") {
+        setLocalUsers(content);
+        console.log("followers")
+      }
     }
-  }, [content]);
+  }, [content, contentType]);
 
   const handleLike = async (reviewId) => {
     if (!authUser) {
@@ -52,6 +62,38 @@ export const Tab = ({ content, tabTitle, contentType }) => {
     } catch (error) {
       console.error("Error liking review:", error);
     }
+  };
+
+  const handleFollow = async (userId) => {
+    if (!authUser) {
+      alert("Please log in to follow users");
+      return;
+    }
+
+    try {
+      const result = await followUser(userId);
+          
+          setLocalUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              user._id === userId
+                ? {
+                    ...user,
+                    followers: result.user.followers,
+    
+                  }
+                : user
+            )
+          );
+        
+        
+      
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const handleUserClick = (userId) => {
+    navigate(`/user/${userId}`);
   };
 
   const renderReviews = () => (
@@ -103,7 +145,6 @@ export const Tab = ({ content, tabTitle, contentType }) => {
             </Card.Body>
           </Card.Root>
         );
-        
       })}
     </VStack>
   );
@@ -156,23 +197,79 @@ export const Tab = ({ content, tabTitle, contentType }) => {
     </Grid>
   );
 
+  const renderUsers = () => (
+    <VStack gap="4" align="stretch">
+      {localUsers.map((user) => {
+        const isFollowing = authUser?.following?.includes(user._id);
+        const isOwnProfile = authUser?._id === user._id;
+
+        return (
+          <Card.Root key={user._id} width="100%">
+            <Card.Body>
+              <HStack justify="space-between" align="center">
+                <HStack
+                  gap="4"
+                  flex="1"
+                  cursor="pointer"
+                  onClick={() => handleUserClick(user._id)}
+                >
+                  <Avatar.Root size="md">
+                    <Avatar.Fallback name={user.username} />
+                    {user.profilePic && <Avatar.Image src={user.profilePic} />}
+                  </Avatar.Root>
+                  <VStack align="start" gap="1">
+                    <Text fontWeight="semibold">{user.username}</Text>
+                    <Text fontSize="sm" color="fg.muted">
+                      {user.email}
+                    </Text>
+                    <HStack gap="4">
+                      <Text fontSize="xs" color="fg.muted">
+                        {user.followers?.length || 0} followers
+                      </Text>
+                      <Text fontSize="xs" color="fg.muted">
+                        {user.following?.length || 0} following
+                      </Text>
+                    </HStack>
+                  </VStack>
+                </HStack>
+
+                {!isOwnProfile && (
+                  <Button
+                    size="sm"
+                    colorPalette={isFollowing ? "gray" : "purple"}
+                    leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
+                    onClick={() => handleFollow(user._id)}
+                  >
+                    {isFollowing ? "Following" : "Follow"}
+                  </Button>
+                )}
+              </HStack>
+            </Card.Body>
+          </Card.Root>
+        );
+      })}
+    </VStack>
+  );
+
+
   const renderEmpty = () => (
     <Text color="gray.500">
       There are no elements added to your {tabTitle}.
     </Text>
   );
 
-    return (
-      <Box>
-        <Text fontSize="xl" mb="4">
-          {tabTitle} ({content ? content.length : 0})
-        </Text>
+  return (
+    <Box>
+      <Text fontSize="xl" mb="4">
+        {tabTitle} ({content ? content.length : 0})
+      </Text>
 
-        {contentType === "books" && renderBooks()}
-        {contentType === "reviews" && renderReviews()}
-        {contentType === "empty" && renderEmpty()}
-      </Box>
-    );
+      {contentType === "books" && renderBooks()}
+      {contentType === "reviews" && renderReviews()}
+      {contentType === "users" && renderUsers()}
+      {contentType === "empty" && renderEmpty()}
+    </Box>
+  );
 }
 
 export default Tab;

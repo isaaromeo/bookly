@@ -58,7 +58,7 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         login(data.user, data.token);
-        navigate("/profile");
+        navigate(`/profile/${data.user._id}`);
       } else {
         const errorData = await response.json();
         setError(
@@ -78,10 +78,10 @@ const Login = () => {
       <Card.Root>
         <Card.Header>
           <Card.Title textAlign="center" fontSize="2xl">
-            Iniciar Sesión
+            Log In
           </Card.Title>
           <Text textAlign="center" color="fg.muted">
-            Bienvenido de vuelta a Bookly
+            Welcome Back to Bookly!
           </Text>
         </Card.Header>
 
@@ -108,7 +108,7 @@ const Login = () => {
               </Field.Root>
 
               <Field.Root>
-                <Field.Label>Contraseña</Field.Label>
+                <Field.Label>Password</Field.Label>
                 <Input
                   name="password"
                   type="password"
@@ -126,7 +126,7 @@ const Login = () => {
                 colorPalette="purple"
                 leftIcon={<LuLogIn />}
               >
-                Iniciar Sesión
+                Log In
               </Button>
             </VStack>
           </form>
@@ -134,7 +134,7 @@ const Login = () => {
 
         <Card.Footer>
           <HStack justify="center" width="100%">
-            <Text>¿No tienes cuenta?</Text>
+            <Text>Don't have an account yet?</Text>
             <Link
               to="/register"
               style={{
@@ -143,7 +143,7 @@ const Login = () => {
                 textDecoration: "none",
               }}
             >
-              Regístrate aquí
+              Register here
             </Link>
           </HStack>
         </Card.Footer>
