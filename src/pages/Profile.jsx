@@ -55,30 +55,37 @@ const Profile = () => {
     refetch, //para actualizar despues del follow
   } = useBooklyApi.useUser(profileUserId);
   
+//porq hay dos casos:
+//1- que .following sea array de ids
+//2- que .following dea array de obj user
+const getIsFollowing = () => {
+  if (!authUser || !authUser.following) return false;
+  if (
+    authUser.following.length > 0 &&
+    typeof authUser.following[0] === "string"
+  ) {
+    return authUser.following.includes(profileUserId);
+  }
+  if (
+    authUser.following.length > 0 &&
+    typeof authUser.following[0] === "object"
+  ) {
+    return authUser.following.some(
+      (followedUser) => followedUser && followedUser._id === profileUserId
+    );
+  }
 
-   const isFollowing = authUser?.following?.some(followedUser => 
-    followedUser._id === profileUserId
-   ) || false;
-  // const [isFollowing, setIsFollowing] = useState(false);
+  return false;
+};
 
-  //actauliza el estado de follow cuando cambien los datos
-  // useEffect(() => {
-  //   if (user && authUser) {
-  //     const following = authUser.following?.includes(user._id) || false;
-  //     setIsFollowing(following);
-  //     console.log("isFollowing 1", isFollowing)
-  //   }
-  // }, [user, authUser]);
+const isFollowing = getIsFollowing();
 
   const handleFollow = async () => {
     if (!authUser) {
       alert("You must be logged in to follow users");
       return;
     }
-    //guardamos el estadoa nterior
-    // const previousIsFollowing = isFollowing;
-    // setIsFollowing(!isFollowing);
-    console.log("isFollowing 1", isFollowing);
+
     try {
       const result = await followUser(profileUserId);
 
@@ -92,8 +99,6 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error following user:", error);
-      //quedamois con el estado anterior
-      setIsFollowing(previousIsFollowing);
       alert("Error following user");
     }
   };
@@ -182,10 +187,18 @@ const Profile = () => {
                   </Button>
                 ) : (
                   <Button
-                    colorPalette={isFollowing ? "gray" : "purple"}
+                    size="sm"
+                    colorScheme="purple"
+                    variant={isFollowing ? "ghost" : "solid"}
+                    // color={isFollowing ? "gray.600" : "white"}
+                    bg={isFollowing ? "gray.600" : "purple.400"}
+                    border={isFollowing ? "1px solid" : "none"}
+                    borderColor={isFollowing ? "gray.300" : "transparent"}
                     leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
-                    loading={followLoading}
-                    onClick={handleFollow}
+                    onClick={() => handleFollow(user._id)}
+                    _hover={{
+                      bg: isFollowing ? "gray.200" : "purple.600",
+                    }}
                   >
                     {isFollowing ? "Following" : "Follow"}
                   </Button>

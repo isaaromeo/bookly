@@ -42,14 +42,10 @@ export const Tab = ({ content, tabTitle, contentType, currentUserId }) => {
 
       //para que se vea el cambio de like en la interfaz irl
       setLocalContent((prevContent) =>
-        prevContent.map((elem) =>
-          elem._id === reviewId
-            ? {
-                ...elem,
-                likes: result.elem.likes,
-                likesCount: result.elem.likes.length,
-              }
-            : elem
+        prevContent.map((review) =>
+          review._id === reviewId
+            ? result.review 
+            : review
         )
       );
     } catch (error) {
@@ -103,9 +99,32 @@ export const Tab = ({ content, tabTitle, contentType, currentUserId }) => {
     return authUser && review.likes?.includes(authUser._id);
   };
 
+  const getIsFollowing = (userId) => {
+    if (!authUser || !authUser.following) return false;
+    if (
+      authUser.following.length > 0 &&
+      typeof authUser.following[0] === "string"
+    ) {
+      return authUser.following.includes(userId);
+    }
+    if (
+      authUser.following.length > 0 &&
+      typeof authUser.following[0] === "object"
+    ) {
+      return authUser.following.some(
+        (followedUser) => followedUser && followedUser._id === userId
+      );
+    }
+
+    return false;
+  };
+
+
+
   const renderReviews = () => (
     <VStack gap="4" align="stretch">
       {localContent.map((review) => {
+        if (!review) return null;
         const isLikedByUser = authUser && review.likes?.includes(authUser._id);
         const likesCount = review.likes?.length || 0;
         return (
@@ -207,12 +226,8 @@ export const Tab = ({ content, tabTitle, contentType, currentUserId }) => {
   const renderUsers = () => (
     <VStack gap="4" align="stretch">
       {localContent.map((user) => {
-        const isFollowing =
-          authUser?.following?.some(
-            (followedUser) => followedUser._id === user._id
-          ) || false;
-        const isOwnProfile = authUser?._id === user._id;
-
+          const isFollowing = getIsFollowing(user._id);
+          const isOwnProfile = authUser?._id === user._id;
         return (
           <Card.Root key={user._id} width="100%">
             <Card.Body>
@@ -246,9 +261,17 @@ export const Tab = ({ content, tabTitle, contentType, currentUserId }) => {
                 {!isOwnProfile && (
                   <Button
                     size="sm"
-                    colorPalette={isFollowing ? "gray" : "green"}
+                    colorScheme="purple"
+                    variant={isFollowing ? "ghost" : "solid"}
+                    // color={isFollowing ? "gray.600" : "white"}
+                    bg={isFollowing ? "gray.600" : "purple.400"}
+                    border={isFollowing ? "1px solid" : "none"}
+                    borderColor={isFollowing ? "gray.300" : "transparent"}
                     leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
                     onClick={() => handleFollow(user._id)}
+                    _hover={{
+                      bg: isFollowing ? "gray.200" : "purple.600",
+                    }}
                   >
                     {isFollowing ? "Following" : "Follow"}
                   </Button>
