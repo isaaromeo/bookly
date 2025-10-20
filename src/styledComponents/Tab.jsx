@@ -12,14 +12,15 @@ import {
 } from "@chakra-ui/react";
 
 import { useNavigate } from "react-router-dom";
-import { FaHeart, FaRegHeart, FaUserPlus } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaUserPlus, FaUserCheck } from "react-icons/fa";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect } from "react";
+import { user } from "@heroui/react";
 
 export const Tab = ({ content, tabTitle, contentType }) => {
   const navigate = useNavigate();
-  const { user: authUser } = useAuth();
+  const { user: authUser, login } = useAuth();
   const { likeReview } = useBooklyApi.useLikeReview();
   const { followUser } = useBooklyApi.useFollowUser();
   const [localReviews, setLocalReviews] = useState([]); //para poder ver el cambio del like irl
@@ -33,7 +34,7 @@ export const Tab = ({ content, tabTitle, contentType }) => {
         console.log("reseñas");
       } else if (contentType === "users") {
         setLocalUsers(content);
-        console.log("followers")
+        console.log(content)
       }
     }
   }, [content, contentType]);
@@ -65,27 +66,33 @@ export const Tab = ({ content, tabTitle, contentType }) => {
   };
 
   const handleFollow = async (userId) => {
+    
     if (!authUser) {
       alert("Please log in to follow users");
       return;
     }
 
     try {
-      const result = await followUser(userId);
-          
-          setLocalUsers((prevUsers) =>
-            prevUsers.map((user) =>
-              user._id === userId
-                ? {
-                    ...user,
-                    followers: result.user.followers,
-    
-                  }
-                : user
-            )
-          );
+      console.log("clicked follow");
+      const data = await followUser(userId);
+      if(data){
+        //actualizar el contexto
+        console.log("user followed succesfully");
+        const token = localStorage.getItem("token");
+        console.log("data user", user);
+        login(user, token);
         
-        
+        //  setLocalUsers((prevUsers) =>
+        //    prevUsers.map((user) =>
+        //      user._id === userId
+        //        ? {
+        //            ...user,
+        //            followers: result.user.followers,
+        //          }
+        //        : user
+        //    )
+        //  );
+       }
       
     } catch (error) {
       console.error("Error following user:", error);
@@ -93,7 +100,7 @@ export const Tab = ({ content, tabTitle, contentType }) => {
   };
 
   const handleUserClick = (userId) => {
-    navigate(`/user/${userId}`);
+    navigate(`/profile/${userId}`);
   };
 
   const renderReviews = () => (
@@ -222,21 +229,21 @@ export const Tab = ({ content, tabTitle, contentType }) => {
                     <Text fontSize="sm" color="fg.muted">
                       {user.email}
                     </Text>
-                    <HStack gap="4">
+                    {/* <HStack gap="4">
                       <Text fontSize="xs" color="fg.muted">
                         {user.followers?.length || 0} followers
                       </Text>
                       <Text fontSize="xs" color="fg.muted">
                         {user.following?.length || 0} following
                       </Text>
-                    </HStack>
+                    </HStack> */}
                   </VStack>
                 </HStack>
 
                 {!isOwnProfile && (
                   <Button
                     size="sm"
-                    colorPalette={isFollowing ? "gray" : "purple"}
+                    colorPalette={isFollowing ? "gray" : "green"}
                     leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
                     onClick={() => handleFollow(user._id)}
                   >

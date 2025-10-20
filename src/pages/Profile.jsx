@@ -20,12 +20,12 @@ import {
   FaEdit,
   FaUserFriends,
   FaUserPlus,
+  FaUserCheck
 } from "react-icons/fa";
 import { Tab } from "../styledComponents/Tab.jsx";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
-import { FollowTab } from "../styledComponents/FollowTab.jsx";
-// import { ProfileHead } from "./ProfileHead.jsx";
+
 
 
 const ProfileContainer = styled.div`
@@ -39,26 +39,33 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("library");
   const { user: authUser, logout, login, loading: authLoading } = useAuth();
   const { userId } = useParams();
+  
 
   //Para ver si estamos en nuestro perfil
   const isOwnProfile = !userId || userId === authUser?._id;
   const profileUserId = userId || authUser?._id;
 
   //follow
-  const { mutate: followUser, isLoading: followLoading } =
+  const { followUser, loading: followLoading } =
     useBooklyApi.useFollowUser();
-  const isFollowing = authUser?.following?.includes(userId);
+  
 
-  //con nuevo hook useApi general
+  //obetener user data con nuevo hook useApi general
   const {
     data: user,
     loading: userLoading,
     error,
-  } = useBooklyApi.useUser(profileUserId); //solo ejecutar si hay user
+    refetch //para actualizar despues del follow
+  } = useBooklyApi.useUser(profileUserId); 
 
-  //user follow data
-  // const { followers, following } =
-  //   useBooklyApi.useUserFollowData(userId);
+  // const isFollowing = authUser?.following?.includes(userId);
+  const [localIsFollowing, setLocalIsFollowing] = useState(
+    authUser?.following?.includes(profileUserId)
+  );
+
+  useEffect(() => {
+    setLocalIsFollowing(authUser?.following?.includes(profileUserId));
+  }, [authUser, profileUserId]);
 
   const handleFollow = async () => {
     if (!authUser) {
@@ -66,11 +73,23 @@ const Profile = () => {
       return;
     }
 
+    setLocalIsFollowing(!localIsFollowing);
+
     try {
-      const result = await followUser(userId); 
+      const data = await followUser(userId);
+      if(data){
+        console.log("user followed succesfully")
+        const token = localStorage.getItem("token");
+        console.log("data user", data.user, "isFollowing", localIsFollowing);
+        login(data.user, token);
+
+      }
+      refetch()
+  
       
     } catch (error) {
       console.error("Error following user:", error);
+      setLocalIsFollowing(!localIsFollowing);
     }
   };
 
@@ -149,9 +168,6 @@ const Profile = () => {
                   <Text color="gray.500">{user.email}</Text>
                   <Badge colorPalette="purple">{user.rol}</Badge>
                 </VStack>
-                <Button variant="outline" leftIcon={<FaEdit />}>
-                  Edit Profile
-                </Button>
                 {isOwnProfile ? (
                   <Button
                     variant="outline"
@@ -162,12 +178,14 @@ const Profile = () => {
                   </Button>
                 ) : (
                   <Button
-                    colorPalette={isFollowing ? "gray" : "purple"}
-                    leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
+                    colorPalette={localIsFollowing ? "gray" : "purple"}
+                    leftIcon={
+                      localIsFollowing ? <FaUserCheck /> : <FaUserPlus />
+                    }
                     loading={followLoading}
                     onClick={handleFollow}
                   >
-                    {isFollowing ? "Following" : "Follow"}
+                    {localIsFollowing ? "Following" : "Follow"}
                   </Button>
                 )}
               </HStack>

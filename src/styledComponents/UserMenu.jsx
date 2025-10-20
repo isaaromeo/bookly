@@ -20,7 +20,7 @@ export const UserMenu = () => {
   const handleAction = (action) => {
     switch (action) {
       case "profile":
-        navigate("/profile");
+        navigate(`/profile/${user._id}`);
         break;
       case "books":
         navigate("/books");
