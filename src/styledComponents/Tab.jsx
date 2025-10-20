@@ -18,26 +18,18 @@ import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect } from "react";
 import { user } from "@heroui/react";
 
-export const Tab = ({ content, tabTitle, contentType }) => {
+export const Tab = ({ content, tabTitle, contentType, currentUserId }) => {
   const navigate = useNavigate();
   const { user: authUser, login } = useAuth();
   const { likeReview } = useBooklyApi.useLikeReview();
   const { followUser } = useBooklyApi.useFollowUser();
-  const [localReviews, setLocalReviews] = useState([]); //para poder ver el cambio del like irl
-  const [localUsers, setLocalUsers] = useState([]); //para poder ver el cambio del follow irl
+  const [localContent, setLocalContent] = useState([]); //para poder ver el cambio del like irl
 
-  
   useEffect(() => {
     if (content) {
-      if (contentType === "reviews") {
-        setLocalReviews(content);
-        console.log("reseñas");
-      } else if (contentType === "users") {
-        setLocalUsers(content);
-        console.log(content)
-      }
+      setLocalContent([...content]);
     }
-  }, [content, contentType]);
+  }, [content]);
 
   const handleLike = async (reviewId) => {
     if (!authUser) {
@@ -49,15 +41,15 @@ export const Tab = ({ content, tabTitle, contentType }) => {
       const result = await likeReview(reviewId);
 
       //para que se vea el cambio de like en la interfaz irl
-      setLocalReviews((prevReviews) =>
-        prevReviews.map((review) =>
-          review._id === reviewId
+      setLocalContent((prevContent) =>
+        prevContent.map((elem) =>
+          elem._id === reviewId
             ? {
-                ...review,
-                likes: result.review.likes,
-                likesCount: result.review.likes.length,
+                ...elem,
+                likes: result.elem.likes,
+                likesCount: result.elem.likes.length,
               }
-            : review
+            : elem
         )
       );
     } catch (error) {
@@ -73,27 +65,27 @@ export const Tab = ({ content, tabTitle, contentType }) => {
     }
 
     try {
-      console.log("clicked follow");
-      const data = await followUser(userId);
-      if(data){
-        //actualizar el contexto
-        console.log("user followed succesfully");
+      const result = await followUser(userId);
+
+      if (result && result.user) {
+        console.log("user followed succesfully")
         const token = localStorage.getItem("token");
-        console.log("data user", user);
-        login(user, token);
-        
-        //  setLocalUsers((prevUsers) =>
-        //    prevUsers.map((user) =>
-        //      user._id === userId
-        //        ? {
-        //            ...user,
-        //            followers: result.user.followers,
-        //          }
-        //        : user
-        //    )
-        //  );
-       }
-      
+        //actualizar contexto
+        login(result.user, token);
+        //actualiza estado local para reflejar cambio
+        setLocalContent((prevContent) =>
+          prevContent.map((user) =>
+            user._id === userId
+              ? {
+                  ...user,
+                  followers: result.user.followers?.includes(userId)
+                    ? [...(user.followers || []), authUser._id]
+                    : user.followers?.filter((id) => id !== authUser._id),
+                }
+              : user
+          )
+        );
+      }
     } catch (error) {
       console.error("Error following user:", error);
     }
@@ -103,9 +95,17 @@ export const Tab = ({ content, tabTitle, contentType }) => {
     navigate(`/profile/${userId}`);
   };
 
+  // const isFollowingUser = (userId) => {
+  //   return authUser?.following?.includes(userId);
+  // };
+
+  const isLikedReview = (review) => {
+    return authUser && review.likes?.includes(authUser._id);
+  };
+
   const renderReviews = () => (
     <VStack gap="4" align="stretch">
-      {localReviews.map((review) => {
+      {localContent.map((review) => {
         const isLikedByUser = authUser && review.likes?.includes(authUser._id);
         const likesCount = review.likes?.length || 0;
         return (
@@ -158,7 +158,7 @@ export const Tab = ({ content, tabTitle, contentType }) => {
 
   const renderBooks = () => (
     <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap="4">
-      {content.map((book) => (
+      {localContent.map((book) => (
         <Card.Root
           key={book._id}
           cursor="pointer"
@@ -206,8 +206,11 @@ export const Tab = ({ content, tabTitle, contentType }) => {
 
   const renderUsers = () => (
     <VStack gap="4" align="stretch">
-      {localUsers.map((user) => {
-        const isFollowing = authUser?.following?.includes(user._id);
+      {localContent.map((user) => {
+        const isFollowing =
+          authUser?.following?.some(
+            (followedUser) => followedUser._id === user._id
+          ) || false;
         const isOwnProfile = authUser?._id === user._id;
 
         return (
@@ -229,14 +232,14 @@ export const Tab = ({ content, tabTitle, contentType }) => {
                     <Text fontSize="sm" color="fg.muted">
                       {user.email}
                     </Text>
-                    {/* <HStack gap="4">
+                    <HStack gap="4">
                       <Text fontSize="xs" color="fg.muted">
                         {user.followers?.length || 0} followers
                       </Text>
                       <Text fontSize="xs" color="fg.muted">
                         {user.following?.length || 0} following
                       </Text>
-                    </HStack> */}
+                    </HStack>
                   </VStack>
                 </HStack>
 

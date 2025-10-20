@@ -39,62 +39,66 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("library");
   const { user: authUser, logout, login, loading: authLoading } = useAuth();
   const { userId } = useParams();
-  
 
   //Para ver si estamos en nuestro perfil
   const isOwnProfile = !userId || userId === authUser?._id;
   const profileUserId = userId || authUser?._id;
 
   //follow
-  const { followUser, loading: followLoading } =
-    useBooklyApi.useFollowUser();
-  
+  const { followUser, loading: followLoading } = useBooklyApi.useFollowUser();
 
   //obetener user data con nuevo hook useApi general
   const {
     data: user,
     loading: userLoading,
     error,
-    refetch //para actualizar despues del follow
-  } = useBooklyApi.useUser(profileUserId); 
+    refetch, //para actualizar despues del follow
+  } = useBooklyApi.useUser(profileUserId);
+  
 
-  // const isFollowing = authUser?.following?.includes(userId);
-  const [localIsFollowing, setLocalIsFollowing] = useState(
-    authUser?.following?.includes(profileUserId)
-  );
+   const isFollowing = authUser?.following?.some(followedUser => 
+    followedUser._id === profileUserId
+   ) || false;
+  // const [isFollowing, setIsFollowing] = useState(false);
 
-  useEffect(() => {
-    setLocalIsFollowing(authUser?.following?.includes(profileUserId));
-  }, [authUser, profileUserId]);
+  //actauliza el estado de follow cuando cambien los datos
+  // useEffect(() => {
+  //   if (user && authUser) {
+  //     const following = authUser.following?.includes(user._id) || false;
+  //     setIsFollowing(following);
+  //     console.log("isFollowing 1", isFollowing)
+  //   }
+  // }, [user, authUser]);
 
   const handleFollow = async () => {
     if (!authUser) {
       alert("You must be logged in to follow users");
       return;
     }
-
-    setLocalIsFollowing(!localIsFollowing);
-
+    //guardamos el estadoa nterior
+    // const previousIsFollowing = isFollowing;
+    // setIsFollowing(!isFollowing);
+    console.log("isFollowing 1", isFollowing);
     try {
-      const data = await followUser(userId);
-      if(data){
-        console.log("user followed succesfully")
-        const token = localStorage.getItem("token");
-        console.log("data user", data.user, "isFollowing", localIsFollowing);
-        login(data.user, token);
+      const result = await followUser(profileUserId);
 
+      if (result && result.user) {
+        console.log("user followed succesfully");
+        console.log("isFollowing 2", isFollowing);
+        const token = localStorage.getItem("token");
+        //actualizamos el contexto
+        login(result.user, token);
+        refetch();
       }
-      refetch()
-  
-      
     } catch (error) {
       console.error("Error following user:", error);
-      setLocalIsFollowing(!localIsFollowing);
+      //quedamois con el estado anterior
+      setIsFollowing(previousIsFollowing);
+      alert("Error following user");
     }
   };
 
-  
-
+  //TODO editar perfil
   const handleEditProfile = () => {
     navigate("/edit");
   };
@@ -178,14 +182,12 @@ const Profile = () => {
                   </Button>
                 ) : (
                   <Button
-                    colorPalette={localIsFollowing ? "gray" : "purple"}
-                    leftIcon={
-                      localIsFollowing ? <FaUserCheck /> : <FaUserPlus />
-                    }
+                    colorPalette={isFollowing ? "gray" : "purple"}
+                    leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
                     loading={followLoading}
                     onClick={handleFollow}
                   >
-                    {localIsFollowing ? "Following" : "Follow"}
+                    {isFollowing ? "Following" : "Follow"}
                   </Button>
                 )}
               </HStack>
@@ -242,6 +244,7 @@ const Profile = () => {
               content={user.library}
               contentType={"books"}
               tabTitle="Library"
+              currentUserId={authUser?._id}
             />
           )}
           {activeTab === "tbr" && (
@@ -252,6 +255,7 @@ const Profile = () => {
               content={user.reviews}
               contentType={"reviews"}
               tabTitle="Reviews"
+              currentUserId={authUser?._id}
             />
           )}
           {activeTab === "followers" && (
@@ -259,6 +263,7 @@ const Profile = () => {
               content={user.followers}
               contentType="users"
               tabTitle="Followers"
+              currentUserId={authUser?._id}
             />
           )}
           {activeTab === "following" && (
@@ -266,6 +271,7 @@ const Profile = () => {
               content={user.following}
               contentType="users"
               tabTitle="Following"
+              currentUserId={authUser?._id}
             />
           )}
         </Card.Body>
