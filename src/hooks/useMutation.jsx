@@ -13,20 +13,38 @@ export const useMutation = () => {
     try {
       const token = localStorage.getItem("token");
       const isFormData = options.body instanceof FormData;
+      const hasBody = options.body !== undefined && options.body !== null;
       const config = {
         method: options.method || "POST",
         headers: {
-         
           Authorization: `Bearer ${token}`,
-          
+          ...options.headers,
         },
         body: options.body,
       };
 
-       if (!isFormData && options.body) {
-         config.headers["Content-Type"] = "application/json";
-         config.body = JSON.stringify(options.body);
-       }
+          if (hasBody) {
+            if (isFormData) {
+              // Para FormData: NO Content-Type, body directo
+              config.body = options.body;
+            } else {
+              // Para JSON: Content-Type + stringify
+              config.headers["Content-Type"] = "application/json";
+              config.body = JSON.stringify(options.body);
+            }
+          }
+
+      //  if (!isFormData && options.body) {
+      //    config.headers["Content-Type"] = "application/json";
+      //    config.body = JSON.stringify(options.body);
+      //  }
+
+      console.log("🔧 useMutation - Config:", {
+        method: config.method,
+        isFormData: isFormData,
+        contentType: config.headers["Content-Type"] || "AUTO",
+        hasBody: hasBody,
+      });
 
       const response = await fetch(
         `https://bookly-back.onrender.com/api${endpoint}`,
