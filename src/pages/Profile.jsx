@@ -105,7 +105,7 @@ const isFollowing = getIsFollowing();
 
   //TODO editar perfil
   const handleEditProfile = () => {
-    navigate("/edit");
+    navigate("/editProfile");
   };
 
   useEffect(() => {
@@ -163,7 +163,7 @@ const isFollowing = getIsFollowing();
       <Card.Root id="profile-header">
         <Card.Body>
           <HStack gap="6">
-            <Avatar.Root size="xl">
+            <Avatar.Root boxSize="120px">
               <Avatar.Fallback name={user.username} />
               {user.profilePic && <Avatar.Image src={user.profilePic} />}
             </Avatar.Root>

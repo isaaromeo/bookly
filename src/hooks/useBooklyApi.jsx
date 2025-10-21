@@ -112,6 +112,7 @@ export const useBooklyApi = {
     const { mutate, loading, error, data } = useMutation();
 
     const updateUser = (userId, userData) => {
+
       return mutate(`/user/${userId}`, {
         method: "PUT",
         body: userData,

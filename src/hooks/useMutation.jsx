@@ -12,15 +12,21 @@ export const useMutation = () => {
 
     try {
       const token = localStorage.getItem("token");
+      const isFormData = options.body instanceof FormData;
       const config = {
         method: options.method || "POST",
         headers: {
-          "Content-Type": "application/json",
+         
           Authorization: `Bearer ${token}`,
-          ...options.headers,
+          
         },
-        body: options.body ? JSON.stringify(options.body) : undefined,
+        body: options.body,
       };
+
+       if (!isFormData && options.body) {
+         config.headers["Content-Type"] = "application/json";
+         config.body = JSON.stringify(options.body);
+       }
 
       const response = await fetch(
         `https://bookly-back.onrender.com/api${endpoint}`,
