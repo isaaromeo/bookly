@@ -15,6 +15,16 @@ import { LuBook } from "react-icons/lu";
 export const BookGrid = ({books}) => {
     const navigate = useNavigate();
 
+    if (!books || books.length === 0) {
+      return (
+        <Box textAlign="center" py="8">
+          <Text fontSize="lg" color="fg.muted">
+            No books found
+          </Text>
+        </Box>
+      );
+    }
+
   return (
     <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap="6">
       {books.map((book) => (
