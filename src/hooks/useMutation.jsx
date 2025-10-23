@@ -34,18 +34,6 @@ export const useMutation = () => {
             }
           }
 
-      //  if (!isFormData && options.body) {
-      //    config.headers["Content-Type"] = "application/json";
-      //    config.body = JSON.stringify(options.body);
-      //  }
-
-      console.log("🔧 useMutation - Config:", {
-        method: config.method,
-        isFormData: isFormData,
-        contentType: config.headers["Content-Type"] || "AUTO",
-        hasBody: hasBody,
-      });
-
       const response = await fetch(
         `https://bookly-back.onrender.com/api${endpoint}`,
         config

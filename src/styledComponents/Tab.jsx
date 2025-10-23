@@ -15,10 +15,10 @@ import { useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart, FaUserPlus, FaUserCheck } from "react-icons/fa";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { user } from "@heroui/react";
 
-export const Tab = ({ content, tabTitle, contentType, currentUserId }) => {
+export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => {
   const navigate = useNavigate();
   const { user: authUser, login } = useAuth();
   const { likeReview } = useBooklyApi.useLikeReview();
@@ -31,96 +31,95 @@ export const Tab = ({ content, tabTitle, contentType, currentUserId }) => {
     }
   }, [content]);
 
-  const handleLike = async (reviewId) => {
-    if (!authUser) {
-      alert("Please log in to like reviews");
-      return;
-    }
+  const handleLike = useCallback(
+    async (reviewId) => {
+      if (!authUser) {
+        alert("Please log in to like reviews");
+        return;
+      }
 
-    try {
-      const result = await likeReview(reviewId);
+      try {
+        const result = await likeReview(reviewId);
 
-      //para que se vea el cambio de like en la interfaz irl
-      setLocalContent((prevContent) =>
-        prevContent.map((review) =>
-          review._id === reviewId
-            ? result.review 
-            : review
-        )
-      );
-    } catch (error) {
-      console.error("Error liking review:", error);
-    }
-  };
-
-  const handleFollow = async (userId) => {
-    
-    if (!authUser) {
-      alert("Please log in to follow users");
-      return;
-    }
-
-    try {
-      const result = await followUser(userId);
-
-      if (result && result.user) {
-        console.log("user followed succesfully")
-        const token = localStorage.getItem("token");
-        //actualizar contexto
-        login(result.user, token);
-        //actualiza estado local para reflejar cambio
+        //para que se vea el cambio de like en la interfaz irl
         setLocalContent((prevContent) =>
-          prevContent.map((user) =>
-            user._id === userId
-              ? {
-                  ...user,
-                  followers: result.user.followers?.includes(userId)
-                    ? [...(user.followers || []), authUser._id]
-                    : user.followers?.filter((id) => id !== authUser._id),
-                }
-              : user
+          prevContent.map((review) =>
+            review._id === reviewId ? result.review : review
           )
         );
+      } catch (error) {
+        console.error("Error liking review:", error);
       }
-    } catch (error) {
-      console.error("Error following user:", error);
-    }
-  };
+    },
+    [authUser, likeReview]);
 
-  const handleUserClick = (userId) => {
-    navigate(`/profile/${userId}`);
-  };
+  const handleFollow = useCallback(
+    async (userId) => {
+      if (!authUser) {
+        alert("Please log in to follow users");
+        return;
+      }
+
+      try {
+        const result = await followUser(userId);
+
+        if (result && result.user) {
+          console.log("user followed succesfully");
+          const token = localStorage.getItem("token");
+          //actualizar contexto
+          login(result.user, token);
+          //actualiza estado local para reflejar cambio
+          setLocalContent((prevContent) =>
+            prevContent.map((user) =>
+              user._id === userId
+                ? {
+                    ...user,
+                    followers: result.user.followers?.includes(userId)
+                      ? [...(user.followers || []), authUser._id]
+                      : user.followers?.filter((id) => id !== authUser._id),
+                  }
+                : user
+            )
+          );
+        }
+      } catch (error) {
+        console.error("Error following user:", error);
+      }
+    },
+    [authUser, followUser, login]);
+
+  const handleUserClick = useCallback(
+    (userId) => {
+      navigate(`/profile/${userId}`);
+    },[navigate]);
 
   // const isFollowingUser = (userId) => {
   //   return authUser?.following?.includes(userId);
   // };
 
-  const isLikedReview = (review) => {
-    return authUser && review.likes?.includes(authUser._id);
-  };
+  const getIsFollowing = useCallback(
+    (userId) => {
+      if (!authUser || !authUser.following) return false;
+      if (
+        authUser.following.length > 0 &&
+        typeof authUser.following[0] === "string"
+      ) {
+        return authUser.following.includes(userId);
+      }
+      if (
+        authUser.following.length > 0 &&
+        typeof authUser.following[0] === "object"
+      ) {
+        return authUser.following.some(
+          (followedUser) => followedUser && followedUser._id === userId
+        );
+      }
 
-  const getIsFollowing = (userId) => {
-    if (!authUser || !authUser.following) return false;
-    if (
-      authUser.following.length > 0 &&
-      typeof authUser.following[0] === "string"
-    ) {
-      return authUser.following.includes(userId);
-    }
-    if (
-      authUser.following.length > 0 &&
-      typeof authUser.following[0] === "object"
-    ) {
-      return authUser.following.some(
-        (followedUser) => followedUser && followedUser._id === userId
-      );
-    }
-
-    return false;
-  };
+      return false;
+    }, [authUser]);
 
 
-
+    //es useMemo util para los renders?
   const renderReviews = () => (
     <VStack gap="4" align="stretch">
       {localContent.map((review) => {
@@ -133,9 +132,31 @@ export const Tab = ({ content, tabTitle, contentType, currentUserId }) => {
               <HStack justify="space-between" mb="2">
                 <VStack align="start" gap="1">
                   <Text fontWeight="semibold">{review.title}</Text>
-                  <Text fontSize="sm" color="fg.muted">
+
+                  {context === "bookDetail" && (
+                    // en  BookDetail mostrar usuario
+                    <HStack>
+                      <Avatar.Root size="xs">
+                        <Avatar.Fallback name={review.user?.username} />
+                        {review.user?.profilePic && (
+                          <Avatar.Image src={review.user.profilePic} />
+                        )}
+                      </Avatar.Root>
+                      <Text fontSize="sm" color="fg.muted">
+                        By {review.user?.username || "Unknown user"}
+                      </Text>
+                    </HStack>
+                  )}
+
+                  {context === "profile" && (
+                    //en Profile: mostrar libro
+                    <Text fontSize="sm" color="fg.muted">
+                      on {review.book.title || "Unknown Book"}
+                    </Text>
+                  )}
+                  {/* <Text fontSize="sm" color="fg.muted">
                     on {review.book?.title || "Unknown Book"}
-                  </Text>
+                  </Text> */}
                 </VStack>
                 <RatingGroup.Root
                   readOnly
@@ -150,10 +171,10 @@ export const Tab = ({ content, tabTitle, contentType, currentUserId }) => {
               </HStack>
               <Text>{review.content}</Text>
               <HStack justify="space-between" align="center">
-                <Text fontSize="sm" color="fg.muted" mt="2">
+                {/* <Text fontSize="sm" color="fg.muted" mt="2">
                   By {review.user?.username} •{" "}
                   {new Date(review.createdAt).toLocaleDateString()}
-                </Text>
+                </Text> */}
                 <HStack gap="2">
                   <IconButton
                     size="sm"

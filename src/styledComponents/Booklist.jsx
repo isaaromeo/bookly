@@ -7,11 +7,12 @@ import {
   Avatar
 } from "@chakra-ui/react";
 import { LuBook } from "react-icons/lu";
-
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const BookList = ({books}) => {
     const navigate = useNavigate();
+    const memoizedBooks = useMemo(() => books || [], [books]);
 
   return (
     <Card.Root
@@ -27,7 +28,7 @@ export const BookList = ({books}) => {
     >
       <Card.Body padding="0">
         <VStack gap="0" align="stretch">
-          {books.map((book) => (
+          {memoizedBooks.map((book) => (
             <Box
               key={book._id}
               padding="3"
@@ -38,7 +39,7 @@ export const BookList = ({books}) => {
               }}
             >
               <HStack gap="3" align="start">
-                {/* Book cover */}
+                {/*cover */}
                 <Avatar.Root size="sm" shape="square" flexShrink="0">
                   <Avatar.Fallback>
                     <LuBook />
@@ -46,7 +47,7 @@ export const BookList = ({books}) => {
                   <Avatar.Image src={book.cover} alt={book.title} />
                 </Avatar.Root>
 
-                {/* Book info */}
+                {/*info */}
                 <VStack align="start" gap="1" flex="1" minWidth="0">
                   <Text
                     fontWeight="semibold"

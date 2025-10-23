@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -66,8 +66,7 @@ const BookDetail = () => {
     error: reviewErr,
   } = useBooklyApi.useBookReviews(id);
 
-  const handleSubmitReview = async () => {
-    console.log("book id:", id, "review", newReview);
+  const handleSubmitReview = useCallback(async () => {
 
     //si no estas loggeado no puedes hacer review
     //añadir que un user no puede reseñar el mismo libro 2 veces
@@ -84,32 +83,30 @@ const BookDetail = () => {
       console.error("Error submitting review:", err);
       alert(`Error: ${err.message}`);
     }
-  };
+  }, [authUser, id, addToLibrary]);
 
-  const handleAddToLibrary = async () => {
-  if (!authUser) {
-    alert("Please log in to add books to your library");
-    return;
-  }
-
-  // const bookIdStr = JSON.stringify(id);
-  // const userIdStr = JSON.stringify(authUser._id);
-  // console.log("bookId + user stringified: ",bookIdStr, userIdStr)
-  
-  try {
-    const result = await addToLibrary(authUser._id, id);
-
-    if (result && result.user) {
-      const token = localStorage.getItem("token");
-      login(result.user, token); // Actualiza el contexto user
+  const handleAddToLibrary = useCallback(async () => {
+    if (!authUser) {
+      alert("Please log in to add books to your library");
+      return;
     }
-    alert("Book added to your library!");
-  } catch (err) {
-    console.error("Error adding to library:", err);
-    alert(`Error: ${err.message}`);
-  }
-};
-  const handleAddToTBR = async () => {
+
+    try {
+      const result = await addToLibrary(authUser._id, id);
+
+      if (result && result.user) {
+        const token = localStorage.getItem("token");
+        login(result.user, token); // Actualiza el contexto user
+      }
+
+      alert("Book added to your library!");
+    } catch (err) {
+      console.error("Error adding to library:", err);
+      alert(`Error: ${err.message}`);
+    }
+  }, [authUser, id, addToLibrary, login]);
+
+  const handleAddToTBR = useCallback(async () => {
     if (!authUser) {
       alert("Please log in to add books to your TBR");
       return;
@@ -122,7 +119,7 @@ const BookDetail = () => {
       console.error("Error adding to TBR:", err);
       alert(`Error: ${err.message}`);
     }
-  };
+  }, [authUser, id, addToTBR]);
 
   if (loadBook) {
     return (
@@ -131,6 +128,7 @@ const BookDetail = () => {
       </Box>
     );
   }
+
 
   return (
     <BookDetailContainer>
@@ -149,7 +147,6 @@ const BookDetail = () => {
             boxShadow="lg"
           />
         </Box>
-
         <Box flex="1">
           <VStack gap="3" align="start">
             <Text fontSize="3xl" fontWeight="bold">
@@ -222,7 +219,12 @@ const BookDetail = () => {
                 <Alert.Title>Error loading reviews: {reviewErr}</Alert.Title>
               </Alert.Root>
             ) : reviews && reviews.length > 0 ? (
-              <Tab content={reviews} tabTitle="Reviews" contentType="reviews" />
+              <Tab
+                content={reviews}
+                tabTitle="Reviews"
+                contentType="reviews"
+                context="bookDetail"
+              />
             ) : (
               <Box textAlign="center" padding="8">
                 <Text color="fg.muted">

@@ -1,4 +1,5 @@
 import { useNavigate} from "react-router-dom";
+import { useMemo } from "react";
 
 import {
   Box,
@@ -14,20 +15,22 @@ import { LuBook } from "react-icons/lu";
 
 export const BookGrid = ({books}) => {
     const navigate = useNavigate();
+    const memoizedBooks = useMemo(() => books || [], [books]);
 
-    if (!books || books.length === 0) {
-      return (
-        <Box textAlign="center" py="8">
-          <Text fontSize="lg" color="fg.muted">
-            No books found
-          </Text>
-        </Box>
-      );
-    }
+     if (!memoizedBooks.length) {
+       return (
+         <Box textAlign="center" py="8">
+           <Text fontSize="lg" color="fg.muted">
+             No books found
+           </Text>
+         </Box>
+       );
+     }
+
 
   return (
     <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap="6">
-      {books.map((book) => (
+      {memoizedBooks.map((book) => (
         <Card.Root
           key={book._id}
           cursor="pointer"

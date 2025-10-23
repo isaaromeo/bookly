@@ -172,10 +172,8 @@ const EditProfile = () => {
             >
               Back to Profile
             </Button>
-            {/* <Text fontSize="xl" fontWeight="bold">
-              Edit Profile
-            </Text> */}
-            <Box width="40px" /> {/* Spacer para alineación */}
+
+            <Box width="40px" />
           </HStack>
         </Card.Header>
 
@@ -192,11 +190,10 @@ const EditProfile = () => {
               <Alert.Indicator />
               <Alert.Title>{success}</Alert.Title>
             </Alert.Root>
-          )} */}
+          )}  */}
 
           <form onSubmit={handleSubmit}>
             <VStack gap="6">
-              {/* Foto de perfil */}
               <Field.Root>
                 <Field.Label textAlign="center">Profile Picture</Field.Label>
                 <VStack gap="3">

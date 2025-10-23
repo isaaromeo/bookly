@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
@@ -58,7 +58,7 @@ const Profile = () => {
 //porq hay dos casos:
 //1- que .following sea array de ids
 //2- que .following dea array de obj user
-const getIsFollowing = () => {
+const isFollowing = useMemo(() => {
   if (!authUser || !authUser.following) return false;
   if (
     authUser.following.length > 0 &&
@@ -76,11 +76,11 @@ const getIsFollowing = () => {
   }
 
   return false;
-};
+}, [authUser, profileUserId]);
 
-const isFollowing = getIsFollowing();
+// const isFollowing = getIsFollowing();
 
-  const handleFollow = async () => {
+  const handleFollow = useCallback(async () => {
     if (!authUser) {
       alert("You must be logged in to follow users");
       return;
@@ -90,8 +90,6 @@ const isFollowing = getIsFollowing();
       const result = await followUser(profileUserId);
 
       if (result && result.user) {
-        console.log("user followed succesfully");
-        console.log("isFollowing 2", isFollowing);
         const token = localStorage.getItem("token");
         //actualizamos el contexto
         login(result.user, token);
@@ -101,12 +99,12 @@ const isFollowing = getIsFollowing();
       console.error("Error following user:", error);
       alert("Error following user");
     }
-  };
+  }, [authUser, profileUserId, followUser, login, refetch]);
 
-  //TODO editar perfil
-  const handleEditProfile = () => {
+ 
+  const handleEditProfile = useCallback(() => {
     navigate("/editProfile");
-  };
+  }, [navigate]);
 
   useEffect(() => {
     if (!authUser && !authLoading) {
@@ -241,11 +239,11 @@ const isFollowing = getIsFollowing();
               </Tabs.Trigger>
               <Tabs.Trigger value="followers">
                 <FaUserFriends style={{ marginRight: "8px" }} />
-                Followers ({user.followers?.length || 0})
+                Followers 
               </Tabs.Trigger>
               <Tabs.Trigger value="following">
                 <FaUserPlus style={{ marginRight: "8px" }} />
-                Following ({user.following?.length || 0})
+                Following 
               </Tabs.Trigger>
             </Tabs.List>
           </Tabs.Root>
@@ -268,7 +266,7 @@ const isFollowing = getIsFollowing();
               content={user.reviews}
               contentType={"reviews"}
               tabTitle="Reviews"
-              currentUserId={authUser?._id}
+              context="profile"
             />
           )}
           {activeTab === "followers" && (

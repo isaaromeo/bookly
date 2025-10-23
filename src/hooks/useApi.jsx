@@ -37,6 +37,7 @@ export const useApi = (endpoint, options = {}) => {
           setLoading(false);
         }
       }
+      console.log(`https://bookly-back.onrender.com/api${endpoint}`);
 
       const response = await fetch(
         `https://bookly-back.onrender.com/api${endpoint}`,
