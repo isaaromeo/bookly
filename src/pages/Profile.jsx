@@ -27,7 +27,6 @@ import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 
 
-
 const ProfileContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -105,6 +104,10 @@ const isFollowing = useMemo(() => {
   const handleEditProfile = useCallback(() => {
     navigate("/editProfile");
   }, [navigate]);
+
+    const handleAdminTools = useCallback(() => {
+      navigate("/adminTools");
+    }, [navigate]);
 
   useEffect(() => {
     if (!authUser && !authLoading) {
@@ -201,6 +204,15 @@ const isFollowing = useMemo(() => {
                     {isFollowing ? "Following" : "Follow"}
                   </Button>
                 )}
+                {isOwnProfile && authUser.rol === "admin" && (
+                  <Button
+                    variant="outline"
+                    leftIcon={<FaEdit />}
+                    onClick={handleAdminTools}
+                  >
+                    Admin Tools
+                  </Button>
+                )}
               </HStack>
 
               <HStack gap="6">
@@ -217,6 +229,7 @@ const isFollowing = useMemo(() => {
           </HStack>
         </Card.Body>
       </Card.Root>
+
 
       <Card.Root>
         <Card.Header>
@@ -239,11 +252,11 @@ const isFollowing = useMemo(() => {
               </Tabs.Trigger>
               <Tabs.Trigger value="followers">
                 <FaUserFriends style={{ marginRight: "8px" }} />
-                Followers 
+                Followers
               </Tabs.Trigger>
               <Tabs.Trigger value="following">
                 <FaUserPlus style={{ marginRight: "8px" }} />
-                Following 
+                Following
               </Tabs.Trigger>
             </Tabs.List>
           </Tabs.Root>

@@ -147,6 +147,25 @@ export const useBooklyApi = {
   useUserFollowData: (userId) =>
     useApi(userId ? `/user/${userId}/followData` : null),
 
+  //admin
+  useUploadBooksCSV: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const uploadBooksCSV = (formData) => {
+      return mutate("/books/uploadCSV", {
+        method: "POST",
+        body: formData,
+      });
+    };
+
+    return {
+      uploadBooksCSV,
+      loading,
+      error,
+      data,
+    };
+  },
+
   //reviews
   useBookReviews: (bookId) => useApi(bookId ? `/reviews/${bookId}` : null),
   useUserReviews: (userId) =>
