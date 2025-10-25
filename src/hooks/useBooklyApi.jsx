@@ -112,7 +112,6 @@ export const useBooklyApi = {
     const { mutate, loading, error, data } = useMutation();
 
     const updateUser = (userId, userData) => {
-
       return mutate(`/user/${userId}`, {
         method: "PUT",
         body: userData,
@@ -216,8 +215,8 @@ export const useBooklyApi = {
   useDeleteReview: () => {
     const { mutate, loading, error, data } = useMutation();
 
-    const deleteReview = (reviewId) => {
-      return mutate(`/reviews/${reviewId}`, {
+    const deleteReview = (reviewId, userId) => {
+      return mutate(`/reviews/${reviewId}/${userId}`, {
         method: "DELETE",
       });
     };

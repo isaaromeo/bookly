@@ -39,6 +39,9 @@ const BookDetail = () => {
     title: "",
   });
 
+  //para que por defecto aparezcan las reviews
+  const [activeTab, setActiveTab] = useState("reviews");
+
   //hook para post review
   const {
     postReview,
@@ -57,6 +60,7 @@ const BookDetail = () => {
     data: book,
     loading: loadBook,
     error: bookErr,
+    refetch: bookRefetch //para actualizar despues de subir la review
   } = useBooklyApi.useBook(id);
 
   //info reviews del libro
@@ -64,10 +68,10 @@ const BookDetail = () => {
     data: reviews,
     loading: loadReview,
     error: reviewErr,
+    refetch: reviewRefetch
   } = useBooklyApi.useBookReviews(id);
 
   const handleSubmitReview = useCallback(async () => {
-
     //si no estas loggeado no puedes hacer review
     //añadir que un user no puede reseñar el mismo libro 2 veces
     if (!authUser) {
@@ -79,11 +83,15 @@ const BookDetail = () => {
       await postReview(id, newReview, authUser._id);
       setNewReview({ rating: 5, content: "", title: "" });
       alert("Review submitted successfully!");
+      setActiveTab("reviews");
+      //añadir refetch
+      bookRefetch();
+      reviewRefetch();
     } catch (err) {
       console.error("Error submitting review:", err);
       alert(`Error: ${err.message}`);
     }
-  }, [authUser, id, addToLibrary]);
+  }, [authUser, id, bookRefetch, reviewRefetch]);
 
   const handleAddToLibrary = useCallback(async () => {
     if (!authUser) {
@@ -192,7 +200,6 @@ const BookDetail = () => {
               <Button variant="outline" onClick={handleAddToTBR}>
                 Add to TBR
               </Button>
-              <Button variant="outline">Review</Button>
             </HStack>
           </VStack>
         </Box>
@@ -200,7 +207,10 @@ const BookDetail = () => {
       {/* Reviews */}
 
       <Box mt="8">
-        <Tabs.Root defaultValue="reviews">
+        <Tabs.Root
+          value={activeTab}
+          onValueChange={(e) => setActiveTab(e.value)}
+        >
           <Tabs.List>
             <Tabs.Trigger value="reviews">
               Reviews ({reviews ? reviews.length : 0})
@@ -230,6 +240,15 @@ const BookDetail = () => {
                 <Text color="fg.muted">
                   No reviews yet. Be the first to review this book!
                 </Text>
+                {authUser && (
+                  <Button
+                    mt="4"
+                    colorPalette="purple"
+                    onClick={() => setActiveTab("add-review")}
+                  >
+                    Be the first to review!
+                  </Button>
+                )}
               </Box>
             )}
           </Tabs.Content>

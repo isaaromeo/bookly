@@ -35,10 +35,18 @@ export const useMutation = () => {
           }
 
       const response = await fetch(
-        `https://bookly-back.onrender.com/api${endpoint}`,
+        `http://localhost:3001/api${endpoint}`,
         config
       );
-      const result = await response.json();
+
+      let result;
+      try {
+        result = await response.json();
+        console.log("Response data:", result);
+      } catch (parseError) {
+        console.error("Error parsing response:", parseError);
+        throw new Error(`Failed to parse response: ${parseError.message}`);
+      }
 
       if (!response.ok) {
         throw new Error(

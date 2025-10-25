@@ -12,11 +12,10 @@ import {
 } from "@chakra-ui/react";
 
 import { useNavigate } from "react-router-dom";
-import { FaHeart, FaRegHeart, FaUserPlus, FaUserCheck } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaUserPlus, FaUserCheck, FaTrash } from "react-icons/fa";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect, useCallback } from "react";
-import { user } from "@heroui/react";
 
 export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => {
   const navigate = useNavigate();
@@ -24,6 +23,8 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
   const { likeReview } = useBooklyApi.useLikeReview();
   const { followUser } = useBooklyApi.useFollowUser();
   const [localContent, setLocalContent] = useState([]); //para poder ver el cambio del like irl
+  const { deleteReview, loading: deletingReview } =
+    useBooklyApi.useDeleteReview();
 
   useEffect(() => {
     if (content) {
@@ -96,6 +97,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
   // const isFollowingUser = (userId) => {
   //   return authUser?.following?.includes(userId);
   // };
+  
 
   const getIsFollowing = useCallback(
     (userId) => {
@@ -118,6 +120,46 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
       return false;
     }, [authUser]);
 
+    const handleDeleteReview = useCallback(
+      async (reviewId) => {
+        if (!authUser) {
+          alert("Please log in to delete reviews");
+          return;
+        }
+
+        if (!window.confirm("Are you sure you want to delete this review?")) {
+          return;
+        }
+
+        try {
+          await deleteReview(reviewId, authUser._id);
+
+          setLocalContent((prevContent) =>
+            prevContent.filter((review) => review._id !== reviewId)
+          );
+
+          alert("Review deleted successfully!");
+        } catch (error) {
+          console.error("Error deleting review:", error);
+          alert(`Error: ${error.message}`);
+        }
+      },
+      [authUser, deleteReview]
+    );
+
+
+    const getReviewUserId = (review) => {
+      if (!review || !review.user) return null;
+
+      // El user puede ser un objeto completo o solo el ID
+      if (typeof review.user === "object" && review.user._id) {
+        return review.user._id;
+      }
+      if (typeof review.user === "string") {
+        return review.user;
+      }
+      return null;
+    };
 
     //es useMemo util para los renders?
   const renderReviews = () => (
@@ -126,6 +168,14 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
         if (!review) return null;
         const isLikedByUser = authUser && review.likes?.includes(authUser._id);
         const likesCount = review.likes?.length || 0;
+        const isOwnReview = authUser &&(
+            review.user?._id === authUser._id ||
+            review.user === authUser._id ||
+            (typeof review.user === "object" &&
+              review.user._id === authUser._id) ||
+            (typeof review.user === "string" && review.user === authUser._id));
+
+        const reviewUserId = getReviewUserId(review)
         return (
           <Card.Root key={review._id} width="100%">
             <Card.Body>
@@ -134,9 +184,14 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                   <Text fontWeight="semibold">{review.title}</Text>
 
                   {context === "bookDetail" && (
-                    // en  BookDetail mostrar usuario
+                    // en BookDetail mostrar usuario
                     <HStack>
-                      <Avatar.Root size="xs">
+                      <Avatar.Root
+                        size="xs"
+                        onClick={() =>
+                          reviewUserId && handleUserClick(reviewUserId)
+                        }
+                      >
                         <Avatar.Fallback name={review.user?.username} />
                         {review.user?.profilePic && (
                           <Avatar.Image src={review.user.profilePic} />
@@ -168,7 +223,19 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                   <RatingGroup.HiddenInput />
                   <RatingGroup.Control />
                 </RatingGroup.Root>
+                {isOwnReview && context === "profile" && (
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    colorPalette="red"
+                    onClick={() => handleDeleteReview(review._id)}
+                    loading={deletingReview}
+                  >
+                    <FaTrash />
+                  </IconButton>
+                )}
               </HStack>
+
               <Text>{review.content}</Text>
               <HStack justify="space-between" align="center">
                 {/* <Text fontSize="sm" color="fg.muted" mt="2">
