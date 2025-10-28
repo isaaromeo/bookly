@@ -9,12 +9,17 @@ import {
   LuUserPlus,
   LuLogIn,
   LuSettings,
+  LuSun,
+  LuMoon
 } from "react-icons/lu";
 import { useAuth } from "../hooks/useAuth.jsx";
+import { useColorMode } from "../components/ui/color-mode";
+import styled from "styled-components";
 
 export const UserMenu = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { colorMode, toggleColorMode } = useColorMode();
 
 
   const handleAction = (action) => {
@@ -104,7 +109,7 @@ export const UserMenu = () => {
                 <LuUser />
                 My Profile
               </Menu.Item>
-              <Menu.Item value="books" onClick={() => handleAction("books")}>
+              <Menu.Item value="explore" onClick={() => handleAction("books")}>
                 <LuBook />
                 Explore Books
               </Menu.Item>
@@ -128,6 +133,15 @@ export const UserMenu = () => {
                 <LuLogOut />
                 Logout
               </Menu.Item>
+              <Menu.Separator />
+
+              {/* Toggle Theme */}
+              <Menu.Item value="theme" onClick={toggleColorMode}>
+                {colorMode === "light" ? <LuMoon /> : <LuSun />}
+                {colorMode === "light" ? "Dark Mode" : "Light Mode"}
+              </Menu.Item>
+
+              <Menu.Separator />
             </>
           ) : (
             // Usuario no autenticado
@@ -157,6 +171,15 @@ export const UserMenu = () => {
                 <LuBook />
                 Explorar Libros
               </Menu.Item>
+              <Menu.Separator />
+
+              {/* Toggle Theme */}
+              <Menu.Item value="theme" onClick={toggleColorMode}>
+                {colorMode === "light" ? <LuMoon /> : <LuSun />}
+                {colorMode === "light" ? "Dark Mode" : "Light Mode"}
+              </Menu.Item>
+
+              <Menu.Separator />
             </>
           )}
         </Menu.Content>

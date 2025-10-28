@@ -39,7 +39,7 @@ const CategorySection = ({
     );
   }
 
-  const featuredBooks = books?.slice(0, 3) || [];
+  const featuredBooks = books?.slice(0, 4) || [];
 
   return (
     <VStack gap="6" align="stretch" mb="8">
