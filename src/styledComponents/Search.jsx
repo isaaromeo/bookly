@@ -42,6 +42,7 @@ export const Search = () => {
     if (query.length >= 2) {
       navigate(`/search?q=${query}`);
       clearSearch();
+      setShowAllResults(false);
     }
   };
 

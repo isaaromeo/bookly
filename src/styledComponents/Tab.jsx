@@ -172,7 +172,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
             review.user?._id === authUser._id ||
             review.user === authUser._id ||
             (typeof review.user === "object" &&
-              review.user._id === authUser._id) ||
+              review.user?._id === authUser._id) ||
             (typeof review.user === "string" && review.user === authUser._id));
 
         const reviewUserId = getReviewUserId(review)

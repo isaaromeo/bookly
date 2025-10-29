@@ -35,7 +35,7 @@ export const useMutation = () => {
           }
 
       const response = await fetch(
-        `http://localhost:3001/api${endpoint}`,
+        `https://bookly-back.onrender.com/api${endpoint}`,
         config
       );
 

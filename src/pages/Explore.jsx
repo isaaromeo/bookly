@@ -7,6 +7,15 @@ import {
   Button,
   Spinner,
   Alert,
+  Card,
+  Grid,
+  RatingGroup,
+  Heading,
+  Image,
+  SimpleGrid,
+  Link,
+  Separator,
+  GridItem,
 } from "@chakra-ui/react";
 import BookGrid from "../styledComponents/BookGrid";
 import { useBooklyApi } from "../hooks/useBooklyApi";
@@ -19,7 +28,15 @@ const HeroSection = styled.div`
   border-radius: 12px;
   margin-bottom: 3rem;
 `;
+  const categories = [
+    "Fantasy",
+    "History",
+    "Horror",
+    "Romance",
+    "Sci-fi",
+    "Thriller",
 
+  ];
 
 const CategorySection = ({
   title,
@@ -101,6 +118,22 @@ const Explore = () => {
           Explore books by your favorite genres
         </Text>
       </HeroSection>
+
+      <Heading size="md" mb={4} color="primary.600">
+        Browse by Category
+      </Heading>
+      <SimpleGrid columns={[2, 3, 5]} spacing={4} mb={10}>
+        {categories.map((cat) => (
+          <Link
+            key={cat}
+            color="secondary.500"
+            _hover={{ color: "primary.400", textDecoration: "underline" }}
+            fontWeight="medium"
+          >
+            {cat}
+          </Link>
+        ))}
+      </SimpleGrid>
 
       <Box padding="6" maxWidth="1200px" margin="0 auto">
         <VStack gap="8" align="stretch">

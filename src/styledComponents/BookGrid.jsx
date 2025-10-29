@@ -38,21 +38,20 @@ export const BookGrid = ({books}) => {
           onClick={() => {
             navigate(`/books/${book._id}`);
           }}
+          bg="brand.800"
         >
           <Card.Body>
-            {/* Book cover */}
             <Box
               as="img"
               src={book.cover}
               alt={book.title}
-              width="100%"
-              height="200px"
+              maxHeight="200px"
+              height="100%"
               objectFit="cover"
               borderRadius="md"
               marginBottom="3"
             />
 
-            {/* Book info */}
             <VStack align="start" gap="2" flex="1">
               <Text
                 fontWeight="bold"
