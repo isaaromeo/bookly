@@ -22,7 +22,7 @@ import {
   FaUserPlus,
   FaUserCheck
 } from "react-icons/fa";
-import { Tab } from "../styledComponents/Tab.jsx";
+import { Tab } from "../styledComponents/Tab2.jsx";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 

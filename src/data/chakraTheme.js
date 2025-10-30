@@ -2,6 +2,19 @@ import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
 
 const config = defineConfig({
   theme: {
+    tokens: {
+      fontWeights: {
+        thin: { value: "100" },
+        extralight: { value: "200" },
+        light: { value: "300" },
+        normal: { value: "400" },
+        medium: { value: "500" },
+        semibold: { value: "600" },
+        bold: { value: "700" },
+        extrabold: { value: "800" },
+        black: { value: "900" },
+      },
+    },
     semanticTokens: {
       colors: {
         "brand.50": { value: "#f0e6ff" },
@@ -14,27 +27,27 @@ const config = defineConfig({
         "brand.700": { value: "#514761" },
         "brand.800": { value: "#383445" },
         "brand.900": { value: "#1f2129" },
-        "primary.50":   { "value": "#EAF1F8" },
-  "primary.100":  { "value": "#CBDDEE" },
-  "primary.200":  { "value": "#AAC7E2" },
-  "primary.300":  { "value": "#88B0D5" },
-  "primary.400":  { "value": "#729FCB" },
-  "primary.500":  { "value": "#6785AB" },
-  "primary.600":  { "value": "#597293" },
-  "primary.700":  { "value": "#4A5E7B" },
-  "primary.800":  { "value": "#3C4A63" },
-  "primary.900":  { "value": "#2D364B" },
+        "primary.50": { value: "#85a5c5ff" },
+        "primary.100": { value: "#CBDDEE" },
+        "primary.200": { value: "#AAC7E2" },
+        "primary.300": { value: "#88B0D5" },
+        "primary.400": { value: "#729FCB" },
+        "primary.500": { value: "#6785AB" },
+        "primary.600": { value: "#597293" },
+        "primary.700": { value: "#4A5E7B" },
+        "primary.800": { value: "#3C4A63" },
+        "primary.900": { value: "#2D364B" },
 
-  "secondary.50":  { "value": "#E9F4F3" },
-  "secondary.100": { "value": "#CBE7E4" },
-  "secondary.200": { "value": "#ACD9D4" },
-  "secondary.300": { "value": "#8ECBC4" },
-  "secondary.400": { "value": "#7FBFB7" },
-  "secondary.500": { "value": "#7BA6A2" },
-  "secondary.600": { "value": "#6A908C" },
-  "secondary.700": { "value": "#587A76" },
-  "secondary.800": { "value": "#476460" },
-  "secondary.900": { "value": "#354E4A" },
+        "secondary.50": { value: "#E9F4F3" },
+        "secondary.100": { value: "#CBE7E4" },
+        "secondary.200": { value: "#ACD9D4" },
+        "secondary.300": { value: "#8ECBC4" },
+        "secondary.400": { value: "#7FBFB7" },
+        "secondary.500": { value: "#7BA6A2" },
+        "secondary.600": { value: "#6A908C" },
+        "secondary.700": { value: "#587A76" },
+        "secondary.800": { value: "#476460" },
+        "secondary.900": { value: "#354E4A" },
 
         "colorScheme.brand": { value: "{colors.brand.500}" },
       },
@@ -44,8 +57,13 @@ const config = defineConfig({
 
 export const system = createSystem(defaultConfig, config);
 
-console.log("System creado:", system);
-console.log("Colores disponibles:", system.tokens.colors);
+console.log(" CHAKRA SYSTEM DEBUG ");
+console.log("FontWeights tokens:", system.tokens.getByName("fontWeights.thin"));
+console.log(
+  "All fontWeights:",
+  Array.from(system.tokens.fontWeights?.entries() || [])
+);
+console.log("System keys:", Object.keys(system));
 // const config = defineConfig({
 //   theme: {
 //     tokens: {
