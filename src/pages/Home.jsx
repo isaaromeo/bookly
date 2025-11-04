@@ -100,7 +100,6 @@ const features = [
     ];
 
 const Home = () => {
-
   const { data: books, loading, error } = useBooklyApi.useBooks();
   const navigate = useNavigate();
 
@@ -111,36 +110,37 @@ const Home = () => {
 
   const isaId = "68f26a93086e5c6b2e14f139";
   const pedriId = "68fd3eb969960b641fcd907d";
-  const {
-    data: dataIsa,
-    loading: loadingIsa,
-    error: errorIsa,
-  } = useBooklyApi.useUser(isaId);
+  // const {
+  //   data: dataIsa,
+  //   loading: loadingIsa,
+  //   error: errorIsa,
+  // } = useBooklyApi.useUser(isaId);
 
-  const {
-    data: dataPedri,
-    loading: loadingPedri,
-    error: errorPedri,
-  } = useBooklyApi.useUser(pedriId);
+  // const {
+  //   data: dataPedri,
+  //   loading: loadingPedri,
+  //   error: errorPedri,
+  // } = useBooklyApi.useUser(pedriId);
 
   const handleBookSelect = (book) => {
     navigate(`/books/${book._id}`);
   };
 
-  const realRecommendations = [
-    {
-      user: dataIsa?.username || "Isa",
-      liked: dataIsa?.library?.slice(0, 3) || [],
-      discovered: dataIsa?.library?.slice(0, 3) || [],
-    },
-    {
-      user: dataPedri?.username || "Pedri",
-      liked: dataPedri?.library?.slice(0, 3) || [],
-      discovered: dataPedri?.library?.slice(0, 3) || [],
-    },
-  ];
+  // const realRecommendations = [
+  //   {
+  //     user: dataIsa?.username || "Isa",
+  //     liked: dataIsa?.library?.slice(0, 3) || [],
+  //     discovered: dataIsa?.library?.slice(0, 3) || [],
+  //   },
+  //   {
+  //     user: dataPedri?.username || "Pedri",
+  //     liked: dataPedri?.library?.slice(0, 3) || [],
+  //     discovered: dataPedri?.library?.slice(0, 3) || [],
+  //   },
+  // ];
 
-  if (loading || loadingIsa || loadingPedri) {
+  //|| loadingIsa || loadingPedri
+  if (loading) {
     return (
       <Box
         display="flex"
@@ -153,7 +153,8 @@ const Home = () => {
     );
   }
 
-  if (error || errorIsa || errorPedri) {
+  //|| errorIsa || errorPedri
+  if (error) {
     return (
       <Box textAlign="center" py="8">
         <Text color="red.500">Error loading data</Text>
@@ -168,9 +169,7 @@ const Home = () => {
           <VStack gap="6" color="white">
             <Heading
               fontSize="4xl"
-              fontWeight="bold"
               style={{
-                fontWeight: "bold",
                 fontFamily: "'Cinzel', serif",
               }}
             >
@@ -232,7 +231,7 @@ const Home = () => {
             ))}
           </SimpleGrid>
         </VStack>
-        <VStack gap="8" mb="12">
+        {/* <VStack gap="8" mb="12">
           {realRecommendations.map((rec, index) => (
             <Box
               key={index}
@@ -311,7 +310,7 @@ const Home = () => {
               </Grid>
             </Box>
           ))}
-        </VStack>
+        </VStack> */}
         <VStack gap="6" mb="12" align="stretch">
           <HStack justify="space-between">
             <Heading size="lg">
@@ -404,26 +403,7 @@ const Home = () => {
           </Card.Body>
         </Card.Root>
       </Container>
-      <Text
-        fontWeight="bold"
-        style={{ border: "2px solid red" }}
-        data-test="font-weight-test"
-      >
-        TEST - Este texto debería ser BOLD
-      </Text>
-      <Text fontWeight="bold" style={{ border: "2px solid red" }}>
-        Inspecciona este elemento - ¿Tiene [font-weight="bold"]?
-      </Text>
-      <div>
-        <Text fontWeight="thin">thin (100)</Text>
-        <Text fontWeight="light">light (300)</Text>
-        <Text fontWeight="normal">normal (400)</Text>
-        <Text fontWeight="medium">medium (500)</Text>
-        <Text fontWeight="semibold">semibold (600)</Text>
-        <Text data-fontweight="bold">bold (700)</Text>
-        <Text fontWeight="extrabold">extrabold (800)</Text>
-        <Text fontWeight="black">black (900)</Text>
-      </div>
+
     </Box>
   );
 };
