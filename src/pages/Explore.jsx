@@ -7,9 +7,7 @@ import {
   Button,
   Spinner,
   Alert,
-  Card,
-  Grid,
-  RatingGroup,
+  Container,
   Heading,
   Image,
   SimpleGrid,
@@ -17,21 +15,32 @@ import {
   Separator,
   GridItem,
 } from "@chakra-ui/react";
-import BookGrid from "../styledComponents/BookGrid";
+import BookGrid from "../styledComponents/BookGrid2";
+import UserRecomend from "../styledComponents/UserRecomend";
+import headerImage from "../assets/headerOK.png";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import styled from "styled-components";
 
-const HeroSection = styled.div`
-  background: linear-gradient(135deg, #836e99 0%, #45385a 100%);
-  padding: 4rem 2rem;
+const HeroSection = styled.section`
+  background-image: linear-gradient(
+      0deg,
+      rgba(133, 120, 171, 0) 0%,
+      rgba(133, 120, 171, 0.88) 100%
+    ),
+    url(${headerImage});
+  background-repeat: repeat-x;
+  background-position: bottom;
   text-align: center;
-  border-radius: 12px;
-  margin-bottom: 3rem;
+  width: 100%;
+  padding: 4rem 1rem;
+  margin-top: 2rem;
+  border-radius: 20px;
 `;
   const categories = [
     "Fantasy",
     "History",
     "Horror",
+    "Adventure",
     "Romance",
     "Sci-fi",
     "Thriller",
@@ -61,10 +70,12 @@ const CategorySection = ({
   return (
     <VStack gap="6" align="stretch" mb="8">
       <HStack justify="space-between" align="center">
-        <Text fontSize="2xl" fontWeight="bold">
+        <Heading size="lg" id={title.toLowerCase().replace(/\s+/g, "-")}>
           {title}
-        </Text>
-
+        </Heading>
+        <Button variant="ghost" size="sm">
+          See All
+        </Button>
       </HStack>
 
       {loading ? (
@@ -111,12 +122,20 @@ const Explore = () => {
   return (
     <Box minHeight="100vh" bg="bg.canvas">
       <HeroSection>
-        <Text fontSize="4xl" fontWeight="bold" color="white" mb="4">
-          Discover New Worlds
-        </Text>
-        <Text fontSize="xl" color="white" opacity="0.9">
-          Explore books by your favorite genres
-        </Text>
+        <Container maxWidth="1200px">
+          <Heading size="2xl" textAlign="center">
+            Explore Our Library
+          </Heading>
+          <Text
+            fontSize="lg"
+            color="fg.muted"
+            textAlign="center"
+            maxWidth="600px"
+          >
+            Dive into our vast collection of books, discover community
+            favorites, and find your next great read
+          </Text>
+        </Container>
       </HeroSection>
 
       <Heading size="md" mb={4} color="primary.600">
