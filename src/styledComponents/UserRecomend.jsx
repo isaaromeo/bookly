@@ -24,12 +24,12 @@ const UserRecomend = () => {
     {
       user: isa?.username || "user1275942",
       liked: isa?.library?.slice(0, 3) || [],
-      discovered: isa?.tbr?.slice(0, 3) || [],
+      discovered: isa?.library?.slice(3, 6) || [],
     },
     {
       user: pedri?.username || "user8974540",
       liked: pedri?.library?.slice(0, 3) || [],
-      discovered: pedri?.tbr?.slice(0, 3) || [],
+      discovered: pedri?.library?.slice(3, 6) || [],
     },
   ];
 
@@ -39,20 +39,20 @@ const UserRecomend = () => {
         <LuUsers style={{ display: "inline", marginRight: "12px" }} />
         Community Discoveries
       </Heading>
-      <Text fontSize="lg" color="fg.muted" maxWidth="800px">
+      <Text fontSize="lg" color="primary.200">
         See what other readers are discovering based on their favorite books
       </Text>
 
       {recomendations.map((rec, index) => (
-        <Card.Root key={index} variant="outline">
+        <Card.Root key={index} variant="outline" bg="brand.900">
           <Card.Body>
             <VStack gap="4" align="stretch">
-              <Text fontWeight="semibold" fontSize="lg">
+              <Text fontWeight="semibold" fontSize="sm" color="primary.100">
                 Because <Badge colorPalette="purple">{rec.user}</Badge> liked
                 these...
               </Text>
 
-              <Flex justify="space-between" align="center" gap="6">
+              <Flex justifyContent="space-between" align="center">
                 <HStack gap="3" flex="1" justify="center">
                   {rec.liked.map((book, i) =>
                     book ? (
@@ -60,7 +60,7 @@ const UserRecomend = () => {
                         <Image
                           src={book.cover}
                           alt={book.title}
-                          boxSize="80px"
+                          boxSize="100px"
                           borderRadius="md"
                           objectFit="cover"
                           boxShadow="sm"
@@ -83,19 +83,29 @@ const UserRecomend = () => {
                   )}
                 </HStack>
 
-                <Box color="brand.500" fontSize="xl" fontWeight="bold" px="4">
+                <Box
+                  color="brand.500"
+                  fontSize="xl"
+                  fontWeight="bold"
+                  px="6rem"
+                >
                   →
                 </Box>
 
                 <VStack align="end" gap="2" flex="1">
-                  <HStack gap="3" justify="end">
+                  <HStack
+                    gap="3"
+                    justify="end"
+                    marginTop="0.7rem"
+                    paddingTop="0.7rem"
+                  >
                     {rec.discovered.map((book, i) =>
                       book ? (
                         <Box key={i} position="relative">
                           <Image
                             src={book.cover}
                             alt={book.title}
-                            boxSize="80px"
+                            boxSize="100px"
                             borderRadius="md"
                             objectFit="cover"
                             boxShadow="sm"
@@ -117,7 +127,7 @@ const UserRecomend = () => {
                       ) : null
                     )}
                   </HStack>
-                  <Text color="brand.500" fontWeight="bold" fontSize="sm">
+                  <Text color="primary.100" fontWeight="bold" fontSize="sm">
                     They discovered these gems!
                   </Text>
                 </VStack>

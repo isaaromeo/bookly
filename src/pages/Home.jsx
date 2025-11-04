@@ -35,7 +35,7 @@ import {
 import BookGrid from "../styledComponents/BookGrid2";
 import headerImage from "../assets/headerOK.png";
 import FeatureCard from "../styledComponents/FeatureCard";
-
+import Stats from "../styledComponents/Stats";
 import styled from "styled-components";
 
 
@@ -231,86 +231,6 @@ const Home = () => {
             ))}
           </SimpleGrid>
         </VStack>
-        {/* <VStack gap="8" mb="12">
-          {realRecommendations.map((rec, index) => (
-            <Box
-              key={index}
-              bg="primary.900"
-              borderRadius="xl"
-              p={6}
-              boxShadow="md"
-              width="100%"
-              opacity={0.8}
-            >
-              <Grid templateColumns="1fr auto 1fr" gap={6} alignItems="center">
-                <VStack align="start" gap={2}>
-                  <Text
-                    fontWeight="semibold"
-                    textAlign="left"
-                    color="primary.100"
-                    mb={4}
-                  >
-                    Because{" "}
-                    <Text
-                      as="span"
-                      color="secondary.500"
-                      fontWeight="bold"
-                      marginBottom={0}
-                    >
-                      {rec.user}
-                    </Text>{" "}
-                    liked...
-                  </Text>
-
-                  <HStack justify="start" gap={3}>
-                    {rec.liked.map((book, i) =>
-                      book ? (
-                        <Image
-                          key={i}
-                          src={book.cover}
-                          alt={book.title}
-                          boxSize="100px"
-                          borderRadius="md"
-                          objectFit="cover"
-                          boxShadow="sm"
-                          cursor="pointer"
-                          onClick={() => navigate(`/books/${book._id}`)}
-                        />
-                      ) : null
-                    )}
-                  </HStack>
-                </VStack>
-
-                <Box color="primary.400" fontSize="2xl" textAlign="center">
-                  <LuMoveUpRight />
-                </Box>
-
-                <VStack align="end" gap={2}>
-                  <HStack justify="end" gap={3} marginBottom="6px">
-                    {rec.discovered.map((book, i) =>
-                      book ? (
-                        <Image
-                          key={i}
-                          src={book.cover}
-                          alt={book.title}
-                          boxSize="100px"
-                          borderRadius="md"
-                          objectFit="cover"
-                          boxShadow="sm"
-                          cursor="pointer"
-                          onClick={() => navigate(`/books/${book._id}`)}
-                        />
-                      ) : null
-                    )}
-                  </HStack>
-                  <Text color="primary.100" fontWeight="bold">
-                    They discovered!
-                  </Text>
-                </VStack>
-              </Grid>
-            </Box>
-          ))}
-        </VStack> */}
         <VStack gap="6" mb="12" align="stretch">
           <HStack justify="space-between">
             <Heading size="lg">
@@ -365,43 +285,7 @@ const Home = () => {
           </SimpleGrid>
         </VStack>
 
-        <Card.Root bg="secondary.100" mb="12" opacity={0.4} borderRadius="15px">
-          <Card.Body>
-            <SimpleGrid columns={{ base: 2, md: 4 }} gap="6" textAlign="center">
-              <VStack>
-                <Heading
-                  size="3xl"
-                  color="brand.300"
-                  sx={{
-                    fontWeight: "bold",
-                    fontStyle: "normal",
-                  }}
-                >
-                  10K+
-                </Heading>
-                <Text color="primary.800">Active Readers</Text>
-              </VStack>
-              <VStack>
-                <Heading size="3xl" color="brand.400">
-                  50K+
-                </Heading>
-                <Text color="primary.800">Books Reviewed</Text>
-              </VStack>
-              <VStack>
-                <Heading size="3xl" color="brand.600">
-                  1M+
-                </Heading>
-                <Text color="primary.800">Books Tracked</Text>
-              </VStack>
-              <VStack>
-                <Heading size="3xl" color="brand.900">
-                  5K+
-                </Heading>
-                <Text color="primary.800">Reading Clubs</Text>
-              </VStack>
-            </SimpleGrid>
-          </Card.Body>
-        </Card.Root>
+        <Stats/>
       </Container>
 
     </Box>

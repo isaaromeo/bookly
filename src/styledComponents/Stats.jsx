@@ -23,10 +23,10 @@ const Stats = () => {
   ];
 
   return (
-    <Card.Root bg="brand.50" mb="12">
+    <Card.Root bg="secondary.200" mb="12" opacity={0.5} borderRadius="15px">
       <Card.Body>
         <VStack gap="4">
-          <Heading size="lg" textAlign="center">
+          <Heading size="lg" color="brand.700"textAlign="center">
             Our Reading Community
           </Heading>
           <SimpleGrid
@@ -37,10 +37,17 @@ const Stats = () => {
           >
             {stats.map((stat, index) => (
               <VStack key={index}>
-                <Heading size="2xl" color="brand.600">
+                <Heading
+                  size="3xl"
+                  color="brand.300"
+                  sx={{
+                    fontWeight: "bold",
+                    fontStyle: "normal",
+                  }}
+                >
                   {stat.number}
                 </Heading>
-                <Text color="fg.muted" fontSize="sm">
+                <Text color="primary.800" fontSize="sm">
                   {stat.label}
                 </Text>
               </VStack>

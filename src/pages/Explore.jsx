@@ -23,7 +23,7 @@ import headerImage from "../assets/headerOK.png";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import styled from "styled-components";
 import { LuTrendingUp } from "react-icons/lu";
-
+import CategorySection from "../styledComponents/CategorySection";
 
 const HeroSection = styled.section`
   background-image: linear-gradient(
@@ -35,56 +35,13 @@ const HeroSection = styled.section`
   background-position: bottom;
   text-align: center;
   width: 100%;
-  padding: 4rem 1rem;
+  padding: 3rem 1rem;
   
   border-radius: 20px;
 `;
 
 
-const CategorySection = ({
-  title,
-  books,
-  loading,
-  error,
-  onBookSelect,
-  categoryRef,
-}) => {
-  if (error) {
-    return (
-      <Alert.Root status="error" mb="6">
-        <Alert.Indicator />
-        <Alert.Title>Error loading: {error}</Alert.Title>
-      </Alert.Root>
-    );
-  }
 
-  const featuredBooks = books?.slice(0, 6) || [];
-
-  return (
-    <VStack gap="6" align="stretch" mb="12" ref={categoryRef}>
-          <HStack justify="space-between" align="center">
-            <Heading size="lg" id={title.toLowerCase().replace(/\s+/g, "-")}>
-              {title}
-            </Heading>
-            <Button variant="ghost" size="sm">
-              See All
-            </Button>
-          </HStack>
-    
-          {loading ? (
-            <Box display="flex" justifyContent="center" padding="8">
-              <Spinner size="lg" />
-            </Box>
-          ) : (
-            <BookGrid
-              books={featuredBooks}
-              onBookSelect={onBookSelect}
-              emptyMessage={`No ${title.toLowerCase()} books found`}
-            />
-          )}
-        </VStack>
-  );
-};
 
 const Explore = () => {
   const navigate = useNavigate();
@@ -170,17 +127,18 @@ const Explore = () => {
           </Heading>
           <Text
             fontSize="lg"
-            color="fg.muted"
+            color="secondary.200"
             textAlign="center"
-            maxWidth="600px"
+            paddingTop="1rem"
+            
           >
             Dive into our vast collection of books, discover community
-            favorites, and find your next great read
+            favorites, and find your next great read!
           </Text>
         </Container>
       </HeroSection>
 
-      <VStack gap="6" mb="8">
+      <VStack gap="6" mb="8" paddingTop="1rem">
         <Heading size="lg">Browse by category</Heading>
         <SimpleGrid columns={{ base: 2, sm: 3, md: 5 }} gap="3" width="100%">
           {categories.map((category) => (

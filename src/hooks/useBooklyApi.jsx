@@ -15,7 +15,10 @@ export const useBooklyApi = {
 
   useBooks: () => useApi("/books", { cacheKey: "all-books" }),
 
-  useBooksByGenre: (genre) => useApi(genre ? `/books/genre/${genre}` : null),
+  useBooksByGenre: (genre) =>
+    useApi(genre ? `/books/genre/${genre}` : null, {
+      cacheKey: genre ? `books-genre-${genre}` : null, 
+    }),
 
   useBooksByAuthor: (author) =>
     useApi(author ? `/books/author/${author}` : null),
