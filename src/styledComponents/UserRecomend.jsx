@@ -8,7 +8,8 @@ import {
   Card,
   Heading,
   Image,
-
+  Badge,
+  Flex
 } from "@chakra-ui/react";
 import { LuUsers } from "react-icons/lu";
 
@@ -64,7 +65,7 @@ const UserRecomend = () => {
                           objectFit="cover"
                           boxShadow="sm"
                           cursor="pointer"
-                          onClick={navigate(`/books/${book._id}`)}
+                          onClick={() => navigate(`/books/${book._id}`)}
                           _hover={{ transform: "scale(1.05)" }}
                           transition="transform 0.2s"
                         />
@@ -82,12 +83,10 @@ const UserRecomend = () => {
                   )}
                 </HStack>
 
-                
                 <Box color="brand.500" fontSize="xl" fontWeight="bold" px="4">
                   →
                 </Box>
 
-                
                 <VStack align="end" gap="2" flex="1">
                   <HStack gap="3" justify="end">
                     {rec.discovered.map((book, i) =>
@@ -101,7 +100,7 @@ const UserRecomend = () => {
                             objectFit="cover"
                             boxShadow="sm"
                             cursor="pointer"
-                            onClick={navigate(`/books/${book._id}`)}
+                            onClick={() => navigate(`/books/${book._id}`)}
                             _hover={{ transform: "scale(1.05)" }}
                             transition="transform 0.2s"
                           />
