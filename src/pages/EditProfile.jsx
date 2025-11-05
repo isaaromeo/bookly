@@ -13,8 +13,9 @@ import {
   Button,
   Alert,
   Spinner,
+  Heading,
 } from "@chakra-ui/react";
-import { FaSave, FaArrowLeft, FaCamera } from "react-icons/fa";
+import { FaSave, FaArrowLeft, FaCamera, FaEdit } from "react-icons/fa";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import styled from "styled-components";
@@ -162,19 +163,14 @@ const EditProfile = () => {
 
   return (
     <EditProfileContainer>
-      <Card.Root>
+      <Card.Root bg="brand.900">
         <Card.Header>
-          <HStack justify="space-between" align="center">
-            <Button
-              variant="ghost"
-              leftIcon={<FaArrowLeft />}
-              onClick={() => navigate(`/profile/${authUser._id}`)}
-            >
-              Back to Profile
-            </Button>
-
-            <Box width="40px" />
-          </HStack>
+          <Heading size="2xl" color="brand.500">
+            <HStack spacing={2}>
+              <Text>Edit Profile</Text>
+              <FaEdit />
+            </HStack>
+          </Heading>
         </Card.Header>
 
         <Card.Body>
@@ -190,14 +186,14 @@ const EditProfile = () => {
               <Alert.Indicator />
               <Alert.Title>{success}</Alert.Title>
             </Alert.Root>
-          )}  */}
+          )}   */}
 
           <form onSubmit={handleSubmit}>
             <VStack gap="6">
               <Field.Root>
                 <Field.Label textAlign="center">Profile Picture</Field.Label>
                 <VStack gap="3">
-                  <Avatar.Root size="xl" position="relative">
+                  <Avatar.Root size="xl" alignSelf="start" position="relative">
                     <Avatar.Fallback name={formData.username} />
                     <Avatar.Image
                       src={previewImage || authUser.profilePic}
@@ -238,9 +234,15 @@ const EditProfile = () => {
                   value={formData.username}
                   onChange={handleInputChange}
                   placeholder="Enter your username"
+                  borderColor="brand.700"
                 />
               </Field.Root>
-              <Card.Root variant="outline" width="100%">
+              <Card.Root
+                bg="brand.900"
+                variant="outline"
+                borderColor="brand.700"
+                width="100%"
+              >
                 <Card.Header>
                   <Text fontWeight="semibold">Change Password (Optional)</Text>
                 </Card.Header>
@@ -254,6 +256,7 @@ const EditProfile = () => {
                         value={formData.currentPassword}
                         onChange={handleInputChange}
                         placeholder="Enter current password"
+                        borderColor="brand.700"
                       />
                     </Field.Root>
                     <Field.Root>
@@ -264,6 +267,7 @@ const EditProfile = () => {
                         value={formData.newPassword}
                         onChange={handleInputChange}
                         placeholder="Enter new password (min 8 characters)"
+                        borderColor="brand.700"
                       />
                     </Field.Root>
                     <Field.Root>
@@ -274,6 +278,7 @@ const EditProfile = () => {
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         placeholder="Confirm new password"
+                        borderColor="brand.700"
                       />
                     </Field.Root>
                   </VStack>
@@ -283,17 +288,28 @@ const EditProfile = () => {
               <HStack gap="4" width="100%" justify="flex-end">
                 <Button
                   variant="outline"
+                  bg="brand.800"
+                  color="brand.100"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                   onClick={() => navigate(`/profile/${authUser._id}`)}
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  colorPalette="purple"
-                  leftIcon={<FaSave />}
+                  bg="brand.800"
+                  color="brand.100"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                   loading={updating}
                 >
                   Save Changes
+                  {/* <FaSave /> para version movil*/}
                 </Button>
               </HStack>
             </VStack>

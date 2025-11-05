@@ -20,8 +20,13 @@ import {
   FaEdit,
   FaUserFriends,
   FaUserPlus,
-  FaUserCheck
+  FaUserCheck,
 } from "react-icons/fa";
+
+import {
+  LuSettings,
+  LuPen
+} from "react-icons/lu";
 import { Tab } from "../styledComponents/Tab.jsx";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
@@ -178,52 +183,58 @@ const isFollowing = useMemo(() => {
                   <Text color="gray.500">{user.email}</Text>
                   <Badge colorPalette="purple">{user.rol}</Badge>
                 </VStack>
-                {isOwnProfile ? (
-                  <Button
-                    variant="outline"
-                    bg="brand.800"
-                    color="brand.100"
-                    onClick={handleEditProfile}
-                    _hover={{
-                      boxShadow: "sm",
-                      borderColor: "brand.300",
-                    }}
-                  >
-                    Edit Profile
-                    {/* <FaEdit /> */}
-                  </Button>
-                ) : (
-                  <Button
-                    size="sm"
-                    colorScheme="purple"
-                    variant={isFollowing ? "ghost" : "solid"}
-                    bg={isFollowing ? "gray.600" : "purple.400"}
-                    border={isFollowing ? "1px solid" : "none"}
-                    borderColor={isFollowing ? "gray.300" : "transparent"}
-                    leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
-                    onClick={() => handleFollow(user._id)}
-                    _hover={{
-                      bg: isFollowing ? "gray.200" : "purple.600",
-                    }}
-                  >
-                    {isFollowing ? "Following" : "Follow"}
-                  </Button>
-                )}
-                {isOwnProfile && authUser.rol === "admin" && (
-                  <Button
-                    variant="outline"
-                    bg="brand.800"
-                    color="brand.100"
-                    onClick={handleAdminTools}
-                    _hover={{
-                      boxShadow: "sm",
-                      borderColor: "brand.300",
-                    }}
-                  >
-                    Admin Tools
-                    <FaEdit />
-                  </Button>
-                )}
+                <VStack>
+                  {isOwnProfile ? (
+                    <Button
+                      variant="outline"
+                      bg="brand.800"
+                      color="brand.100"
+                      maxWidth="130px"
+                      onClick={handleEditProfile}
+                      _hover={{
+                        boxShadow: "sm",
+                        borderColor: "brand.300",
+                      }}
+                    >
+                      Edit Profile
+                      {/* <LuPen/> para pantallas peques
+                      quedaria mejor con el boton de admin tools en un mini menu*/}
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      bg={isFollowing ? "brand.800" : "brand.600"}
+                      _focus={{
+                        outline: "none !important",
+                      }}
+                      onClick={() => handleFollow(user._id)}
+                      _hover={{
+                        boxShadow: "sm",
+                        borderColor: "brand.300",
+                      }}
+                    >
+                      {isFollowing ? "Following" : "Follow"}
+                      {isFollowing ? <FaUserCheck /> : <FaUserPlus />}
+                    </Button>
+                  )}
+                  {isOwnProfile && authUser.rol === "admin" && (
+                    <Button
+                      variant="outline"
+                      bg="brand.800"
+                      color="brand.100"
+                      maxWidth="120px"
+                      onClick={handleAdminTools}
+                      _hover={{
+                        boxShadow: "sm",
+                        borderColor: "brand.300",
+                      }}
+                    >
+                      Admin Tools
+                      {/* <LuSettings /> para pantallas peques */}
+                    </Button>
+                  )}
+                </VStack>
               </HStack>
 
               <HStack gap="6">
@@ -247,7 +258,7 @@ const isFollowing = useMemo(() => {
             value={activeTab}
             onValueChange={(e) => setActiveTab(e.value)}
           >
-            <Tabs.List>
+            <Tabs.List gap="0.5">
               <Tabs.Trigger
                 value="library"
                 bg="brand.700"
