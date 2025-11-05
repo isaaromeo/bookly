@@ -13,8 +13,9 @@ import {
   Input,
   Badge,
   IconButton,
+  Heading,
 } from "@chakra-ui/react";
-import { FaUpload, FaFileCsv, FaTrash, FaTools } from "react-icons/fa";
+import { FaUpload, FaFileCsv, FaTrash, FaTools, FaEdit } from "react-icons/fa";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import styled from "styled-components";
@@ -23,6 +24,7 @@ const AdminToolsContainer = styled.div`
   max-width: 600px;
   margin: 2rem auto;
   padding: 1rem;
+  backround: brand.900;
 `;
 
 const AdminTools = () => {
@@ -78,15 +80,15 @@ const AdminTools = () => {
 
   return (
     <AdminToolsContainer>
-      <Card.Root>
+      <Card.Root bg="brand.900">
         <Card.Header>
-          <HStack gap="3">
-            <FaTools />
-            <Text fontSize="xl" fontWeight="bold">
-              Admin Tools
-            </Text>
-            <Badge colorPalette="purple">Admin</Badge>
-          </HStack>
+          <Heading size="2xl" color="brand.500">
+            <HStack spacing={2}>
+              <Text>Admin Tools</Text>
+              <FaTools />
+              <Badge colorPalette="purple">Admin</Badge>
+            </HStack>
+          </Heading>
         </Card.Header>
 
         <Card.Body>
@@ -101,6 +103,8 @@ const AdminTools = () => {
                 id="csv-upload"
                 type="file"
                 accept=".csv"
+                borderColor="brand.700"
+                paddingTop="6px"
                 onChange={handleFileSelect}
               />
               {/*TO DO pintar tabla con ejemplo */}
@@ -123,11 +127,7 @@ const AdminTools = () => {
                         </Text>
                       </VStack>
                     </HStack>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      onClick={clearFile}
-                    >
+                    <IconButton size="sm" variant="ghost" onClick={clearFile}>
                       <FaTrash />
                     </IconButton>
                   </HStack>
@@ -135,13 +135,19 @@ const AdminTools = () => {
               </Card.Root>
             )}
             <Button
-              colorPalette="purple"
-              leftIcon={<FaUpload />}
+              variant="outline"
+              bg="brand.800"
+              color="brand.100"
+              _hover={{
+                boxShadow: "sm",
+                borderColor: "brand.500",
+              }}
               onClick={handleUpload}
               loading={uploadLoading}
-              disabled={!selectedFile || uploadLoading}
+              // disabled={!selectedFile || uploadLoading}
             >
               Upload Books CSV
+              <FaUpload />
             </Button>
 
             {error && (
