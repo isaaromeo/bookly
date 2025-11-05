@@ -34,6 +34,7 @@ import {
 } from "react-icons/lu";
 import BookGrid from "../styledComponents/BookGrid2";
 import headerImage from "../assets/headerOK.png";
+import headerImage2 from "../assets/images/header2.png";
 import FeatureCard from "../styledComponents/FeatureCard";
 import Stats from "../styledComponents/Stats";
 import styled from "styled-components";

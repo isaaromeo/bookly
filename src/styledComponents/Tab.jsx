@@ -178,10 +178,10 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
         const reviewUserId = getReviewUserId(review)
         return (
           <Card.Root key={review._id} width="100%">
-            <Card.Body>
+            <Card.Body bg="brand.900">
               <HStack justify="space-between" mb="2">
                 <VStack align="start" gap="1">
-                  <Text fontWeight="semibold">{review.title}</Text>
+                  <Text fontWeight="semibold" color="brand.500" fontSize="xl" paddingBottom="1rem">{review.title}</Text>
 
                   {context === "bookDetail" && (
                     // en BookDetail mostrar usuario
@@ -204,14 +204,12 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                   )}
 
                   {context === "profile" && (
-                    //en Profile: mostrar libro
+                    //en Profile mostrar libro
                     <Text fontSize="sm" color="fg.muted">
                       on {review.book.title || "Unknown Book"}
                     </Text>
                   )}
-                  {/* <Text fontSize="sm" color="fg.muted">
-                    on {review.book?.title || "Unknown Book"}
-                  </Text> */}
+                  
                 </VStack>
                 <RatingGroup.Root
                   readOnly
@@ -220,6 +218,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                   size="sm"
                   colorPalette="yellow"
                 >
+                  
                   <RatingGroup.HiddenInput />
                   <RatingGroup.Control />
                 </RatingGroup.Root>
@@ -236,18 +235,19 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                 )}
               </HStack>
 
-              <Text>{review.content}</Text>
+              <Text fontSize="md" padding="1rem">{review.content}</Text>
               <HStack justify="space-between" align="center">
-                {/* <Text fontSize="sm" color="fg.muted" mt="2">
-                  By {review.user?.username} •{" "}
-                  {new Date(review.createdAt).toLocaleDateString()}
-                </Text> */}
+               
                 <HStack gap="2">
                   <IconButton
                     size="sm"
                     variant="ghost"
-                    colorPalette={isLikedByUser ? "red" : "gray"}
+                    colorPalette={isLikedByUser ? "purple" : "gray"}
                     onClick={() => handleLike(review._id)}
+                    _hover={{
+                      boxShadow: "sm",
+                      borderColor: "brand.300",
+                    }}
                   >
                     {isLikedByUser ? <FaHeart /> : <FaRegHeart />}
                   </IconButton>
@@ -381,10 +381,6 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
 
   return (
     <Box>
-      <Text fontSize="xl" mb="4">
-        {tabTitle} ({content ? content.length : 0})
-      </Text>
-
       {contentType === "books" && renderBooks()}
       {contentType === "reviews" && renderReviews()}
       {contentType === "users" && renderUsers()}

@@ -8,24 +8,78 @@ import {
   HStack,
   RatingGroup,
   Button,
-  Badge,
-  Tabs,
-  Field,
   Input,
+  Field,
+  Tabs,
+  Badge,
+  Skeleton,
+  SkeletonText,
   Spinner,
   Alert,
-  IconButton
+  Container,
+  Stack,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import styled from "styled-components";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth"; 
 import { Tab } from "../styledComponents/Tab"; 
+import coverPlaceholder from "../assets/images/placeholder-cover.jpg"
 
 const BookDetailContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 `;
+
+//skeletons de carga
+const BookCoverSkeleton = () => (
+  <Box flex="0 0 300px">
+    <Skeleton height="400px" borderRadius="lg" mb="4" />
+    <Skeleton height="4" width="80%" />
+    <Skeleton height="3" width="60%" mt="2" />
+  </Box>
+);
+
+const BookInfoSkeleton = () => (
+  <Box flex="1">
+    <VStack gap="4" align="start">
+      <Skeleton height="8" width="80%" />
+      <Skeleton height="6" width="60%" />
+      <HStack>
+        <Skeleton height="6" width="120px" />
+        <Skeleton height="4" width="40px" />
+      </HStack>
+      <SkeletonText noOfLines={4} spacing="3" />
+      <HStack gap="4" flexWrap="wrap">
+        <Skeleton height="6" width="100px" />
+        <Skeleton height="6" width="120px" />
+        <Skeleton height="6" width="80px" />
+      </HStack>
+      <HStack gap="4">
+        <Skeleton height="10" width="140px" />
+        <Skeleton height="10" width="140px" />
+        <Skeleton height="10" width="140px" />
+      </HStack>
+    </VStack>
+  </Box>
+);
+
+const ReviewSkeleton = () => (
+  <Card.Root width="100%">
+    <Card.Body>
+      <VStack gap="3" align="start">
+        <HStack justify="space-between" width="100%">
+          <Skeleton height="5" width="100%" />
+          
+        </HStack>
+        <SkeletonText noOfLines={3} spacing="2" width="100%" />
+        <Skeleton height="3" width="40%" />
+      </VStack>
+    </Card.Body>
+  </Card.Root>
+); 
 
 const BookDetail = () => {
   //datos necesarios para post review
@@ -131,9 +185,22 @@ const BookDetail = () => {
 
   if (loadBook) {
     return (
-      <Box display="flex" justifyContent="center" padding="8">
-        <Spinner size="lg" />
-      </Box>
+      <BookDetailContainer>
+        <HStack
+          gap="8"
+          align="start"
+          flexDirection={{ base: "column", md: "row" }}
+        >
+          <BookCoverSkeleton/>
+          <BookInfoSkeleton/>
+        </HStack>
+
+        <Box mt="8">
+          <Tabs.Root>
+              <ReviewSkeleton/>
+          </Tabs.Root>
+        </Box>
+      </BookDetailContainer>
     );
   }
 
@@ -148,7 +215,7 @@ const BookDetail = () => {
         <Box flex="0 0 300px">
           <Box
             as="img"
-            src={book.cover}
+            src={book.cover || coverPlaceholder}
             alt={book.title}
             width="100%"
             borderRadius="lg"
@@ -166,9 +233,10 @@ const BookDetail = () => {
 
             <HStack>
               <RatingGroup.Root
+                allowHalf
                 readOnly
                 count={5}
-                defaultValue={book.rating}
+                value={book.rating}
                 size="md"
                 colorPalette="yellow"
               >
@@ -177,7 +245,7 @@ const BookDetail = () => {
               <Text>({book.rating}/5)</Text>
             </HStack>
 
-            <Text fontSize="lg" lineHeight="1.6">
+            <Text fontSize="lg" lineHeight="1.6" textAlign="left">
               {book.sinopsis}
             </Text>
 
@@ -193,18 +261,34 @@ const BookDetail = () => {
               </Badge>
             </HStack>
 
-            <HStack gap="4">
-              <Button colorPalette="purple" onClick={handleAddToLibrary}>
+            <HStack gap="4" paddingTop="1.5rem">
+              <Button
+                bg="brand.800"
+                color="brand.100"
+                onClick={handleAddToLibrary}
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
+              >
                 Add to Library
               </Button>
-              <Button variant="outline" onClick={handleAddToTBR}>
+              <Button
+                bg="brand.800"
+                color="brand.100"
+                variant="outline"
+                onClick={handleAddToTBR}
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
+              >
                 Add to TBR
               </Button>
             </HStack>
           </VStack>
         </Box>
       </HStack>
-      {/* Reviews */}
 
       <Box mt="8">
         <Tabs.Root
@@ -212,10 +296,33 @@ const BookDetail = () => {
           onValueChange={(e) => setActiveTab(e.value)}
         >
           <Tabs.List>
-            <Tabs.Trigger value="reviews">
+            <Tabs.Trigger
+              value="reviews"
+              bg="brand.900"
+              _hover={{
+                boxShadow: "xl",
+                borderColor: "brand.300",
+              }}
+              _focus={{
+                outline: "none !important",
+              }}
+            >
               Reviews ({reviews ? reviews.length : 0})
             </Tabs.Trigger>
-            <Tabs.Trigger value="add-review">Review book</Tabs.Trigger>
+            <Tabs.Trigger
+              value="add-review"
+              bg="brand.900"
+              _hover={{
+                boxShadow: "xl",
+                borderColor: "brand.300",
+              }}
+              _focus={{
+                outline: "none !important",
+                boxShadow: "none !important",
+              }}
+            >
+              Review book
+            </Tabs.Trigger>
           </Tabs.List>
 
           <Tabs.Content value="reviews">
@@ -255,7 +362,7 @@ const BookDetail = () => {
 
           <Tabs.Content value="add-review">
             <Card.Root mt="4">
-              <Card.Body>
+              <Card.Body bg="brand.900">
                 <VStack gap="4">
                   <Field.Root>
                     <Field.Label>Review title</Field.Label>
@@ -265,6 +372,7 @@ const BookDetail = () => {
                       onChange={(e) =>
                         setNewReview({ ...newReview, title: e.target.value })
                       }
+                      borderColor="brand.700"
                     />
                   </Field.Root>
 
@@ -296,6 +404,7 @@ const BookDetail = () => {
                           content: e.target.value,
                         })
                       }
+                      borderColor="brand.700"
                     />
                   </Field.Root>
 
@@ -304,6 +413,13 @@ const BookDetail = () => {
                     colorPalette="purple"
                     onClick={handleSubmitReview}
                     loading={postingReview}
+                    bg="brand.800"
+                    color="brand.100"
+                    variant="outline"
+                    _hover={{
+                      boxShadow: "sm",
+                      borderColor: "brand.300",
+                    }}
                   >
                     Submit Review
                   </Button>
