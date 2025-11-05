@@ -22,7 +22,7 @@ import {
   FaUserPlus,
   FaUserCheck
 } from "react-icons/fa";
-import { Tab } from "../styledComponents/Tab2.jsx";
+import { Tab } from "../styledComponents/Tab.jsx";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 
@@ -162,7 +162,7 @@ const isFollowing = useMemo(() => {
     <ProfileContainer>
       {/* <ProfileHead user={user} isOwnProfile={isOwnProfile} /> */}
       <Card.Root id="profile-header">
-        <Card.Body>
+        <Card.Body bg="brand.900">
           <HStack gap="6">
             <Avatar.Root boxSize="120px">
               <Avatar.Fallback name={user.username} />
@@ -181,17 +181,22 @@ const isFollowing = useMemo(() => {
                 {isOwnProfile ? (
                   <Button
                     variant="outline"
-                    leftIcon={<FaEdit />}
+                    bg="brand.800"
+                    color="brand.100"
                     onClick={handleEditProfile}
+                    _hover={{
+                      boxShadow: "sm",
+                      borderColor: "brand.300",
+                    }}
                   >
                     Edit Profile
+                    {/* <FaEdit /> */}
                   </Button>
                 ) : (
                   <Button
                     size="sm"
                     colorScheme="purple"
                     variant={isFollowing ? "ghost" : "solid"}
-                    // color={isFollowing ? "gray.600" : "white"}
                     bg={isFollowing ? "gray.600" : "purple.400"}
                     border={isFollowing ? "1px solid" : "none"}
                     borderColor={isFollowing ? "gray.300" : "transparent"}
@@ -207,10 +212,16 @@ const isFollowing = useMemo(() => {
                 {isOwnProfile && authUser.rol === "admin" && (
                   <Button
                     variant="outline"
-                    leftIcon={<FaEdit />}
+                    bg="brand.800"
+                    color="brand.100"
                     onClick={handleAdminTools}
+                    _hover={{
+                      boxShadow: "sm",
+                      borderColor: "brand.300",
+                    }}
                   >
                     Admin Tools
+                    <FaEdit />
                   </Button>
                 )}
               </HStack>
@@ -230,31 +241,80 @@ const isFollowing = useMemo(() => {
         </Card.Body>
       </Card.Root>
 
-
-      <Card.Root>
+      <Card.Root bg="brand.900">
         <Card.Header>
           <Tabs.Root
             value={activeTab}
             onValueChange={(e) => setActiveTab(e.value)}
           >
             <Tabs.List>
-              <Tabs.Trigger value="library">
+              <Tabs.Trigger
+                value="library"
+                bg="brand.700"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
+                _focus={{
+                  outline: "none !important",
+                }}
+              >
                 <FaBook style={{ marginRight: "8px" }} />
                 Library
               </Tabs.Trigger>
-              <Tabs.Trigger value="tbr">
+              <Tabs.Trigger
+                value="tbr"
+                bg="brand.700"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
+                _focus={{
+                  outline: "none !important",
+                }}
+              >
                 <FaBookmark style={{ marginRight: "8px" }} />
                 TBR
               </Tabs.Trigger>
-              <Tabs.Trigger value="reviews">
+              <Tabs.Trigger
+                value="reviews"
+                bg="brand.700"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
+                _focus={{
+                  outline: "none !important",
+                }}
+              >
                 <FaBook style={{ marginRight: "8px" }} />
                 Reviews
               </Tabs.Trigger>
-              <Tabs.Trigger value="followers">
+              <Tabs.Trigger
+                value="followers"
+                bg="brand.800"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
+                _focus={{
+                  outline: "none !important",
+                }}
+              >
                 <FaUserFriends style={{ marginRight: "8px" }} />
                 Followers
               </Tabs.Trigger>
-              <Tabs.Trigger value="following">
+              <Tabs.Trigger
+                value="following"
+                bg="brand.800"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
+                _focus={{
+                  outline: "none !important",
+                }}
+              >
                 <FaUserPlus style={{ marginRight: "8px" }} />
                 Following
               </Tabs.Trigger>

@@ -16,6 +16,7 @@ import { FaHeart, FaRegHeart, FaUserPlus, FaUserCheck, FaTrash } from "react-ico
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect, useCallback } from "react";
+import BookGrid from "../styledComponents/BookGrid2";
 
 export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => {
   const navigate = useNavigate();
@@ -177,20 +178,31 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
 
         const reviewUserId = getReviewUserId(review)
         return (
-          <Card.Root key={review._id} width="100%">
-            <Card.Body bg="brand.900">
-              <HStack justify="space-between" mb="2">
+          <Card.Root key={review._id} width="100%" borderRadius="20px">
+            <Card.Body
+              bg={context === "profile" ? "black" : "brand.900"}
+              borderRadius="20px"
+            >
+              <HStack justify="space-between" mb="2" alignItems="start">
                 <VStack align="start" gap="1">
-                  <Text fontWeight="semibold" color="brand.500" fontSize="xl" paddingBottom="1rem">{review.title}</Text>
+                  <Text
+                    fontWeight="semibold"
+                    color="brand.500"
+                    fontSize="xl"
+                    paddingBottom="1rem"
+                  >
+                    {review.title}
+                  </Text>
 
                   {context === "bookDetail" && (
                     // en BookDetail mostrar usuario
-                    <HStack>
+                    <HStack marginBottom="0.5rem">
                       <Avatar.Root
                         size="xs"
                         onClick={() =>
                           reviewUserId && handleUserClick(reviewUserId)
                         }
+                        
                       >
                         <Avatar.Fallback name={review.user?.username} />
                         {review.user?.profilePic && (
@@ -209,35 +221,29 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                       on {review.book.title || "Unknown Book"}
                     </Text>
                   )}
-                  
                 </VStack>
-                <RatingGroup.Root
-                  readOnly
-                  count={5}
-                  defaultValue={review.rating}
-                  size="sm"
-                  colorPalette="yellow"
-                >
-                  
-                  <RatingGroup.HiddenInput />
-                  <RatingGroup.Control />
-                </RatingGroup.Root>
-                {isOwnReview && context === "profile" && (
-                  <IconButton
+                
+                  <RatingGroup.Root
+                    readOnly
+                    count={5}
+                    defaultValue={review.rating}
                     size="sm"
-                    variant="ghost"
-                    colorPalette="red"
-                    onClick={() => handleDeleteReview(review._id)}
-                    loading={deletingReview}
+                    colorPalette="yellow"
+                    allowHalf
+                    value={review.rating}
+                    justifySelf="start"
                   >
-                    <FaTrash />
-                  </IconButton>
-                )}
+                    <RatingGroup.HiddenInput />
+                    <RatingGroup.Control />
+                  </RatingGroup.Root>
+                  
+                
               </HStack>
 
-              <Text fontSize="md" padding="1rem">{review.content}</Text>
+              <Text fontSize="md" paddingBottom="2rem">
+                {review.content}
+              </Text>
               <HStack justify="space-between" align="center">
-               
                 <HStack gap="2">
                   <IconButton
                     size="sm"
@@ -255,6 +261,18 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                     {likesCount} {likesCount === 1 ? "like" : "likes"}
                   </Text>
                 </HStack>
+                {isOwnReview && context === "profile" && (
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    colorPalette="red"
+                    onClick={() => handleDeleteReview(review._id)}
+                    loading={deletingReview}
+                    alignSelf="end"
+                  >
+                    <FaTrash />
+                  </IconButton>
+                )}
               </HStack>
             </Card.Body>
           </Card.Root>
@@ -264,51 +282,13 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
   );
 
   const renderBooks = () => (
-    <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap="4">
-      {localContent.map((book) => (
-        <Card.Root
-          key={book._id}
-          cursor="pointer"
-          onClick={() => navigate(`/books/${book._id}`)}
-        >
-          <Card.Body>
-            <img
-              src={book.cover}
-              alt={book.title}
-              style={{
-                width: "100%",
-                height: "200px",
-                objectFit: "cover",
-                borderRadius: "8px",
-              }}
-            />
-            <Text fontWeight="bold" mt="2">
-              {book.title}
-            </Text>
-            <Text fontSize="sm" color="gray.500">
-              {book.author}
-            </Text>
-            {book.rating && (
-              <HStack mt="1">
-                <RatingGroup.Root
-                  readOnly
-                  count={5}
-                  defaultValue={book.rating}
-                  size="sm"
-                  colorPalette="yellow"
-                >
-                  <RatingGroup.HiddenInput />
-                  <RatingGroup.Control />
-                </RatingGroup.Root>
-                <Text fontSize="xs" color="fg.muted">
-                  ({book.rating})
-                </Text>
-              </HStack>
-            )}
-          </Card.Body>
-        </Card.Root>
-      ))}
-    </Grid>
+    <BookGrid 
+      books={localContent}
+      onBookSelect={() => {
+        navigate(`/books/${localContent.book._id}`)}
+      }
+     />
+    
   );
 
   const renderUsers = () => (
@@ -317,7 +297,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
           const isFollowing = getIsFollowing(user._id);
           const isOwnProfile = authUser?._id === user._id;
         return (
-          <Card.Root key={user._id} width="100%">
+          <Card.Root key={user._id} width="100%" borderRadius="20px">
             <Card.Body>
               <HStack justify="space-between" align="center">
                 <HStack
@@ -336,10 +316,10 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                       {user.email}
                     </Text>
                     <HStack gap="4">
-                      <Text fontSize="xs" color="fg.muted">
+                      <Text fontSize="xs" color="brand.100">
                         {user.followers?.length || 0} followers
                       </Text>
-                      <Text fontSize="xs" color="fg.muted">
+                      <Text fontSize="xs" color="brand.100">
                         {user.following?.length || 0} following
                       </Text>
                     </HStack>
@@ -349,19 +329,19 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                 {!isOwnProfile && (
                   <Button
                     size="sm"
-                    colorScheme="purple"
-                    variant={isFollowing ? "ghost" : "solid"}
-                    // color={isFollowing ? "gray.600" : "white"}
-                    bg={isFollowing ? "gray.600" : "purple.400"}
-                    border={isFollowing ? "1px solid" : "none"}
-                    borderColor={isFollowing ? "gray.300" : "transparent"}
-                    leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
+                    variant="outline"
+                    bg={isFollowing ? "brand.800" : "brand.600"}
+                    _focus={{
+                      outline: "none !important",
+                    }}
                     onClick={() => handleFollow(user._id)}
                     _hover={{
-                      bg: isFollowing ? "gray.200" : "purple.600",
+                      boxShadow: "sm",
+                      borderColor: "brand.300",
                     }}
                   >
                     {isFollowing ? "Following" : "Follow"}
+                    {isFollowing ? <FaUserCheck /> : <FaUserPlus />}
                   </Button>
                 )}
               </HStack>
