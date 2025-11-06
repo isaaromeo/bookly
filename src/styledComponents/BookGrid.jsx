@@ -1,6 +1,6 @@
-import { useNavigate} from "react-router-dom";
+// src/styledComponents/BookGrid.jsx - Mejorado
+import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
-
 import {
   Box,
   Grid,
@@ -8,87 +8,113 @@ import {
   Text,
   VStack,
   HStack,
-  Spinner,
   RatingGroup,
+  Skeleton,
 } from "@chakra-ui/react";
-import { LuBook } from "react-icons/lu";
+import coverPlaceholder from "../assets/images/placeholder-cover.jpg";
 
-export const BookGrid = ({books}) => {
-    const navigate = useNavigate();
-    const memoizedBooks = useMemo(() => books || [], [books]);
+export const BookGrid = ({
+  books,
+  loading = false,
+  onBookSelect,
+  emptyMessage = "No books found",
 
-     if (!memoizedBooks.length) {
-       return (
-         <Box textAlign="center" py="8">
-           <Text fontSize="lg" color="fg.muted">
-             No books found
-           </Text>
-         </Box>
-       );
-     }
+}) => {
+  const navigate = useNavigate();
+  const memoizedBooks = useMemo(() => books || [], [books]);
 
+  if (loading) {
+    return (
+      <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="6">
+        {[...Array(8)].map((_, i) => (
+          <Card.Root key={i}>
+            <Card.Body>
+              <Skeleton height="300px" borderRadius="8px" mb="4" />
+              <Skeleton height="4" mb="2" width="80%" />
+              <Skeleton height="3" mb="3" width="60%" />
+              <Skeleton height="3" width="90%" />
+            </Card.Body>
+          </Card.Root>
+        ))}
+      </Grid>
+    );
+  }
+
+  if (!memoizedBooks.length) {
+    return (
+      <Box textAlign="center" py="12">
+        <Text fontSize="lg" color="fg.muted">
+          {emptyMessage}
+        </Text>
+      </Box>
+    );
+  }
 
   return (
-    <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap="6">
+    <Grid templateColumns="repeat(auto-fit, minmax(230px, 1fr))" gap="4">
       {memoizedBooks.map((book) => (
         <Card.Root
           key={book._id}
           cursor="pointer"
-          height="100%"
-          onClick={() => {
-            navigate(`/books/${book._id}`);
+          onClick={() =>
+            onBookSelect ? onBookSelect(book) : navigate(`/books/${book._id}`)
+          }
+          // height="100%"
+          // variant="outline"
+          maxWidth="250px"
+          _hover={{
+            transform: "translateY(-4px)",
+            boxShadow: "xl",
+            borderColor: "brand.200",
           }}
+          transition="all 0.3s ease-in-out"
           bg="brand.800"
         >
           <Card.Body>
             <Box
               as="img"
-              src={book.cover}
+              src={book.cover || coverPlaceholder}
               alt={book.title}
-              maxHeight="200px"
-              height="100%"
+              width="100%"
+              height="270px"
               objectFit="cover"
-              borderRadius="md"
-              marginBottom="3"
+              borderRadius="8px"
+              mb="4"
             />
 
-            <VStack align="start" gap="2" flex="1">
-              <Text
-                fontWeight="bold"
-                fontSize="md"
-                lineClamp="2"
-                height="2.5rem"
-              >
+            <VStack align="start" gap="2">
+              <Text fontWeight="bold" fontSize="lg" lineClamp="2" height="3rem">
                 {book.title}
               </Text>
 
-              <Text fontSize="sm" color="fg.muted" lineClamp="1">
-                by {book.author}
+              <Text color="fg.muted" fontSize="md" lineClamp="1">
+                {book.author}
               </Text>
 
-              {/* Rating */}
-              {book.rating && (
-                <HStack gap="1" width="100%">
-                  <RatingGroup.Root
-                    readOnly
-                    count={5}
-                    defaultValue={book.rating}
-                    size="sm"
-                    colorPalette="yellow"
-                  >
-                    <RatingGroup.HiddenInput />
-                    <RatingGroup.Control />
-                  </RatingGroup.Root>
-                  <Text fontSize="xs" color="fg.muted">
-                    ({book.rating})
-                  </Text>
-                </HStack>
-              )}
+              <HStack gap="2" width="100%">
+                <RatingGroup.Root
+                  readOnly
+                  count={5}
+                  defaultValue={book.rating}
+                  size="sm"
+                  colorPalette="yellow"
+                >
+                  <RatingGroup.HiddenInput />
+                  <RatingGroup.Control />
+                </RatingGroup.Root>
+                <Text fontSize="sm" color="fg.muted">
+                  ({book.rating}/5)
+                </Text>
+              </HStack>
 
-              {/* Genres */}
               {book.genres && book.genres.length > 0 && (
-                <Text fontSize="xs" color="fg.subtle" lineClamp="1">
-                  {book.genres.slice(0, 2).join(", ")}
+                <Text
+                  fontSize="sm"
+                  color="fg.subtle"
+                  lineClamp="2"
+                  height="2.5rem"
+                >
+                  {book.genres.join(", ")}
                 </Text>
               )}
             </VStack>
