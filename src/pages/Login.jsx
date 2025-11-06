@@ -14,6 +14,8 @@ import {
 import { LuLogIn } from "react-icons/lu";
 import styled from "styled-components";
 import { useAuth } from "../hooks/useAuth";
+import { toaster} from "../components/ui/toaster.jsx"
+import { useBooklyApi } from "@/hooks/useBooklyApi";
 
 const LoginContainer = styled.div`
   max-width: 400px;
@@ -26,10 +28,11 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login: authLogin } = useAuth(); 
+  const { login, loading, error } = useBooklyApi.useLogin(); 
 
   const handleChange = (e) => {
     setFormData({
@@ -40,44 +43,61 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
+    // setLoading(true);
+    // setError("");
 
     try {
-      const response = await fetch(
-        "https://bookly-back.onrender.com/api/user/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+    //   const response = await fetch(
+    //     "https://bookly-back.onrender.com/api/user/login",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(formData),
+    //     }
+    //   );
 
-      if (response.ok) {
-        const data = await response.json();
-        login(data.user, data.token);
-        navigate(`/profile/${data.user._id}`);
-      } else {
-        const errorData = await response.json();
-        setError(
-          errorData.message || "Login error. Verify your credentials"
-        );
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     login(data.user, data.token);
+    //     navigate(`/profile/${data.user._id}`);
+    //   } else {
+    //     const errorData = await response.json();
+    //     setError(errorData.message || "Login error. Verify your credentials");
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    //   setError(error.message);
+    const result = await login(formData);
+      
+      if (result && result.user && result.token) {
+        authLogin(result.user, result.token);
+        
+        toaster.create({
+          title: "Welcome back!",
+          description: "You have successfully logged in",
+          type: "success",
+        });
+        
+        navigate(`/profile/${result.user._id}`);
       }
-    } catch (error) {
-      console.error("Error:", error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) {
+      
+      toaster.create({
+        title: "Login Failed",
+        description: err.message || "Invalid credentials",
+        type: "error",
+      });
+    
+    } 
   };
 
   return (
     <LoginContainer>
-      <Card.Root>
+      <Card.Root bg="brand.900">
         <Card.Header>
-          <Card.Title textAlign="center" fontSize="2xl">
+          <Card.Title textAlign="center" fontSize="2xl" color="brand.100">
             Log In
           </Card.Title>
           <Text textAlign="center" color="fg.muted">
@@ -86,12 +106,12 @@ const Login = () => {
         </Card.Header>
 
         <Card.Body>
-          {error && (
+          {/* {error && (
             <Alert.Root status="error" mb="4">
               <Alert.Indicator />
               <Alert.Title>{error}</Alert.Title>
             </Alert.Root>
-          )}
+          )} */}
 
           <form onSubmit={handleSubmit}>
             <VStack gap="4">
@@ -103,6 +123,11 @@ const Login = () => {
                   placeholder="tu@email.com"
                   value={formData.email}
                   onChange={handleChange}
+                  borderColor="brand.700"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                   required
                 />
               </Field.Root>
@@ -115,6 +140,11 @@ const Login = () => {
                   placeholder="Tu contraseña"
                   value={formData.password}
                   onChange={handleChange}
+                  borderColor="brand.700"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                   required
                 />
               </Field.Root>
@@ -123,8 +153,12 @@ const Login = () => {
                 type="submit"
                 width="100%"
                 loading={loading}
-                colorPalette="purple"
-                leftIcon={<LuLogIn />}
+                bg="brand.800"
+                color="brand.100"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
               >
                 Log In
               </Button>

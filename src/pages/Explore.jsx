@@ -130,7 +130,6 @@ const Explore = () => {
             color="secondary.200"
             textAlign="center"
             paddingTop="1rem"
-            
           >
             Dive into our vast collection of books, discover community
             favorites, and find your next great read!
@@ -144,12 +143,17 @@ const Explore = () => {
           {categories.map((category) => (
             <Button
               key={category.name}
+              bg="brand.900"
+              color="brand.100"
+              _hover={{
+                boxShadow: "sm",
+                borderColor: "brand.300",
+              }}
               variant={
                 activeCategory === category.name.toLowerCase()
                   ? "solid"
                   : "outline"
               }
-              colorPalette="purple"
               onClick={() => handleCategoryClick(category)}
             >
               {category.name}

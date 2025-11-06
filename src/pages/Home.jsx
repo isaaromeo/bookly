@@ -188,7 +188,12 @@ const Home = () => {
             <HStack gap="4" mt="4">
               <Button
                 size="lg"
-                colorPalette="white"
+                bg="brand.800"
+                color="brand.100"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
                 variant="outline"
                 onClick={() => navigate("/books")}
               >
@@ -199,6 +204,10 @@ const Home = () => {
                 size="lg"
                 variant="solid"
                 bg="brand.50"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
                 color="brand.600"
                 onClick={() => navigate("/register")}
               >
@@ -286,9 +295,8 @@ const Home = () => {
           </SimpleGrid>
         </VStack>
 
-        <Stats/>
+        <Stats />
       </Container>
-
     </Box>
   );
 };

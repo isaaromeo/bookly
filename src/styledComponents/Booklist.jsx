@@ -24,7 +24,8 @@ export const BookList = ({books}) => {
       zIndex="dropdown"
       maxHeight="400px"
       overflowY="auto"
-      
+      // bg="black"
+      // opacity={0.9}
     >
       <Card.Body padding="0">
         <VStack gap="0" align="stretch">
@@ -33,10 +34,12 @@ export const BookList = ({books}) => {
               key={book._id}
               padding="3"
               cursor="pointer"
-              borderColor="border.subtle"
+              border="solid 2px"
+              borderColor="brand.700"
               onClick={() => {
                 navigate(`/books/${book._id}`);
               }}
+              bg="brand.900"
             >
               <HStack gap="3" align="start">
                 {/*cover */}

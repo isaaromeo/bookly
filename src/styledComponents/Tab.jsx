@@ -284,9 +284,9 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
   const renderBooks = () => (
     <BookGrid 
       books={localContent}
-      onBookSelect={() => {
-        navigate(`/books/${localContent.book._id}`)}
-      }
+      // onBookSelect={() => {
+      //   navigate(`/books/${localContent.book._id}`)}
+      // }
      />
     
   );

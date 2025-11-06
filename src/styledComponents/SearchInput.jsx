@@ -16,6 +16,15 @@ export const SearchInput = ({
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           rounded="full"
+          border="solid 2px"
+          borderColor="brand.900"
+          _hover={{
+            borderColor: "brand.100",
+          }}
+          _focus={{
+            outline: "none !important",
+            borderColor: "brand.100",
+          }}
         />
       </InputGroup>
     </HStack>

@@ -19,6 +19,7 @@ import { FaSave, FaArrowLeft, FaCamera, FaEdit } from "react-icons/fa";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import styled from "styled-components";
+import { toaster } from "../components/ui/toaster";
 
 const EditProfileContainer = styled.div`
   max-width: 600px;
@@ -81,22 +82,42 @@ const EditProfile = () => {
   const validateForm = () => {
     if (!formData.username.trim()) {
       setError("Username is required");
+      toaster.create({
+        title: "Validation Error",
+        description: "Username is required",
+        type: "error",
+      });
       return false;
     }
 
     if (formData.newPassword) {
       if (formData.newPassword.length < 8) {
         setError("New password must be at least 8 characters");
+        toaster.create({
+          title: "Validation Error",
+          description: "New password must be at least 8 characters",
+          type: "error",
+        });
         return false;
       }
 
       if (formData.newPassword !== formData.confirmPassword) {
         setError("New passwords don't match");
+        toaster.create({
+          title: "Validation Error",
+          description: "New passwords don't match",
+          type: "error",
+        });
         return false;
       }
 
       if (!formData.currentPassword) {
         setError("Current password is required to change password");
+        toaster.create({
+          title: "Validation Error",
+          description: "Current password is required to change password",
+          type: "error",
+        });
         return false;
       }
     }
@@ -122,14 +143,19 @@ const EditProfile = () => {
       if (profilePic) {
         updateData.append("profilePic", profilePic);
       }
-       console.log("FormData content:");
-       for (let [key, value] of updateData.entries()) {
-         console.log(`${key}:`, value);
-       }
+      //  console.log("FormData content:");
+      //  for (let [key, value] of updateData.entries()) {
+      //    console.log(`${key}:`, value);
+      //  }
       const result = await updateUser(authUser._id, updateData);
 
       if (result) {
         console.log("Profile updated successfully!", result);
+        toaster.create({
+          title: "Profile Updated!",
+          description: "Your profile has been updated successfully",
+          type: "success",
+        });
 
         //actualizar contexto
         const token = result.token;
@@ -150,6 +176,11 @@ const EditProfile = () => {
     } catch (error) {
       console.error("Error updating profile:", error);
       setError(error.message || "Error updating profile");
+      toaster.create({
+        title: "Update Failed",
+        description: error.message || "Error updating profile",
+        type: "error",
+      });
     }
   };
 
@@ -174,19 +205,6 @@ const EditProfile = () => {
         </Card.Header>
 
         <Card.Body>
-          {error && (
-            <Alert.Root status="error" mb="4">
-              <Alert.Indicator />
-              <Alert.Title>{error}</Alert.Title>
-            </Alert.Root>
-          )}
-
-          {/* {success && (
-            <Alert.Root status="success" mb="4">
-              <Alert.Indicator />
-              <Alert.Title>{success}</Alert.Title>
-            </Alert.Root>
-          )}   */}
 
           <form onSubmit={handleSubmit}>
             <VStack gap="6">

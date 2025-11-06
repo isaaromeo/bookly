@@ -17,7 +17,7 @@ export const useBooklyApi = {
 
   useBooksByGenre: (genre) =>
     useApi(genre ? `/books/genre/${genre}` : null, {
-      cacheKey: genre ? `books-genre-${genre}` : null, 
+      cacheKey: genre ? `books-genre-${genre}` : null,
     }),
 
   useBooksByAuthor: (author) =>
@@ -148,6 +148,43 @@ export const useBooklyApi = {
 
   useUserFollowData: (userId) =>
     useApi(userId ? `/user/${userId}/followData` : null),
+
+  //auth
+  useLogin: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const login = (credentials) => {
+      return mutate("/user/login", {
+        method: "POST",
+        body: credentials,
+      });
+    };
+
+    return {
+      login,
+      loading,
+      error,
+      data,
+    };
+  },
+
+  useRegister: () => {
+    const { mutate, loading, error, data } = useMutation();
+
+    const register = (userData) => {
+      return mutate("/user/register", {
+        method: "POST",
+        body: userData,
+      });
+    };
+
+    return {
+      register,
+      loading,
+      error,
+      data,
+    };
+  },
 
   //admin
   useUploadBooksCSV: () => {

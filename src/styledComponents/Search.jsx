@@ -13,10 +13,6 @@ import BookList from "./BookList";
 
 export const Search = () => {
 
-  // const [searchQuery, setSearchQuery] = useState("");
-  // const [searchResults, setSearchResults] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [showResults, setShowResults] = useState(false);
   const searchRef = useRef();
   const navigate = useNavigate();
   const [showAllResults, setShowAllResults] = useState(false);
@@ -47,7 +43,12 @@ export const Search = () => {
   };
 
   return (
-    <Box position="relative" width="100%" maxWidth="500px" ref={searchRef}>
+    <Box
+      position="relative"
+      width="100%"
+      maxWidth={{ base: "100%", md: "500px", lg: "700px", xl: "800px" }}
+      ref={searchRef}
+    >
       <form onSubmit={handleSearchSubmit}>
         <SearchInput
           query={query}
@@ -69,7 +70,6 @@ export const Search = () => {
           emptyMessage="No books found. Try another search!"
         />
       )}
-
     </Box>
   );
 };

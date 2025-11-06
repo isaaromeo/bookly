@@ -13,6 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { LuUserPlus } from "react-icons/lu";
 import styled from "styled-components";
+import { toaster } from "../components/ui/toaster.jsx";
+import { useBooklyApi } from "@/hooks/useBooklyApi";
 
 const RegisterContainer = styled.div`
   max-width: 450px;
@@ -27,33 +29,54 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { register, loading, error } = useBooklyApi.useRegister();
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    if (error) setError("");
+    // if (error) setError("");
   };
 
   const validateForm = () => {
     if (formData.password.length < 8) {
-      setError("password must be atleast 8 characters long");
+      // setError("password must be atleast 8 characters long");
+      toaster.create({
+        title: "Validation Error",
+        description: "Password must be at least 8 characters long",
+        type: "error",
+      });
       return false;
     }
     if (formData.password !== formData.confirmPassword) {
-      setError("password mismacth");
+      // setError("password mismacth");
+      toaster.create({
+        title: "Validation Error",
+        description: "Passwords don't match",
+        type: "error",
+      });
       return false;
     }
     if (!formData.email.includes("@")) {
-      setError("use a valid email");
+      // setError("use a valid email");
+      toaster.create({
+        title: "Validation Error",
+        description: "Please use a valid email address",
+        type: "error",
+      });
       return false;
     }
     if (formData.username.length < 3) {
-      setError("Username must be more than 3 charaters long");
+      // setError("Username must be more than 3 charaters long");
+      toaster.create({
+        title: "Validation Error",
+        description: "Username must be at least 3 characters long",
+        type: "error",
+      });
       return false;
     }
     return true;
@@ -66,68 +89,94 @@ const Register = () => {
       return;
     }
 
-    setLoading(true);
-    setError("");
+    // setLoading(true);
+    // setError("");
 
     try {
       const { confirmPassword, ...registerData } = formData;
 
-      const response = await fetch(
-        "https://bookly-back.onrender.com/api/user/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(registerData),
-        }
-      );
+      //   const response = await fetch(
+      //     "https://bookly-back.onrender.com/api/user/register",
+      //     {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify(registerData),
+      //     }
+      //   );
 
-      const data = await response.json();
+      //   const data = await response.json();
 
-      if (response.ok) {
-        alert("Sign in sucessful");
-        navigate("/login");
-      } else {
-        setError(data.message || "Sign in error");
+      //   if (response.ok) {
+      //     alert("Sign in sucessful");
+      //     navigate("/login");
+      //   } else {
+      //     setError(data.message || "Sign in error");
+      //   }
+      // } catch (error) {
+      //   console.error("Error:", error);
+      //   setError(error.message);
+      // } finally {
+      //   setLoading(false);
+      const result = await register(registerData);
+
+      if (result) {
+        toaster.create({
+          title: "Account Created!",
+          description: "Your account has been created successfully",
+          type: "success",
+        });
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
       }
-    } catch (error) {
-      console.error("Error:", error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      
+      toaster.create({
+        title: "Registration Failed",
+        description: err.message || "Error creating account",
+        type: "error",
+      });
     }
+    // }
   };
 
   return (
     <RegisterContainer>
-      <Card.Root>
+      <Card.Root bg="brand.900">
         <Card.Header>
-          <Card.Title textAlign="center" fontSize="2xl">
-            Crear Cuenta
+          <Card.Title textAlign="center" fontSize="2xl" color="brand.100">
+            Create Account
           </Card.Title>
           <Text textAlign="center" color="fg.muted">
-            Únete a la comunidad de Bookly
+            Join the Bookly community!
           </Text>
         </Card.Header>
 
         <Card.Body>
-          {error && (
+          {/* {error && (
             <Alert.Root status="error" mb="4">
               <Alert.Indicator />
               <Alert.Title>{error}</Alert.Title>
             </Alert.Root>
-          )}
+          )} */}
 
           <form onSubmit={handleSubmit}>
             <VStack gap="4">
               <Field.Root>
-                <Field.Label>Nombre de Usuario</Field.Label>
+                <Field.Label>Username</Field.Label>
                 <Input
                   name="username"
-                  placeholder="Tu nombre de usuario"
+                  placeholder="Your username"
                   value={formData.username}
                   onChange={handleChange}
+                  borderColor="brand.700"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                   required
                 />
               </Field.Root>
@@ -137,33 +186,48 @@ const Register = () => {
                 <Input
                   name="email"
                   type="email"
-                  placeholder="tu@email.com"
+                  placeholder="your@email.com"
                   value={formData.email}
                   onChange={handleChange}
+                  borderColor="brand.700"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                   required
                 />
               </Field.Root>
 
               <Field.Root>
-                <Field.Label>Contraseña</Field.Label>
+                <Field.Label>Password</Field.Label>
                 <Input
                   name="password"
                   type="password"
-                  placeholder="Mínimo 8 caracteres"
+                  placeholder="Minimum 8 characters"
                   value={formData.password}
                   onChange={handleChange}
+                  borderColor="brand.700"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                   required
                 />
               </Field.Root>
 
               <Field.Root>
-                <Field.Label>Confirmar Contraseña</Field.Label>
+                <Field.Label>Confirm Password</Field.Label>
                 <Input
                   name="confirmPassword"
                   type="password"
-                  placeholder="Confirma tu contraseña"
+                  placeholder="Confirm your password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
+                  borderColor="brand.700"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                   required
                 />
               </Field.Root>
@@ -172,27 +236,31 @@ const Register = () => {
                 type="submit"
                 width="100%"
                 loading={loading}
-                colorPalette="purple"
-                leftIcon={<LuUserPlus />}
+                bg="brand.800"
+                color="brand.100"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
               >
-                Crear Cuenta
+                Create Account
               </Button>
             </VStack>
           </form>
 
           <Box mt="4" p="4" bg="bg.subtle" borderRadius="md">
             <Text fontSize="sm" fontWeight="semibold" mb="2">
-              Requisitos de la cuenta:
+              Account requirements:
             </Text>
-            <Text fontSize="sm">• Nombre de usuario (mín. 3 caracteres)</Text>
-            <Text fontSize="sm">• Email válido</Text>
-            <Text fontSize="sm">• Contraseña (mín. 8 caracteres)</Text>
+            <Text fontSize="sm">• Username (min. 3 characters)</Text>
+            <Text fontSize="sm">• Valid email</Text>
+            <Text fontSize="sm">• Password (min. 8 characters)</Text>
           </Box>
         </Card.Body>
 
         <Card.Footer>
           <HStack justify="center" width="100%">
-            <Text>¿Ya tienes cuenta?</Text>
+            <Text>Already have an account?</Text>
             <Link
               to="/login"
               style={{
@@ -201,7 +269,7 @@ const Register = () => {
                 textDecoration: "none",
               }}
             >
-              Inicia Sesión
+              Log In
             </Link>
           </HStack>
         </Card.Footer>

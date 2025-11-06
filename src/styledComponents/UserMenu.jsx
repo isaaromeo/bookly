@@ -51,8 +51,23 @@ export const UserMenu = () => {
   return (
     <Menu.Root positioning={{ placement: "bottom-start" }}>
       <Menu.Trigger asChild>
-        <Button variant="ghost" size="md" padding="0.5" rounded="full">
-          <Avatar.Root size="sm" colorPalette="purple">
+        <Button
+          variant="ghost"
+          size="md"
+          _hover={{
+            boxShadow: "sm",
+            borderColor: "brand.300",
+          }}
+          _focus={{
+            outline: "none !important",
+          }}
+          padding="0.5"
+          rounded="full"
+        >
+          <Avatar.Root
+            size="sm"
+            
+          >
             {user ? (
               <>
                 <Avatar.Fallback name={user.username} />
@@ -73,7 +88,7 @@ export const UserMenu = () => {
       </Menu.Trigger>
 
       <Menu.Positioner>
-        <Menu.Content minWidth="200px">
+        <Menu.Content minWidth="200px" bg="brand.900">
           {user ? (
             <>
               <Menu.ItemGroup id="user-info">
@@ -100,26 +115,34 @@ export const UserMenu = () => {
                 </Menu.Item>
               </Menu.ItemGroup>
 
-              <Menu.Separator />
+              <Menu.Separator bg="brand.200" />
 
               <Menu.Item
                 value="profile"
                 onClick={() => handleAction("profile")}
+                color="brand.100"
+                cursor="pointer"
               >
                 <LuUser />
                 My Profile
               </Menu.Item>
-              <Menu.Item value="explore" onClick={() => handleAction("books")}>
+              <Menu.Item
+                value="explore"
+                color="brand.100"
+                cursor="pointer"
+                onClick={() => handleAction("books")}
+              >
                 <LuBook />
                 Explore Books
               </Menu.Item>
-              <Menu.Item value="home" onClick={() => handleAction("home")}>
+              <Menu.Item
+                value="home"
+                color="brand.100"
+                cursor="pointer"
+                onClick={() => handleAction("home")}
+              >
                 <LuHouse />
                 Home
-              </Menu.Item>
-              <Menu.Item value="settings">
-                <LuSettings />
-                Settings
               </Menu.Item>
 
               <Menu.Separator />
@@ -134,52 +157,54 @@ export const UserMenu = () => {
                 Logout
               </Menu.Item>
               <Menu.Separator />
-
-              {/* Toggle Theme */}
-              <Menu.Item value="theme" onClick={toggleColorMode}>
-                {colorMode === "light" ? <LuMoon /> : <LuSun />}
-                {colorMode === "light" ? "Dark Mode" : "Light Mode"}
-              </Menu.Item>
-
-              <Menu.Separator />
             </>
           ) : (
             // Usuario no autenticado
             <>
               <Menu.ItemGroup id="welcome">
-                <Menu.Item value="welcome" closeOnSelect={false}>
-                  <Text fontWeight="semibold" fontSize="sm">
-                    Bienvenido a Bookly
+                <Menu.Item
+                  bg="primary.900"
+                  value="welcome"
+                  closeOnSelect={false}
+                >
+                  <Text fontWeight="semibold" fontSize="sm" color="brand.200">
+                    Welcome to Bookly!
                   </Text>
                 </Menu.Item>
               </Menu.ItemGroup>
 
-              <Menu.Separator />
+              <Menu.Separator colorPalette="gray" />
 
-              <Menu.Item value="login" onClick={() => navigate("/login")}>
+              <Menu.Item
+                value="login"
+                color="brand.100"
+                cursor="pointer"
+                onClick={() => navigate("/login")}
+              >
                 <LuLogIn />
-                Iniciar Sesión
+                Log in
               </Menu.Item>
-              <Menu.Item value="register" onClick={() => navigate("/register")}>
+              <Menu.Item
+                color="brand.100"
+                value="register"
+                cursor="pointer"
+                onClick={() => navigate("/register")}
+              >
                 <LuUserPlus />
-                Registrarse
+                Register
               </Menu.Item>
 
               <Menu.Separator />
 
-              <Menu.Item value="books" onClick={() => navigate("/books")}>
+              <Menu.Item
+                color="brand.100"
+                value="books"
+                cursor="pointer"
+                onClick={() => navigate("/books")}
+              >
                 <LuBook />
-                Explorar Libros
+                Explore books
               </Menu.Item>
-              <Menu.Separator />
-
-              {/* Toggle Theme */}
-              <Menu.Item value="theme" onClick={toggleColorMode}>
-                {colorMode === "light" ? <LuMoon /> : <LuSun />}
-                {colorMode === "light" ? "Dark Mode" : "Light Mode"}
-              </Menu.Item>
-
-              <Menu.Separator />
             </>
           )}
         </Menu.Content>

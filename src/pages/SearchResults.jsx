@@ -10,7 +10,7 @@ import {
   Alert
 } from "@chakra-ui/react";
 import { LuArrowLeft, LuHouse } from "react-icons/lu";
-import BookGrid from "../styledComponents/BookGrid";
+import BookGrid from "../styledComponents/BookGrid2";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useBookSearch } from "../hooks/useBookSearch"; 
 
@@ -61,7 +61,7 @@ export const SearchResults = () => {
 
   return (
     <Box minHeight="100vh" bg="bg.canvas" padding="6">
-      <Text fontSize="2xl" fontWeight="bold" mb="4">
+      <Text fontSize="xl" color="fg.muted" mb="4" fontWeight="semibold" textAlign="left">
         Search Results for "{query}"
       </Text>
       <BookGrid

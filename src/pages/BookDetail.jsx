@@ -20,12 +20,14 @@ import {
   Stack,
   Grid,
   GridItem,
+  createToaster
 } from "@chakra-ui/react";
 import styled from "styled-components";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth"; 
 import { Tab } from "../styledComponents/Tab"; 
 import coverPlaceholder from "../assets/images/placeholder-cover.jpg"
+import { toaster } from "../components/ui/toaster";
 
 const BookDetailContainer = styled.div`
   max-width: 1200px;
@@ -125,25 +127,52 @@ const BookDetail = () => {
     refetch: reviewRefetch
   } = useBooklyApi.useBookReviews(id);
 
+
   const handleSubmitReview = useCallback(async () => {
     //si no estas loggeado no puedes hacer review
     //añadir que un user no puede reseñar el mismo libro 2 veces
     if (!authUser) {
-      alert("Please log in to submit a review");
+
+      toaster.create({
+        title: "Authentication Required",
+        description: "Please log in to submit a review",
+        type: "error",
+      });
       return;
+    }
+
+    if (!newReview.title.trim() || !newReview.content.trim()) {
+
+      toaster.create({
+        title: "Missing Information",
+        description: "Please fill in all fields",
+        type: "error",
+      });
+      return;
+      
     }
 
     try {
       await postReview(id, newReview, authUser._id);
       setNewReview({ rating: 5, content: "", title: "" });
-      alert("Review submitted successfully!");
+
+      toaster.create({
+        title: "Review Submitted!",
+        description: "Your review has been published successfully",
+        type: "success",
+      });
       setActiveTab("reviews");
-      //añadir refetch
+
       bookRefetch();
       reviewRefetch();
     } catch (err) {
-      console.error("Error submitting review:", err);
-      alert(`Error: ${err.message}`);
+
+      toaster.create({
+        title: "Submission Failed",
+        description:
+          err.message || "Error submitting review. Please try again.",
+        type: "error",
+      });
     }
   }, [authUser, id, bookRefetch, reviewRefetch]);
 
@@ -207,6 +236,7 @@ const BookDetail = () => {
 
   return (
     <BookDetailContainer>
+ 
       <HStack
         gap="8"
         align="start"
@@ -284,6 +314,32 @@ const BookDetail = () => {
                 }}
               >
                 Add to TBR
+              </Button>
+              <Button
+                onClick={() => {
+                  console.log("Testing toaster...");
+
+                  // Prueba múltiples métodos
+                  if (window.chakraToast) {
+                    window.chakraToast({
+                      title: "Test via window",
+                      status: "success",
+                    });
+                  }
+
+                  // Método directo
+                  const testToaster = createToaster();
+                  testToaster.create({
+                    title: "Direct Toaster Test",
+                    description: "This should work",
+                    type: "success",
+                  });
+
+                  console.log("Toaster test completed");
+                }}
+                colorPalette="green"
+              >
+                Debug Toaster
               </Button>
             </HStack>
           </VStack>
