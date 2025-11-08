@@ -169,19 +169,31 @@ const Profile = () => {
             {/* Columna 1 - Avatar (Fila 1) */}
             <GridItem
               display="flex"
-              alignItems="center"
-              justifyContent="center"
+              alignItems={{
+                base: "center",
+                sm: "center",
+                md: "center",
+                lg: "center",
+              }}
+              justifyContent={{
+                base: "start",
+                sm: "center",
+                md: "center",
+                lg: "center",
+              }}
               height="100%"
+              pt="0.5rem"
+              pb="0.5rem"
             >
               <Avatar.Root
                 width={{
-                  base: "90px",
+                  base: "70px",
                   sm: "100px",
                   md: "120px",
-                  lg: "1200px",
+                  lg: "120px",
                 }}
                 height={{
-                  base: "90px",
+                  base: "70px",
                   sm: "100px",
                   md: "120px",
                   lg: "120px",
@@ -193,56 +205,104 @@ const Profile = () => {
             </GridItem>
 
             {/* Columna 2 - Información del usuario (Fila 1) */}
-            <GridItem>
-              <VStack align="start" gap="1">
-                <HStack gap="3" align="center">
-                  <Text
-                    fontSize={{
-                      base: "xl",
-                      md: "2xl",
-                      lg: "3xl",
-                    }}
-                    fontWeight="bold"
-                  >
-                    {user.username}
-                  </Text>
-                  <Badge
-                    colorPalette="purple"
-                    fontSize={{ base: "xs", md: "sm" }}
-                  >
-                    {user.rol}
-                  </Badge>
+            <GridItem
+              display="flex"
+              alignItems="center"
+              justifyContent="start"
+              height="100%"
+            >
+              <VStack align="start" gap="3">
+                <HStack gap="3">
+                  <VStack align="start" gap="1" alignItems="center">
+                    <Text
+                      fontWeight="bold"
+                      fontSize={{
+                        base: "sm",
+                        md: "md",
+                        lg: "xl",
+                      }}
+                    >
+                      {user.followers?.length || 0}
+                    </Text>
+                    <Text
+                      fontSize={{
+                        base: "xs",
+                        md: "md",
+                        lg: "xl",
+                      }}
+                      color="gray.500"
+                    >
+                      Followers
+                    </Text>
+                  </VStack>
+                  <VStack align="start" gap="1" alignItems="center">
+                    <Text
+                      fontWeight="bold"
+                      fontSize={{
+                        base: "sm",
+                        md: "md",
+                        lg: "xl",
+                      }}
+                    >
+                      {user.following?.length || 0}
+                    </Text>
+                    <Text
+                      fontSize={{
+                        base: "xs",
+                        md: "md",
+                        lg: "xl",
+                      }}
+                      color="gray.500"
+                    >
+                      Following
+                    </Text>
+                  </VStack>
                 </HStack>
-                <Text
-                  color="gray.500"
-                  fontSize={{
-                    base: "sm",
-                    md: "md",
-                    lg: "lg",
-                  }}
-                >
-                  {user.email}
-                </Text>
               </VStack>
             </GridItem>
 
             {/* Columna 3 - Botones (Fila 1) */}
-            <GridItem>
-              <VStack gap="2" align="end">
+            <GridItem
+              display="flex"
+              alignItems="center"
+              justifyContent="start"
+              height="100%"
+            >
+              <VStack gap="0" align="top">
                 {isOwnProfile ? (
                   <>
                     <Button
                       variant="outline"
-                      bg="brand.800"
+                      bg={{
+                        base: "transparent",
+                        sm: "brand.800",
+                        md: "brand.800",
+                        lg: "brand.800",
+                      }}
                       color="brand.100"
                       onClick={handleEditProfile}
                       _hover={{
                         boxShadow: "sm",
                         borderColor: "brand.300",
                       }}
-                      maxWidth={{ base: "150px", md: "150px" }}
+                      maxWidth={{ base: "20px", md: "150px" }}
                     >
-                      <LuPen style={{ marginRight: "8px" }} />
+                      {/* <LuPen /> */}
+                      <Box
+                        as={LuPen}
+                        width={{
+                          base: "16px",
+                          sm: "20px",
+                          md: "20px",
+                          lg: "20px",
+                        }}
+                        height={{
+                          base: "16px",
+                          sm: "20px",
+                          md: "20px",
+                          lg: "20px",
+                        }}
+                      />
                       <Text display={{ base: "none", sm: "block" }}>
                         Edit Profile
                       </Text>
@@ -250,16 +310,43 @@ const Profile = () => {
                     {authUser.rol === "admin" && (
                       <Button
                         variant="outline"
-                        bg="brand.800"
+                        bg={{
+                          base: "transparent",
+                          sm: "brand.800",
+                          md: "brand.800",
+                          lg: "brand.800",
+                        }}
                         color="brand.100"
                         onClick={handleAdminTools}
                         _hover={{
                           boxShadow: "sm",
                           borderColor: "brand.300",
                         }}
-                        maxWidth={{ base: "150px", md: "150px" }}
+                        maxWidth={{
+                          base: "20px",
+                          sm: "30px",
+                          md: "100px",
+                          lg: "150px",
+                        }}
                       >
-                        <LuSettings style={{ marginRight: "8px" }} />
+                        {/* <LuSettings
+                          size={12}
+                        /> */}
+                        <Box
+                          as={LuSettings}
+                          width={{
+                            base: "16px",
+                            sm: "20px",
+                            md: "20px",
+                            lg: "20px",
+                          }}
+                          height={{
+                            base: "16px",
+                            sm: "20px",
+                            md: "20px",
+                            lg: "20px",
+                          }}
+                        />
                         <Text display={{ base: "none", sm: "block" }}>
                           Admin Tools
                         </Text>
@@ -275,42 +362,87 @@ const Profile = () => {
                       boxShadow: "sm",
                       borderColor: "brand.300",
                     }}
-                    size={{ base: "sm", md: "md" }}
+                    maxWidth={{
+                      base: "20px",
+                      sm: "30px",
+                      md: "100px",
+                      lg: "150px",
+                    }}
                   >
-                    {isFollowing ? "Following" : "Follow"}
-                    {isFollowing ? <FaUserCheck /> : <FaUserPlus />}
+                    <Box
+                      as={isFollowing ? FaUserCheck : FaUserPlus}
+                      width={{
+                        base: "16px",
+                        sm: "20px",
+                        md: "20px",
+                        lg: "20px",
+                      }}
+                      height={{
+                        base: "16px",
+                        sm: "20px",
+                        md: "20px",
+                        lg: "20px",
+                      }}
+                     
+                    />
+                    {/* <Text display={{ base: "none", sm: "block" }}>
+                      {isFollowing ? "Following" : "Follow"}
+                    </Text> */}
+
+                    {/* {isFollowing ? <FaUserCheck /> : <FaUserPlus />} */}
                   </Button>
                 )}
               </VStack>
             </GridItem>
 
             {/* Columna 1 - Seguidores (Fila 2) */}
-            <GridItem>
-              <VStack align="start" gap="3">
-                <HStack gap="6">
-                  <VStack align="start" gap="1" alignItems="center">
-                    <Text fontWeight="bold" fontSize={{ base: "lg", md: "xl" }}>
-                      {user.followers?.length || 0}
-                    </Text>
-                    <Text fontSize={{ base: "sm", md: "md" }} color="gray.500">
-                      Followers
-                    </Text>
-                  </VStack>
-                  <VStack align="start" gap="1" alignItems="center">
-                    <Text fontWeight="bold" fontSize={{ base: "lg", md: "xl" }}>
-                      {user.following?.length || 0}
-                    </Text>
-                    <Text fontSize={{ base: "sm", md: "md" }} color="gray.500">
-                      Following
-                    </Text>
-                  </VStack>
+            <GridItem
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              height="100%"
+            >
+              <VStack
+                align="start"
+                gap="1"
+                marginLeft={{ base: "0", md: "1rem" }}
+                width="100%"
+              >
+                <HStack gap="3" align="center">
+                  <Text
+                    fontSize={{
+                      base: "md",
+                      md: "2xl",
+                      lg: "3xl",
+                    }}
+                    fontWeight="bold"
+                  >
+                    {user.username}
+                  </Text>
+                  <Badge
+                    colorPalette="purple"
+                    fontSize={{ base: "xs", md: "sm" }}
+                    display={{ base: "none", md: "block" }}
+                  >
+                    {user.rol}
+                  </Badge>
                 </HStack>
+                <Text
+                  color="gray.500"
+                  fontSize={{
+                    base: "0.7rem",
+                    md: "md",
+                    lg: "lg",
+                  }}
+                >
+                  {user.email}
+                </Text>
               </VStack>
             </GridItem>
 
             {/* Columna 2 y 3 vacías en Fila 2 */}
-            <GridItem />
-            <GridItem />
+            <GridItem>{/* Columna 2  Fila 2 */}</GridItem>
+            <GridItem>{/* Columna 3  Fila 2 */}</GridItem>
           </Grid>
         </Card.Body>
       </Card.Root>
@@ -329,8 +461,10 @@ const Profile = () => {
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
               >
-                <FaBook style={{ marginRight: "8px" }} />
-                Library
+                <FaBook />
+                <Text display={{ base: "none", lg: "block" }} ml="2">
+                  Library
+                </Text>
               </Tabs.Trigger>
               <Tabs.Trigger
                 value="tbr"
@@ -338,8 +472,10 @@ const Profile = () => {
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
               >
-                <FaBookmark style={{ marginRight: "8px" }} />
-                TBR
+                <FaBookmark />
+                <Text display={{ base: "none", lg: "block" }} ml="2">
+                  TBR
+                </Text>
               </Tabs.Trigger>
               <Tabs.Trigger
                 value="reviews"
@@ -347,8 +483,10 @@ const Profile = () => {
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
               >
-                <FaBook style={{ marginRight: "8px" }} />
-                Reviews
+                <FaBook />
+                <Text display={{ base: "none", lg: "block" }} ml="2">
+                  Reviews
+                </Text>
               </Tabs.Trigger>
               <Tabs.Trigger
                 value="followers"
@@ -356,8 +494,10 @@ const Profile = () => {
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
               >
-                <FaUserFriends style={{ marginRight: "8px" }} />
-                Followers
+                <FaUserFriends />
+                <Text display={{ base: "none", lg: "block" }} ml="2">
+                  Followers
+                </Text>
               </Tabs.Trigger>
               <Tabs.Trigger
                 value="following"
@@ -365,8 +505,10 @@ const Profile = () => {
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
               >
-                <FaUserPlus style={{ marginRight: "8px" }} />
-                Following
+                <FaUserPlus />
+                <Text display={{ base: "none", lg: "block" }} ml="2">
+                  Following
+                </Text>
               </Tabs.Trigger>
             </Tabs.List>
           </Tabs.Root>

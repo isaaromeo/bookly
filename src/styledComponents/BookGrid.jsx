@@ -53,10 +53,10 @@ export const BookGrid = ({
   return (
     <Grid
       templateColumns={{
-        base: "repeat(2, 1fr)", // ← 2 columnas en móvil
-        sm: "repeat(3, 1fr)", // ← 3 columnas en sm
-        md: "repeat(3, 1fr)", // ← 4 columnas en md
-        lg: "repeat(auto-fit, minmax(200px, 1fr))", // ← Auto en pantallas grandes
+        base: "repeat(2, 1fr)",
+        sm: "repeat(3, 1fr)",
+        md: "repeat(3, 1fr)",
+        lg: "repeat(auto-fit, minmax(200px, 1fr))",
       }}
       gap="4"
       justifyItems="center"
@@ -76,11 +76,10 @@ export const BookGrid = ({
           }}
           transition="all 0.3s ease-in-out"
           bg="brand.800"
-          width="90%"
+          width="95%"
           maxWidth={{
-            // ← Limita el ancho máximo
             base: "180px",
-            sm: "160px",
+            sm: "180px",
             md: "200px",
             lg: "250px",
           }}
@@ -90,7 +89,6 @@ export const BookGrid = ({
             display="flex"
             flexDirection="column"
             height="100%"
-          
           >
             <Box
               as="img"
@@ -135,23 +133,44 @@ export const BookGrid = ({
                 {book.author}
               </Text>
 
-              <HStack gap="2" width="100%">
-                <RatingGroup.Root
-                  readOnly
-                  count={5}
-                  defaultValue={book.rating}
-                  size={{
-                    base: "xs",
+              <HStack gap="0" width="100%">
+                <Box
+                  transform={{
+                    base: "scale(0.8)",
+                    sm: "scale(0.8)",
+                    md: "scale(1)",
+                    lg: "scale(1)",
+                  }}
+                  transformOrigin="left center"
+                  margin={{ base: "0", sm: "2" }}
+                >
+                  <RatingGroup.Root
+                    readOnly
+                    count={5}
+                    defaultValue={book.rating}
+                    size={{
+                      base: "xs",
+                      sm: "xs",
+                      md: "sm",
+                      lg: "sm",
+                    }}
+                    colorPalette="yellow"
+                    
+                  >
+                    <RatingGroup.HiddenInput />
+                    <RatingGroup.Control />
+                  </RatingGroup.Root>
+                </Box>
+
+                <Text
+                  fontSize={{
+                    base: "0.6rem",
                     sm: "xs",
                     md: "sm",
                     lg: "sm",
                   }}
-                  colorPalette="yellow"
+                  color="fg.muted"
                 >
-                  <RatingGroup.HiddenInput />
-                  <RatingGroup.Control />
-                </RatingGroup.Root>
-                <Text fontSize="sm" color="fg.muted">
                   ({book.rating}/5)
                 </Text>
               </HStack>
