@@ -1,5 +1,5 @@
 
-import BookGrid from "../styledComponents/BookGrid2";
+import BookGrid from "../styledComponents/BookGrid";
 import {
   Box,
   Text,

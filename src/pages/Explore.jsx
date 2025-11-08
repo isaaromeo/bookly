@@ -16,7 +16,7 @@ import {
   Separator,
   GridItem,
 } from "@chakra-ui/react";
-import BookGrid from "../styledComponents/BookGrid2";
+import BookGrid from "../styledComponents/BookGrid";
 import UserRecomend from "../styledComponents/UserRecomend";
 import Stats from "../styledComponents/Stats";
 import headerImage from "../assets/headerOK.png";
@@ -27,17 +27,23 @@ import CategorySection from "../styledComponents/CategorySection";
 
 const HeroSection = styled.section`
   background-image: linear-gradient(
-      0deg,
-      rgba(133, 120, 171, 0) 0%,
-      rgba(133, 120, 171, 0.88) 100%
-    );
+    0deg,
+    rgba(133, 120, 171, 0) 0%,
+    rgba(133, 120, 171, 0.88) 100%
+  );
   background-repeat: repeat-x;
   background-position: bottom;
   text-align: center;
   width: 100%;
   padding: 3rem 1rem;
-  
+
   border-radius: 20px;
+
+  @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
+    margin: 0;
+    width: 95%;
+    padding: 3rem 1rem;
+  }
 `;
 
 
@@ -119,14 +125,33 @@ const Explore = () => {
 
 
   return (
-    <Box minHeight="100vh" bg="bg.canvas">
+    <Box minHeight="100vh" bg="bg.canvas" justifyItems="center">
       <HeroSection>
-        <Container maxWidth="1200px">
-          <Heading size="2xl" textAlign="center">
+        <Container
+          maxWidth="1200px"
+          padding={{
+            base: "0",
+          }}
+        >
+          <Heading
+            fontSize={{
+              base: "2xl",
+              sm: "2xl",
+              md: "3xl",
+              lg: "4xl",
+            }}
+            textAlign="center"
+            color="brand.100"
+          >
             Explore Our Library
           </Heading>
           <Text
-            fontSize="lg"
+            fontSize={{
+              base: "md",
+              sm: "md",
+              md: "lg",
+              lg: "lg",
+            }}
             color="secondary.200"
             textAlign="center"
             paddingTop="1rem"
@@ -136,93 +161,108 @@ const Explore = () => {
           </Text>
         </Container>
       </HeroSection>
-
-      <VStack gap="6" mb="8" paddingTop="1rem">
-        <Heading size="lg">Browse by category</Heading>
-        <SimpleGrid columns={{ base: 2, sm: 3, md: 5 }} gap="3" width="100%">
-          {categories.map((category) => (
-            <Button
-              key={category.name}
-              bg="brand.900"
-              color="brand.100"
-              _hover={{
-                boxShadow: "sm",
-                borderColor: "brand.300",
-              }}
-              variant={
-                activeCategory === category.name.toLowerCase()
-                  ? "solid"
-                  : "outline"
-              }
-              onClick={() => handleCategoryClick(category)}
-            >
-              {category.name}
-            </Button>
-          ))}
-        </SimpleGrid>
-      </VStack>
-
-      <Stats />
-      <UserRecomend />
-      <VStack gap="6" align="stretch" mb="12">
-        <Heading size="xl">
-          <LuTrendingUp style={{ display: "inline", marginRight: "12px" }} />
-          Trending Now
-        </Heading>
-        <BookGrid
-          books={allBooks?.slice(0, 8) || []}
-          loading={allLoading}
-          onBookSelect={handleBookSelect}
-        />
-      </VStack>
-
-      <Box padding="6" maxWidth="1200px" margin="0 auto">
-        <VStack gap="8" align="stretch">
-          <CategorySection
-            title="Fantasy Adventures"
-            books={fantasyBooks}
-            loading={fantasyLoading}
-            onBookSelect={handleBookSelect}
-            categoryRef={fantasyRef}
-          />
-
-          <CategorySection
-            title="Romantic Stories"
-            books={romanceBooks}
-            loading={romanceLoading}
-            onBookSelect={handleBookSelect}
-            categoryRef={romanceRef}
-          />
-
-          <CategorySection
-            title="Mystery"
-            books={mysteryBooks}
-            loading={mysteryLoading}
-            onBookSelect={handleBookSelect}
-            categoryRef={mysteryRef}
-          />
-
-          <CategorySection
-            title="Sci-Fi"
-            books={scifiBooks}
-            loading={scifiLoading}
-            onBookSelect={handleBookSelect}
-            categoryRef={scifiRef}
-          />
-
-          <VStack gap="6" align="stretch" mb="8">
-            <Heading size="lg">Complete Collection</Heading>
-            <Text color="fg.muted">
-              Browse through our entire library of {allBooks?.length || 0} books
-            </Text>
-            <BookGrid
-              books={allBooks}
-              loading={allLoading}
-              onBookSelect={handleBookSelect}
-            />
-          </VStack>
+      <Container maxWidth="1200px" py="8" alignContent="center">
+        <VStack gap="6" mb="8" paddingTop="1rem">
+          <Heading size="lg">Browse by category</Heading>
+          <SimpleGrid
+            columns={{ base: 2, sm: 4, md: 5, lg: 5 }}
+            gap="3"
+            width="100%"
+          >
+            {categories.map((category) => (
+              <Button
+                key={category.name}
+                bg="brand.900"
+                color="brand.100"
+                _hover={{
+                  boxShadow: "sm",
+                  borderColor: "brand.300",
+                }}
+                variant={
+                  activeCategory === category.name.toLowerCase()
+                    ? "solid"
+                    : "outline"
+                }
+                onClick={() => handleCategoryClick(category)}
+              >
+                {category.name}
+              </Button>
+            ))}
+          </SimpleGrid>
         </VStack>
-      </Box>
+
+        <Stats />
+        <UserRecomend />
+        <VStack gap="6" align="stretch" mb="12">
+          <Heading
+            size={{
+              base: "lg",
+              sm: "lg",
+              md: "xl",
+              lg: "xl",
+            }}
+            textAlign="left"
+            pl="1rem"
+          >
+            <LuTrendingUp style={{ display: "inline", marginRight: "12px" }} />
+            Trending Now
+          </Heading>
+          <BookGrid
+            books={allBooks?.slice(0, 8) || []}
+            loading={allLoading}
+            onBookSelect={handleBookSelect}
+          />
+        </VStack>
+
+        <Box padding="6" maxWidth="1200px" margin="0 auto">
+          <VStack gap="8" align="stretch">
+            <CategorySection
+              title="Fantasy Adventures"
+              books={fantasyBooks}
+              loading={fantasyLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={fantasyRef}
+            />
+
+            <CategorySection
+              title="Romantic Stories"
+              books={romanceBooks}
+              loading={romanceLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={romanceRef}
+            />
+
+            <CategorySection
+              title="Mystery"
+              books={mysteryBooks}
+              loading={mysteryLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={mysteryRef}
+            />
+
+            <CategorySection
+              title="Sci-Fi"
+              books={scifiBooks}
+              loading={scifiLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={scifiRef}
+            />
+
+            <VStack gap="6" align="stretch" mb="8">
+              <Heading size="lg">Complete Collection</Heading>
+              <Text color="fg.muted">
+                Browse through our entire library of {allBooks?.length || 0}{" "}
+                books
+              </Text>
+              <BookGrid
+                books={allBooks}
+                loading={allLoading}
+                onBookSelect={handleBookSelect}
+              />
+            </VStack>
+          </VStack>
+        </Box>
+      </Container>
     </Box>
   );
 };

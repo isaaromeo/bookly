@@ -23,14 +23,20 @@ const Stats = () => {
   ];
 
   return (
-    <Card.Root bg="secondary.200" mb="12" boxShadow="md" opacity={0.7} borderRadius="15px">
+    <Card.Root
+      bg="secondary.200"
+      mb="12"
+      boxShadow="md"
+      opacity={0.7}
+      borderRadius="15px"
+    >
       <Card.Body>
         <VStack gap="4">
-          <Heading size="xl" color="brand.700"textAlign="center">
+          <Heading size="xl" color="brand.700" textAlign="center">
             Our Reading Community
           </Heading>
           <SimpleGrid
-            columns={{ base: 2, md: 4 }}
+            columns={{ base: 2, sm: 4, md: 4, lg: 4 }}
             gap="6"
             width="100%"
             textAlign="center"
