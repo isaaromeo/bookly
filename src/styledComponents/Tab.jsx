@@ -16,7 +16,7 @@ import { FaHeart, FaRegHeart, FaUserPlus, FaUserCheck, FaTrash } from "react-ico
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect, useCallback } from "react";
-import BookGrid from "../styledComponents/BookGrid2";
+import BookGrid from "../styledComponents/BookGrid";
 
 export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => {
   const navigate = useNavigate();
