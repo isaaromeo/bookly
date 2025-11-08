@@ -169,21 +169,17 @@ const Profile = () => {
             {/* Columna 1 - Avatar (Fila 1) */}
             <GridItem
               display="flex"
-              alignItems={{
-                base: "center",
-                sm: "center",
-                md: "center",
-                lg: "center",
-              }}
+              alignItems="center"
               justifyContent={{
                 base: "start",
-                sm: "center",
+                sm: "start",
                 md: "center",
                 lg: "center",
               }}
               height="100%"
               pt="0.5rem"
               pb="0.5rem"
+              pl="0.3rem"
             >
               <Avatar.Root
                 width={{
@@ -218,6 +214,7 @@ const Profile = () => {
                       fontWeight="bold"
                       fontSize={{
                         base: "sm",
+                        sm: "md",
                         md: "md",
                         lg: "xl",
                       }}
@@ -227,6 +224,7 @@ const Profile = () => {
                     <Text
                       fontSize={{
                         base: "xs",
+                        sm: "md",
                         md: "md",
                         lg: "xl",
                       }}
@@ -240,6 +238,7 @@ const Profile = () => {
                       fontWeight="bold"
                       fontSize={{
                         base: "sm",
+                        sm: "md",
                         md: "md",
                         lg: "xl",
                       }}
@@ -249,6 +248,7 @@ const Profile = () => {
                     <Text
                       fontSize={{
                         base: "xs",
+                        sm: "md",
                         md: "md",
                         lg: "xl",
                       }}
@@ -268,7 +268,15 @@ const Profile = () => {
               justifyContent="start"
               height="100%"
             >
-              <VStack gap="0" align="top">
+              <VStack
+                gap={{
+                  base: "0",
+                  sm: "2",
+                  md: "2",
+                  lg: "2",
+                }}
+                align="top"
+              >
                 {isOwnProfile ? (
                   <>
                     <Button
@@ -285,7 +293,12 @@ const Profile = () => {
                         boxShadow: "sm",
                         borderColor: "brand.300",
                       }}
-                      maxWidth={{ base: "20px", md: "150px" }}
+                      maxWidth={{
+                        base: "20px",
+                        sm: "150px",
+                        md: "150px",
+                        lg: "150px",
+                      }}
                     >
                       {/* <LuPen /> */}
                       <Box
@@ -324,8 +337,8 @@ const Profile = () => {
                         }}
                         maxWidth={{
                           base: "20px",
-                          sm: "30px",
-                          md: "100px",
+                          sm: "150px",
+                          md: "150px",
                           lg: "150px",
                         }}
                       >
@@ -364,9 +377,18 @@ const Profile = () => {
                     }}
                     maxWidth={{
                       base: "20px",
-                      sm: "30px",
-                      md: "100px",
+                      sm: "110px",
+                      md: "150px",
                       lg: "150px",
+                    }}
+                    maxHeight={{
+                      base: "30px",
+                      sm: "150px",
+                      md: "150px",
+                      lg: "150px",
+                    }}
+                    mb={{
+                      base: "1rem",
                     }}
                   >
                     <Box
@@ -383,11 +405,12 @@ const Profile = () => {
                         md: "20px",
                         lg: "20px",
                       }}
-                     
                     />
-                    {/* <Text display={{ base: "none", sm: "block" }}>
-                      {isFollowing ? "Following" : "Follow"}
-                    </Text> */}
+                    {
+                      <Text display={{ base: "none", sm: "block" }}>
+                        {isFollowing ? "Following" : "Follow"}
+                      </Text>
+                    }
 
                     {/* {isFollowing ? <FaUserCheck /> : <FaUserPlus />} */}
                   </Button>
@@ -411,7 +434,8 @@ const Profile = () => {
                 <HStack gap="3" align="center">
                   <Text
                     fontSize={{
-                      base: "md",
+                      base: "sm",
+                      sm: "xl",
                       md: "2xl",
                       lg: "3xl",
                     }}
@@ -422,7 +446,12 @@ const Profile = () => {
                   <Badge
                     colorPalette="purple"
                     fontSize={{ base: "xs", md: "sm" }}
-                    display={{ base: "none", md: "block" }}
+                    display={{
+                      base: "none",
+                      sm: "none",
+                      md: "block",
+                      lg: "block",
+                    }}
                   >
                     {user.rol}
                   </Badge>
@@ -431,6 +460,7 @@ const Profile = () => {
                   color="gray.500"
                   fontSize={{
                     base: "0.7rem",
+                    sm: "sm",
                     md: "md",
                     lg: "lg",
                   }}
@@ -460,9 +490,23 @@ const Profile = () => {
                 bg="brand.700"
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
+                padding={{
+                  base: "0.3em 0.8em",
+                  sm: "0.3em 0.8em",
+                  md: "block",
+                  lg: "block",
+                }}
               >
                 <FaBook />
-                <Text display={{ base: "none", lg: "block" }} ml="2">
+                <Text
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "block",
+                    lg: "block",
+                  }}
+                  ml="2"
+                >
                   Library
                 </Text>
               </Tabs.Trigger>
@@ -471,9 +515,23 @@ const Profile = () => {
                 bg="brand.700"
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
+                padding={{
+                  base: "0.3em 0.8em",
+                  sm: "0.3em 0.8em",
+                  md: "block",
+                  lg: "block",
+                }}
               >
                 <FaBookmark />
-                <Text display={{ base: "none", lg: "block" }} ml="2">
+                <Text
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "block",
+                    lg: "block",
+                  }}
+                  ml="2"
+                >
                   TBR
                 </Text>
               </Tabs.Trigger>
@@ -482,9 +540,23 @@ const Profile = () => {
                 bg="brand.700"
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
+                padding={{
+                  base: "0.3em 0.8em",
+                  sm: "0.3em 0.8em",
+                  md: "block",
+                  lg: "block",
+                }}
               >
                 <FaBook />
-                <Text display={{ base: "none", lg: "block" }} ml="2">
+                <Text
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "block",
+                    lg: "block",
+                  }}
+                  ml="2"
+                >
                   Reviews
                 </Text>
               </Tabs.Trigger>
@@ -493,9 +565,23 @@ const Profile = () => {
                 bg="brand.800"
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
+                padding={{
+                  base: "0.3em 0.8em",
+                  sm: "0.3em 0.8em",
+                  md: "block",
+                  lg: "block",
+                }}
               >
                 <FaUserFriends />
-                <Text display={{ base: "none", lg: "block" }} ml="2">
+                <Text
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "block",
+                    lg: "block",
+                  }}
+                  ml="2"
+                >
                   Followers
                 </Text>
               </Tabs.Trigger>
@@ -504,9 +590,28 @@ const Profile = () => {
                 bg="brand.800"
                 _hover={{ boxShadow: "sm", borderColor: "brand.300" }}
                 _focus={{ outline: "none !important" }}
+                padding={{
+                  base: "0.3em 0.8em",
+                  sm: "0.3em 0.8em",
+                  md: "block",
+                  lg: "block",
+                }}
               >
                 <FaUserPlus />
-                <Text display={{ base: "none", lg: "block" }} ml="2">
+                <Text
+                  display={{
+                    base: "none",
+                    sm: "none",
+                    md: "block",
+                    lg: "block",
+                  }}
+                  fontSize={{
+                    sm: "md",
+                    md: "md",
+                    lg: "lg",
+                  }}
+                  ml="2"
+                >
                   Following
                 </Text>
               </Tabs.Trigger>

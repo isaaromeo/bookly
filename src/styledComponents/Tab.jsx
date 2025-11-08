@@ -182,14 +182,30 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
             <Card.Body
               bg={context === "profile" ? "black" : "brand.900"}
               borderRadius="20px"
+              padding={{
+                base: "1rem",
+                sm: "1rem",
+                md: "1.5rem",
+                lg: "1.5rem",
+              }}
             >
               <HStack justify="space-between" mb="2" alignItems="start">
                 <VStack align="start" gap="1">
                   <Text
                     fontWeight="semibold"
                     color="brand.500"
-                    fontSize="xl"
-                    paddingBottom="1rem"
+                    fontSize={{
+                      base: "md",
+                      sm: "lg",
+                      md: "xl",
+                      lg: "xl",
+                    }}
+                    paddingBottom={{
+                      base: "0.5rem",
+                      sm: "0.5rem",
+                      md: "1rem",
+                      lg: "1rem",
+                    }}
                   >
                     {review.title}
                   </Text>
@@ -202,7 +218,6 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                         onClick={() =>
                           reviewUserId && handleUserClick(reviewUserId)
                         }
-                        
                       >
                         <Avatar.Fallback name={review.user?.username} />
                         {review.user?.profilePic && (
@@ -217,17 +232,39 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
 
                   {context === "profile" && (
                     //en Profile mostrar libro
-                    <Text fontSize="sm" color="fg.muted">
+                    <Text
+                      fontSize={{
+                        base: "0.7rem",
+                        sm: "xs",
+                        md: "sm",
+                        lg: "sm",
+                      }}
+                      color="fg.muted"
+                    >
                       on {review.book.title || "Unknown Book"}
                     </Text>
                   )}
                 </VStack>
-                
+                <Box
+                  transform={{
+                    base: "scale(0.8)",
+                    sm: "scale(0.8)",
+                    md: "scale(1)",
+                    lg: "scale(1)",
+                  }}
+                  transformOrigin="right center"
+                  margin={{ base: "0", sm: "2" }}
+                >
                   <RatingGroup.Root
                     readOnly
                     count={5}
                     defaultValue={review.rating}
-                    size="sm"
+                    size={{
+                      base: "xs",
+                      sm: "xs",
+                      md: "sm",
+                      lg: "sm",
+                    }}
                     colorPalette="yellow"
                     allowHalf
                     value={review.rating}
@@ -236,17 +273,34 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                     <RatingGroup.HiddenInput />
                     <RatingGroup.Control />
                   </RatingGroup.Root>
-                  
-                
+                </Box>
               </HStack>
 
-              <Text fontSize="md" paddingBottom="2rem">
+              <Text
+                fontSize={{
+                  base: "xs",
+                  sm: "sm",
+                  md: "sm",
+                  lg: "md",
+                }}
+                paddingBottom={{
+                  base: "0.5rem",
+                  sm: "0.5rem",
+                  md: "1rem",
+                  lg: "2rem",
+                }}
+              >
                 {review.content}
               </Text>
               <HStack justify="space-between" align="center">
                 <HStack gap="2">
                   <IconButton
-                    size="sm"
+                    size={{
+                      base: "xs",
+                      sm: "xs",
+                      md: "sm",
+                      lg: "sm",
+                    }}
                     variant="ghost"
                     colorPalette={isLikedByUser ? "purple" : "gray"}
                     onClick={() => handleLike(review._id)}
@@ -257,13 +311,26 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                   >
                     {isLikedByUser ? <FaHeart /> : <FaRegHeart />}
                   </IconButton>
-                  <Text fontSize="sm" color="fg.muted">
+                  <Text
+                    fontSize={{
+                      base: "xs",
+                      sm: "xs",
+                      md: "sm",
+                      lg: "sm",
+                    }}
+                    color="fg.muted"
+                  >
                     {likesCount} {likesCount === 1 ? "like" : "likes"}
                   </Text>
                 </HStack>
                 {isOwnReview && context === "profile" && (
                   <IconButton
-                    size="sm"
+                    size={{
+                      base: "xs",
+                      sm: "xs",
+                      md: "sm",
+                      lg: "sm",
+                    }}
                     variant="ghost"
                     colorPalette="red"
                     onClick={() => handleDeleteReview(review._id)}
@@ -298,7 +365,14 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
           const isOwnProfile = authUser?._id === user._id;
         return (
           <Card.Root key={user._id} width="100%" borderRadius="20px">
-            <Card.Body>
+            <Card.Body
+              padding={{
+                base: "1rem",
+                sm: "1rem",
+                md: "1.5rem",
+                lg: "1.5rem",
+              }}
+            >
               <HStack justify="space-between" align="center">
                 <HStack
                   gap="4"
@@ -311,15 +385,49 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                     {user.profilePic && <Avatar.Image src={user.profilePic} />}
                   </Avatar.Root>
                   <VStack align="start" gap="1">
-                    <Text fontWeight="semibold">{user.username}</Text>
-                    <Text fontSize="sm" color="fg.muted">
+                    <Text
+                      fontWeight="semibold"
+                      fontSize={{
+                        base: "sm",
+                        sm: "sm",
+                        md: "md",
+                        lg: "md",
+                      }}
+                    >
+                      {user.username}
+                    </Text>
+                    <Text
+                      fontSize={{
+                        base: "xs",
+                        sm: "xs",
+                        md: "sm",
+                        lg: "sm",
+                      }}
+                      color="fg.muted"
+                    >
                       {user.email}
                     </Text>
                     <HStack gap="4">
-                      <Text fontSize="xs" color="brand.100">
+                      <Text
+                        fontSize={{
+                          base: "0.7rem",
+                          sm: "0.7rem",
+                          md: "xs",
+                          lg: "xs",
+                        }}
+                        color="brand.100"
+                      >
                         {user.followers?.length || 0} followers
                       </Text>
-                      <Text fontSize="xs" color="brand.100">
+                      <Text
+                        fontSize={{
+                          base: "0.7rem",
+                          sm: "0.7rem",
+                          md: "xs",
+                          lg: "xs",
+                        }}
+                        color="brand.100"
+                      >
                         {user.following?.length || 0} following
                       </Text>
                     </HStack>
@@ -339,9 +447,49 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                       boxShadow: "sm",
                       borderColor: "brand.300",
                     }}
+                    maxWidth={{
+                      base: "20px",
+                      sm: "100px",
+                      md: "150px",
+                      lg: "150px",
+                    }}
+                    maxHeight={{
+                      base: "30px",
+                      sm: "150px",
+                      md: "150px",
+                      lg: "150px",
+                    }}
                   >
-                    {isFollowing ? "Following" : "Follow"}
-                    {isFollowing ? <FaUserCheck /> : <FaUserPlus />}
+                    <Box
+                      as={isFollowing ? FaUserCheck : FaUserPlus}
+                      width={{
+                        base: "14px",
+                        sm: "20px",
+                        md: "20px",
+                        lg: "20px",
+                      }}
+                      height={{
+                        base: "16px",
+                        sm: "20px",
+                        md: "20px",
+                        lg: "20px",
+                      }}
+                    />
+                    {
+                      <Text
+                        fontSize={{
+                          base: "xs",
+                          sm: "xs",
+                          md: "md",
+                          lg: "md",
+                        }}
+                        display={{ base: "none", sm: "block" }}
+                      >
+                        {isFollowing ? "Following" : "Follow"}
+                      </Text>
+                    }
+                    {/* {isFollowing ? "Following" : "Follow"} */}
+                    {/* {isFollowing ? <FaUserCheck /> : <FaUserPlus />} */}
                   </Button>
                 )}
               </HStack>

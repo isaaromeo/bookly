@@ -137,12 +137,12 @@ export const BookGrid = ({
                 <Box
                   transform={{
                     base: "scale(0.8)",
-                    sm: "scale(0.8)",
+                    sm: "scale(1)",
                     md: "scale(1)",
                     lg: "scale(1)",
                   }}
                   transformOrigin="left center"
-                  margin={{ base: "0", sm: "2" }}
+                  margin={{ base: "0"}}
                 >
                   <RatingGroup.Root
                     readOnly
@@ -150,7 +150,7 @@ export const BookGrid = ({
                     defaultValue={book.rating}
                     size={{
                       base: "xs",
-                      sm: "xs",
+                      sm: "sm",
                       md: "sm",
                       lg: "sm",
                     }}
