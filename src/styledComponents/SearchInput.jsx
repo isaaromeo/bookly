@@ -10,13 +10,13 @@ export const SearchInput = ({
 
   return (
     <HStack gap="2" width="100%">
-      <InputGroup startElement={<LuSearch />}>
+      <InputGroup startElement={<LuSearch />} size={{ base: "sm", md: "md" }}>
         <Input
           placeholder={placeholder}
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           rounded="full"
-          border="solid 2px"
+          border="solid 1px"
           borderColor="brand.900"
           _hover={{
             borderColor: "brand.100",
@@ -25,6 +25,13 @@ export const SearchInput = ({
             outline: "none !important",
             borderColor: "brand.100",
           }}
+          maxHeight={{
+            base: "35px",
+            sm: "40px",
+            md: "40px",
+            lg: "40px",
+          }}
+          alignSelf="end"
         />
       </InputGroup>
     </HStack>

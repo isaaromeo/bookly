@@ -1,16 +1,16 @@
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import './App.css'
+import "./App.css";
 import Search from "./styledComponents/Search.jsx";
 import UserMenu from "./styledComponents/UserMenu.jsx";
 import { ThemeProvider } from "styled-components";
-// import { booklyTheme } from "./theme";
 import { Provider } from "./components/ui/provider";
 import { AuthProvider } from "./context/AuthContext";
 import { useColorMode } from "./components/ui/color-mode";
- import { booklyTheme, lightTheme} from "./data/booklyTheme";
-//import { colorPalettes } from "compositions/lib/color-palettes";
+import { booklyTheme, lightTheme } from "./data/booklyTheme";
 import styled from "styled-components";
 import { Toaster } from "./components/ui/toaster";
+import { Heading } from "@chakra-ui/react";
+
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -28,7 +28,6 @@ const Header = styled.header`
   z-index: 1000;
 `;
 
-
 const HeaderContainer = styled.div`
   max-width: 1300px;
   margin: 0 auto;
@@ -36,19 +35,26 @@ const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 2rem;
+
   @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
-    flex-direction: column;
-    gap: 1rem;
     padding: 0 1rem;
+    gap: 1rem;
+  }
+
+  @media (max-width: ${(props) => props.theme.breakpoints?.mobile || "480px"}) {
+    padding: 0 0.5rem;
+    gap: 0.5rem;
   }
 `;
-
 
 const LogoSection = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+  flex-shrink: 0;
+  min-width: fit-content;
 `;
 
 const BackButton = styled.button`
@@ -64,10 +70,14 @@ const BackButton = styled.button`
   outline: none !important;
 
   &:hover {
-    color: #8d7a96ab};
+    color: #8d7a96ab;
     border-color: transparent;
   }
-  
+
+  @media (max-width: ${(props) => props.theme.breakpoints?.mobile || "480px"}) {
+    font-size: 1.2rem;
+    padding: 0.25rem;
+  }
 `;
 
 const PageTitle = styled.h1`
@@ -76,30 +86,53 @@ const PageTitle = styled.h1`
   font-size: 2.2rem;
   color: ${(props) => props.theme?.colors?.app?.primaryText || "#2d3748"};
   margin-left: 10px;
+  white-space: nowrap;
+
+  @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: ${(props) => props.theme.breakpoints?.mobile || "480px"}) {
+    font-size: 1.5rem;
+    margin-left: 5px;
+  }
 `;
 
 const PageLogo = styled.p`
   font-family: ${(props) =>
     props.theme?.typography?.fonts?.heading || "Cinzel, serif"};
-  font-size: 0.7rem;
+  font-size: 1rem;
   color: ${(props) => props.theme?.colors?.app?.secondaryText || "#718096"};
   margin: 0;
+  white-space: nowrap;
+  align-self: end;
+  @media (max-width: ${(props) => props.theme.breakpoints?.mobile || "540px"}) {
+    display: none;
+    
+  }
+  @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
+    font-size: 0.7rem;
+  }
 `;
-
 
 const Navbar = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: 35%;
-  justify-content: space-between;
+  flex: 1;
+  justify-content: flex-end;
+  max-width: 600px;
 
   @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
-    width: 100%;
-    justify-content: center;
+    gap: 0.75rem;
+    max-width: 500px;
+  }
+
+  @media (max-width: ${(props) => props.theme.breakpoints?.mobile || "480px"}) {
+    gap: 0.5rem;
+    max-width: 400px;
   }
 `;
-
 
 const MainContent = styled.main`
   flex: 1;
@@ -108,8 +141,9 @@ const MainContent = styled.main`
   padding: 2rem;
   padding-top: 0;
   width: 100%;
+
   @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
-    padding: 1rem;
+    padding: 0;
   }
 `;
 
@@ -127,7 +161,6 @@ const MainContentContainer = styled.div`
   }
 `;
 
-
 const Footer = styled.footer`
   background: ${(props) =>
     props.theme?.colors?.app?.cardHeaderBackground || "#ffffff"};
@@ -144,69 +177,80 @@ const FooterContainer = styled.div`
 `;
 
 function ThemeWrapper({ children }) {
-const { colorMode } = useColorMode();
-const currentTheme = colorMode === "light" ? lightTheme : booklyTheme;
+  const { colorMode } = useColorMode();
+  const currentTheme = colorMode === "light" ? lightTheme : booklyTheme;
 
-return <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>;
+  return <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>;
 }
 
 function App() {
-
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
 
   return (
     <Provider>
       <ThemeWrapper>
-          <AuthProvider>
-            <Toaster />
-                      <AppContainer>
-                        <Header>
-                          <HeaderContainer>
-                            <LogoSection
-                              onClick={() => {
-                                navigate("/");
-                              }}
-                            >
-                              <PageTitle>Bookly |</PageTitle>
-                              <PageLogo>Meet your new fav read!</PageLogo>
-                            </LogoSection>
-            
-                            <Navbar>
-                              <Search />
-                              <UserMenu />
-                            </Navbar>
-                          </HeaderContainer>
-                        </Header>
-            
-                        <MainContentContainer>
-                          {!isHomePage && (
-                            <BackButton
-                              onClick={() => {
-                                navigate(-1);
-                              }}
-                              title="Go back"
-                            >
-                              ←
-                            </BackButton>
-                          )}
-            
-                          <MainContent>
-                            <Outlet />
-                          </MainContent>
-                        </MainContentContainer>
-            
-                        <Footer>
-                          <FooterContainer>
-                            <p>Created by Isa 🧚💻</p>
-                            <p>Contact: hello@bookly.com | FAQS | Social Media</p>
-                          </FooterContainer>
-                        </Footer>
-                      </AppContainer>
-                    </AuthProvider>
-                  </ThemeWrapper>
-                </Provider>
-              );
-            }
-            
-            export default App;
+        <AuthProvider>
+          <Toaster />
+          <AppContainer>
+            <Header>
+              <HeaderContainer>
+                <LogoSection
+                  onClick={() => {
+                    navigate("/");
+                  }}
+                >
+                  <PageTitle>Bookly</PageTitle>
+                  <Heading
+                    size="2xl"
+                    paddingTop="5px"
+                    display={{
+                      base: "none",
+                      sm: "none",
+                      md: "block",
+                      lg: "block",
+                    }}
+                  >
+                    |
+                  </Heading>
+                  <PageLogo>Meet your new fav read!</PageLogo>
+                </LogoSection>
+
+                <Navbar>
+                  <Search />
+                  <UserMenu />
+                </Navbar>
+              </HeaderContainer>
+            </Header>
+
+            <MainContentContainer>
+              {!isHomePage && (
+                <BackButton
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+                  title="Go back"
+                >
+                  ←
+                </BackButton>
+              )}
+
+              <MainContent>
+                <Outlet />
+              </MainContent>
+            </MainContentContainer>
+
+            <Footer>
+              <FooterContainer>
+                <p>Created by Isa 🧚💻</p>
+                <p>Contact: hello@bookly.com | FAQS | Social Media</p>
+              </FooterContainer>
+            </Footer>
+          </AppContainer>
+        </AuthProvider>
+      </ThemeWrapper>
+    </Provider>
+  );
+}
+
+export default App;

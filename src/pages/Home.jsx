@@ -32,9 +32,9 @@ import {
   LuStar,
   LuMoveUpRight
 } from "react-icons/lu";
-import BookGrid from "../styledComponents/BookGrid2";
+import BookGrid from "../styledComponents/BookGrid";
 import headerImage from "../assets/headerOK.png";
-import headerImage2 from "../assets/images/header2.png";
+import headerImage2 from "../assets/images/headerUpdate.png";
 import FeatureCard from "../styledComponents/FeatureCard";
 import Stats from "../styledComponents/Stats";
 import styled from "styled-components";
@@ -46,14 +46,20 @@ const HeroSection = styled.section`
       rgba(133, 120, 171, 0) 0%,
       rgba(133, 120, 171, 0.88) 100%
     ),
-    url(${headerImage});
+    url(${headerImage2});
   background-repeat: repeat-x;
   background-position: bottom;
   text-align: center;
   width: 100%;
   padding: 4rem 1rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
   border-radius: 20px;
+
+  @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
+    margin: 0;
+    width: 95%;
+    padding: 3rem 1rem;
+  }
 `;
 
 const features = [
@@ -164,20 +170,41 @@ const Home = () => {
   }
 
   return (
-    <Box>
+    <Box justifyItems="center">
       <HeroSection>
-        <Container maxWidth="1200px">
+        <Container
+          maxWidth="1200px"
+          padding={{
+            base: "0",
+          }}
+        >
           <VStack gap="6" color="white">
             <Heading
-              fontSize="4xl"
               style={{
                 fontFamily: "'Cinzel', serif",
+              }}
+              fontSize={{
+                base: "2xl",
+                sm: "2xl",
+                md: "3xl",
+                lg: "4xl",
               }}
             >
               Discover Your Next Favorite Book
             </Heading>
             <Text
-              fontSize="xl"
+              fontSize={{
+                base: "md",
+                sm: "lg",
+                md: "lg",
+                lg: "xl",
+              }}
+              paddingBottom={{
+                base: "1rem",
+                sm: "1rem",
+                md: "2rem",
+                lg: "2rem",
+              }}
               color="secondary.200"
               opacity="0.9"
               maxWidth="600px"
@@ -187,7 +214,6 @@ const Home = () => {
             </Text>
             <HStack gap="4" mt="4">
               <Button
-                size="lg"
                 bg="brand.800"
                 color="brand.100"
                 _hover={{
@@ -196,12 +222,23 @@ const Home = () => {
                 }}
                 variant="outline"
                 onClick={() => navigate("/books")}
+                size={{
+                  base: "xs",
+                  sm: "md",
+                  md: "md",
+                  lg: "lg",
+                }}
+                fontSize={{
+                  base: "xs",
+                  sm: "md",
+                  md: "md",
+                  lg: "xl",
+                }}
               >
                 <LuBook style={{ marginRight: "8px" }} />
                 Explore Books
               </Button>
               <Button
-                size="lg"
                 variant="solid"
                 bg="brand.50"
                 _hover={{
@@ -210,6 +247,18 @@ const Home = () => {
                 }}
                 color="brand.600"
                 onClick={() => navigate("/register")}
+                size={{
+                  base: "xs",
+                  sm: "md",
+                  md: "md",
+                  lg: "lg",
+                }}
+                fontSize={{
+                  base: "xs",
+                  sm: "md",
+                  md: "md",
+                  lg: "xl",
+                }}
               >
                 Join Community
               </Button>
@@ -218,17 +267,30 @@ const Home = () => {
         </Container>
       </HeroSection>
 
-      <Container maxWidth="1200px" py="8">
+      <Container maxWidth="1200px" py="8" alignContent="center">
         <VStack gap="12" mb="12">
           <VStack gap="4" align="start" width="100%">
-            <Heading size="xl" textAlign="left">
+            <Heading
+              fontSize={{
+                base: "lg",
+                sm: "lg",
+                md: "xl",
+                lg: "xl",
+              }}
+              textAlign="left"
+            >
               Why Book Lovers Choose Bookly
             </Heading>
             <Text
-              fontSize="lg"
               color="fg.muted"
               maxWidth="600px"
               textAlign="left"
+              fontSize={{
+                base: "md",
+                sm: "md",
+                md: "lg",
+                lg: "lg",
+              }}
             >
               Everything you need to enhance your reading experience in one
               beautiful platform
@@ -249,7 +311,22 @@ const Home = () => {
               />
               Trending Now
             </Heading>
-            <Button variant="ghost" onClick={() => navigate("/books")}>
+            <Button
+              variant="ghost"
+              _hover={{
+                boxShadow: "sm",
+                borderColor: "brand.300",
+              }}
+              bg="brand.900"
+              color="brand.100"
+              onClick={() => navigate("/books")}
+              size={{
+                base: "xs",
+                sm: "sm",
+                md: "lg",
+                lg: "lg",
+              }}
+            >
               View All
             </Button>
           </HStack>
@@ -275,7 +352,7 @@ const Home = () => {
                       color="brand.900"
                       sx={{
                         fontWeight: "bold !important",
-                        fontStyle: "normal", // Por si acaso quita la italic
+                        fontStyle: "normal",
                       }}
                     >
                       {feedback.quote}

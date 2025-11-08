@@ -51,7 +51,17 @@ export const BookGrid = ({
   }
 
   return (
-    <Grid templateColumns="repeat(auto-fit, minmax(230px, 1fr))" gap="4">
+    <Grid
+      templateColumns={{
+        base: "repeat(2, 1fr)", // ← 2 columnas en móvil
+        sm: "repeat(3, 1fr)", // ← 3 columnas en sm
+        md: "repeat(3, 1fr)", // ← 4 columnas en md
+        lg: "repeat(auto-fit, minmax(200px, 1fr))", // ← Auto en pantallas grandes
+      }}
+      gap="4"
+      justifyItems="center"
+      width="100%"
+    >
       {memoizedBooks.map((book) => (
         <Card.Root
           key={book._id}
@@ -59,9 +69,6 @@ export const BookGrid = ({
           onClick={() =>
             onBookSelect ? onBookSelect(book) : navigate(`/books/${book._id}`)
           }
-          // height="100%"
-          // variant="outline"
-          maxWidth="250px"
           _hover={{
             transform: "translateY(-4px)",
             boxShadow: "xl",
@@ -69,25 +76,62 @@ export const BookGrid = ({
           }}
           transition="all 0.3s ease-in-out"
           bg="brand.800"
+          width="90%"
+          maxWidth={{
+            // ← Limita el ancho máximo
+            base: "180px",
+            sm: "160px",
+            md: "200px",
+            lg: "250px",
+          }}
         >
-          <Card.Body>
+          <Card.Body
+            padding={{ base: "2", md: "3" }}
+            display="flex"
+            flexDirection="column"
+            height="100%"
+          
+          >
             <Box
               as="img"
               src={book.cover || coverPlaceholder}
               alt={book.title}
               width="100%"
-              height="270px"
+              height={{
+                base: "150px",
+                sm: "150px",
+                md: "250px",
+                lg: "250px",
+              }}
               objectFit="cover"
               borderRadius="8px"
               mb="4"
             />
 
             <VStack align="start" gap="2">
-              <Text fontWeight="bold" fontSize="lg" lineClamp="2" height="3rem">
+              <Text
+                fontWeight="bold"
+                fontSize={{
+                  base: "1rem",
+                  sm: "md",
+                  md: "lg",
+                  lg: "lg",
+                }}
+                lineClamp="2"
+              >
                 {book.title}
               </Text>
 
-              <Text color="fg.muted" fontSize="md" lineClamp="1">
+              <Text
+                color="fg.muted"
+                fontSize={{
+                  base: "xs",
+                  sm: "xs",
+                  md: "md",
+                  lg: "md",
+                }}
+                lineClamp="1"
+              >
                 {book.author}
               </Text>
 
@@ -96,7 +140,12 @@ export const BookGrid = ({
                   readOnly
                   count={5}
                   defaultValue={book.rating}
-                  size="sm"
+                  size={{
+                    base: "xs",
+                    sm: "xs",
+                    md: "sm",
+                    lg: "sm",
+                  }}
                   colorPalette="yellow"
                 >
                   <RatingGroup.HiddenInput />

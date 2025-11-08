@@ -53,7 +53,7 @@ export const UserMenu = () => {
       <Menu.Trigger asChild>
         <Button
           variant="ghost"
-          size="md"
+          
           _hover={{
             boxShadow: "sm",
             borderColor: "brand.300",
@@ -63,10 +63,20 @@ export const UserMenu = () => {
           }}
           padding="0.5"
           rounded="full"
+          size={{
+            base: "sm",
+            sm: "sm",
+            md: "md",
+            lg: "md",
+          }}
         >
           <Avatar.Root
-            size="sm"
-            
+            size={{
+              base: "xs",
+              sm: "xs",
+              md: "sm",
+              lg: "sm",
+            }}
           >
             {user ? (
               <>

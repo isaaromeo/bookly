@@ -46,8 +46,15 @@ export const Search = () => {
     <Box
       position="relative"
       width="100%"
-      maxWidth={{ base: "100%", md: "500px", lg: "700px", xl: "800px" }}
+      maxWidth={{
+        base: "60%",
+        sm: "70%",
+        md: "70%",
+        lg: "100%",
+      }}
+      
       ref={searchRef}
+      flex="1"
     >
       <form onSubmit={handleSearchSubmit}>
         <SearchInput

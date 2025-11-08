@@ -1,5 +1,5 @@
 import { useBooklyApi } from "../hooks/useBooklyApi";
-import { useNavigate } from "react-router-dom";
+
 import {
   Box,
   Text,
@@ -23,10 +23,10 @@ const Stats = () => {
   ];
 
   return (
-    <Card.Root bg="secondary.200" mb="12" opacity={0.5} borderRadius="15px">
+    <Card.Root bg="secondary.200" mb="12" boxShadow="md" opacity={0.7} borderRadius="15px">
       <Card.Body>
         <VStack gap="4">
-          <Heading size="lg" color="brand.700"textAlign="center">
+          <Heading size="xl" color="brand.700"textAlign="center">
             Our Reading Community
           </Heading>
           <SimpleGrid

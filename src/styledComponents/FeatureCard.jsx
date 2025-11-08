@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 
 const FeatureCard = ({ icon, title, description }) => (
-  <Card.Root variant="outline" height="100%">
+  <Card.Root variant="outline" height="100%" bg="brand.900">
     <Card.Body textAlign="center">
       <Box fontSize="2xl" mb="3" color="brand.500">
         {icon}
