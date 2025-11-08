@@ -17,9 +17,22 @@ import { toaster } from "../components/ui/toaster.jsx";
 import { useBooklyApi } from "@/hooks/useBooklyApi";
 
 const RegisterContainer = styled.div`
-  max-width: 450px;
-  margin: 2rem auto;
+  max-width: 650px;
+  width: 60%;
+  // margin: 2rem auto;
   padding: 2rem;
+  justify-self: center;
+
+  @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
+    margin: 0;
+    padding: 1rem;
+    width: 80%;
+  }
+  @media (max-width: ${(props) => props.theme.breakpoints?.mobile || "480px"}) {
+    margin: 0;
+    padding: 1rem;
+    width: 100%;
+  }
 `;
 
 const Register = () => {
@@ -89,36 +102,10 @@ const Register = () => {
       return;
     }
 
-    // setLoading(true);
-    // setError("");
 
     try {
       const { confirmPassword, ...registerData } = formData;
 
-      //   const response = await fetch(
-      //     "https://bookly-back.onrender.com/api/user/register",
-      //     {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify(registerData),
-      //     }
-      //   );
-
-      //   const data = await response.json();
-
-      //   if (response.ok) {
-      //     alert("Sign in sucessful");
-      //     navigate("/login");
-      //   } else {
-      //     setError(data.message || "Sign in error");
-      //   }
-      // } catch (error) {
-      //   console.error("Error:", error);
-      //   setError(error.message);
-      // } finally {
-      //   setLoading(false);
       const result = await register(registerData);
 
       if (result) {
@@ -145,7 +132,11 @@ const Register = () => {
 
   return (
     <RegisterContainer>
-      <Card.Root bg="brand.900">
+      <Card.Root
+        bg="brand.900"
+        
+        
+      >
         <Card.Header>
           <Card.Title textAlign="center" fontSize="2xl" color="brand.100">
             Create Account
@@ -156,13 +147,6 @@ const Register = () => {
         </Card.Header>
 
         <Card.Body>
-          {/* {error && (
-            <Alert.Root status="error" mb="4">
-              <Alert.Indicator />
-              <Alert.Title>{error}</Alert.Title>
-            </Alert.Root>
-          )} */}
-
           <form onSubmit={handleSubmit}>
             <VStack gap="4">
               <Field.Root>
@@ -260,13 +244,23 @@ const Register = () => {
 
         <Card.Footer>
           <HStack justify="center" width="100%">
-            <Text>Already have an account?</Text>
+            <Text
+              fontSize={{
+                base: "sm",
+                sm: "md",
+                md: "md",
+                lg: "xl",
+              }}
+            >
+              Already have an account?
+            </Text>
             <Link
               to="/login"
               style={{
-                color: "#bb9dee",
+                color: "brand.500",
                 fontWeight: "bold",
                 textDecoration: "none",
+                fontSize: "1rem",
               }}
             >
               Log In
