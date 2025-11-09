@@ -7,6 +7,8 @@ const config = defineConfig({
     lg: "@media screen and (min-width: 1024px)",
     xl: "@media screen and (min-width: 1280px)",
     "2xl": "@media screen and (min-width: 1536px)",
+    customCol: "@media screen and (min-width: 478px) and (max-width: 600px)",
+    tableMid: "@media screen and (min-width: 601px) and (max-width: 767px)",
   },
   theme: {
     tokens: {
@@ -74,8 +76,22 @@ system.breakpoints = {
     lg: "@media screen and (min-width: 1024px)",
     xl: "@media screen and (min-width: 1280px)",
     "2xl": "@media screen and (min-width: 1536px)",
+    customCol: "@media screen and (min-width: 478px) and (max-width: 600px)",
+    tableMid: "@media screen and (min-width: 601px) and (max-width: 767px)",
   },
 };
+
+system.breakpoints.breakpoints = [
+  "base",
+  "xs",
+  "customCol",
+  "sm",
+  "tableMid",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+];
 export { system };
 
 console.log("Breakpoints:", system.tokens.breakpoints);

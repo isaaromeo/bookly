@@ -18,28 +18,42 @@ import {
   Alert,
   Container,
   Stack,
-  Grid,
-  GridItem,
-  createToaster
 } from "@chakra-ui/react";
 import styled from "styled-components";
 import { useBooklyApi } from "../hooks/useBooklyApi";
-import { useAuth } from "../hooks/useAuth"; 
-import { Tab } from "../styledComponents/Tab"; 
-import coverPlaceholder from "../assets/images/placeholder-cover.jpg"
+import { useAuth } from "../hooks/useAuth";
+import { Tab } from "../styledComponents/Tab";
+import coverPlaceholder from "../assets/images/placeholder-cover.jpg";
 import { toaster } from "../components/ui/toaster";
 import { FaBook, FaBookmark } from "react-icons/fa";
 
 const BookDetailContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
+
+  @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "820px"}) {
+    margin: 0;
+    padding: 0.5rem;
+  }
 `;
 
-//skeletons de carga
+// Skeletons de carga actualizados para Flexbox
 const BookCoverSkeleton = () => (
-  <Box flex="0 0 300px">
-    <Skeleton height="400px" borderRadius="lg" mb="4" />
+  <Box
+    width={{
+      base: "100%",
+      sm: "250px",
+      md: "300px",
+      lg: "350px",
+    }}
+    flexShrink={0}
+  >
+    <Skeleton
+      height={{ base: "300px", sm: "350px", md: "400px" }}
+      borderRadius="lg"
+      mb="4"
+    />
     <Skeleton height="4" width="80%" />
     <Skeleton height="3" width="60%" mt="2" />
   </Box>
@@ -48,22 +62,21 @@ const BookCoverSkeleton = () => (
 const BookInfoSkeleton = () => (
   <Box flex="1">
     <VStack gap="4" align="start">
-      <Skeleton height="8" width="80%" />
-      <Skeleton height="6" width="60%" />
+      <Skeleton height={{ base: "6", sm: "7", md: "8" }} width="80%" />
+      <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="60%" />
       <HStack>
-        <Skeleton height="6" width="120px" />
-        <Skeleton height="4" width="40px" />
+        <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="120px" />
+        <Skeleton height={{ base: "4", sm: "4", md: "4" }} width="40px" />
       </HStack>
-      <SkeletonText noOfLines={4} spacing="3" />
+      <SkeletonText noOfLines={{ base: 3, sm: 4, md: 4 }} spacing="3" />
       <HStack gap="4" flexWrap="wrap">
-        <Skeleton height="6" width="100px" />
-        <Skeleton height="6" width="120px" />
-        <Skeleton height="6" width="80px" />
+        <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="100px" />
+        <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="120px" />
+        <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="80px" />
       </HStack>
-      <HStack gap="4">
-        <Skeleton height="10" width="140px" />
-        <Skeleton height="10" width="140px" />
-        <Skeleton height="10" width="140px" />
+      <HStack gap="4" flexWrap="wrap">
+        <Skeleton height={{ base: "8", sm: "9", md: "10" }} width="140px" />
+        <Skeleton height={{ base: "8", sm: "9", md: "10" }} width="140px" />
       </HStack>
     </VStack>
   </Box>
@@ -75,65 +88,64 @@ const ReviewSkeleton = () => (
       <VStack gap="3" align="start">
         <HStack justify="space-between" width="100%">
           <Skeleton height="5" width="100%" />
-          
         </HStack>
         <SkeletonText noOfLines={3} spacing="2" width="100%" />
         <Skeleton height="3" width="40%" />
       </VStack>
     </Card.Body>
   </Card.Root>
-); 
+);
 
 const BookDetail = () => {
-  //datos necesarios para post review
   const { id } = useParams();
   const { user: authUser, login } = useAuth();
 
-  //info new review a enviar en post
   const [newReview, setNewReview] = useState({
     rating: 5,
     content: "",
     title: "",
   });
 
-  //para que por defecto aparezcan las reviews
   const [activeTab, setActiveTab] = useState("reviews");
+  const [isSinopsisExpanded, setIsSinopsisExpanded] = useState(false);
 
-  //hook para post review
   const {
     postReview,
     loading: postingReview,
     error: postError,
   } = useBooklyApi.usePostReview();
 
-  //hook para add to library y tbr
   const { addToLibrary, loading: addingToLibrary } =
     useBooklyApi.useAddToLibrary();
   const { addToTBR, loading: addingToTBR } = useBooklyApi.useAddToTBR();
 
-  //Con nuevo hook useApi general
-  //info libro
   const {
     data: book,
     loading: loadBook,
     error: bookErr,
-    refetch: bookRefetch //para actualizar despues de subir la review
+    refetch: bookRefetch,
   } = useBooklyApi.useBook(id);
 
-  //info reviews del libro
   const {
     data: reviews,
     loading: loadReview,
     error: reviewErr,
-    refetch: reviewRefetch
+    refetch: reviewRefetch,
   } = useBooklyApi.useBookReviews(id);
 
+  const isLongSinopsis = book?.sinopsis && book.sinopsis.length > 80;
+  const getSinopsisText = () => {
+    if (!book?.sinopsis) return "";
+
+    if (isSinopsisExpanded || !isLongSinopsis) {
+      return book.sinopsis;
+    }
+
+    return book.sinopsis.slice(0, 200) + "...";
+  };
 
   const handleSubmitReview = useCallback(async () => {
-    //si no estas loggeado no puedes hacer review
-    //añadir que un user no puede reseñar el mismo libro 2 veces
     if (!authUser) {
-
       toaster.create({
         title: "Authentication Required",
         description: "Please log in to submit a review",
@@ -143,14 +155,12 @@ const BookDetail = () => {
     }
 
     if (!newReview.title.trim() || !newReview.content.trim()) {
-
       toaster.create({
         title: "Missing Information",
         description: "Please fill in all fields",
         type: "error",
       });
       return;
-      
     }
 
     try {
@@ -167,7 +177,6 @@ const BookDetail = () => {
       bookRefetch();
       reviewRefetch();
     } catch (err) {
-
       toaster.create({
         title: "Submission Failed",
         description:
@@ -188,7 +197,7 @@ const BookDetail = () => {
 
       if (result && result.user) {
         const token = localStorage.getItem("token");
-        login(result.user, token); // Actualiza el contexto user
+        login(result.user, token);
       }
 
       alert("Book added to your library!");
@@ -216,74 +225,191 @@ const BookDetail = () => {
   if (loadBook) {
     return (
       <BookDetailContainer>
-        <HStack
-          gap="8"
+        <Stack
+          direction={{ base: "column", sm: "row" }}
+          gap={{ base: 6, sm: 6, md: 8 }}
           align="start"
-          flexDirection={{ base: "column", md: "row" }}
+          mb={8}
         >
-          <BookCoverSkeleton/>
-          <BookInfoSkeleton/>
-        </HStack>
+          <BookCoverSkeleton />
+          <BookInfoSkeleton />
+        </Stack>
 
         <Box mt="8">
           <Tabs.Root>
-              <ReviewSkeleton/>
+            <ReviewSkeleton />
           </Tabs.Root>
         </Box>
       </BookDetailContainer>
     );
   }
 
-
   return (
     <BookDetailContainer>
-      <HStack
-        gap="8"
+      <Stack
+        direction={{
+          base: "column", // 0px - 767px
+          md: "row", // 768px+
+        }}
+        gap={{
+          base: 6,
+          md: 8,
+        }}
         align="start"
-        flexDirection={{ base: "column", md: "row" }}
+        mb={8}
+        className="custom-book-stack"
       >
-        <Box flex="0 0 300px">
+        <Box
+          width={{
+            base: "100%",
+            // customCol: "100%",
+            // tableMid: "50%",
+            sm: "50%",
+            md: "50%",
+            lg: "50%",
+          }}
+          flexShrink={0}
+          className="book-image-container"
+        >
           <Box
             as="img"
             src={book.cover || coverPlaceholder}
             alt={book.title}
             width="100%"
-            maxWidth={{
-              base: "400px",
-              sm: "400px",
-              md: "400px",
-              lg: "400px",
-            }}
+            height="auto"
             borderRadius="lg"
-            boxShadow="lg"
+            boxShadow="xl"
+            objectFit="cover"
           />
-        </Box>
-        <Box flex="1">
-          <VStack gap="3" align="start">
-            <Text
-              fontSize={{
-                base: "lg",
-                sm: "xl",
-                md: "2xl",
-                lg: "3xl",
+          <HStack
+            display={{
+              base: "none",
+              sm: "flex",
+              md: "flex",
+              lg: "none",
+            }}
+            gap="4"
+            paddingTop="1.5rem"
+            flexWrap="wrap"
+            justifyContent="center"
+          >
+            <Button
+              bg="brand.800"
+              color="brand.100"
+              onClick={handleAddToLibrary}
+              _hover={{
+                boxShadow: "sm",
+                borderColor: "brand.300",
               }}
+              size={{ base: "sm", sm: "sm", md: "sm", lg: "md" }}
+              width={{ base: "100%", sm: "auto" }}
+              maxWidth={{
+                base: "16px",
+                sm: "140px",
+                md: "150px",
+                lg: "170px",
+              }}
+            >
+              <Box
+                as={FaBook}
+                width={{
+                  base: "14px",
+                  sm: "16px",
+                  md: "16px",
+                  lg: "20px",
+                }}
+                height={{
+                  base: "14px",
+                  sm: "16px",
+                  md: "16px",
+                  lg: "20px",
+                }}
+              />
+              <Text
+                display={{
+                  base: "none",
+                  sm: "block",
+                  md: "block",
+                  lg: "block",
+                }}
+              >
+                Add to Library
+              </Text>
+            </Button>
+            <Button
+              bg="brand.800"
+              color="brand.100"
+              variant="outline"
+              onClick={handleAddToTBR}
+              _hover={{
+                boxShadow: "sm",
+                borderColor: "brand.300",
+              }}
+              size={{ base: "sm", sm: "sm", md: "sm", lg: "md" }}
+              width={{ base: "100%", sm: "auto" }}
+              maxWidth={{
+                base: "16px",
+                sm: "120px",
+                md: "150px",
+                lg: "150px",
+              }}
+            >
+              <Box
+                as={FaBookmark}
+                width={{
+                  base: "14px",
+                  sm: "16px",
+                  md: "16px",
+                  lg: "20px",
+                }}
+                height={{
+                  base: "14px",
+                  sm: "16px",
+                  md: "16px",
+                  lg: "20px",
+                }}
+              />
+              <Text
+                display={{
+                  base: "none",
+                  sm: "block",
+                  md: "block",
+                  lg: "block",
+                }}
+              >
+                Add to TBR
+              </Text>
+            </Button>
+          </HStack>
+        </Box>
+
+        <Box flex="1">
+          <VStack gap={{ base: 3, md: 4 }} align="start">
+            <Text
+              fontSize={{ base: "xl", sm: "xl", md: "2xl", lg: "3xl" }}
               fontWeight="bold"
+              lineHeight="1.2"
+              color="brand.50"
+              textShadow="0 3px 4px rgba(65, 45, 75, 0.93)"
+              textAlign="left"
             >
               {book.title}
             </Text>
+
             <Text
               fontSize={{
-                base: "sm",
-                sm: "sm",
+                base: "md",
+                sm: "xs",
                 md: "md",
-                lg: "xl",
+                lg: "md",
               }}
               color="fg.muted"
+              textAlign="left"
             >
               by {book.author}
             </Text>
 
-            <HStack>
+            <HStack gap="3" flexWrap="wrap" align="center">
               <RatingGroup.Root
                 allowHalf
                 readOnly
@@ -291,7 +417,7 @@ const BookDetail = () => {
                 value={book.rating}
                 size={{
                   base: "xs",
-                  sm: "sm",
+                  sm: "xs",
                   md: "md",
                   lg: "md",
                 }}
@@ -299,35 +425,124 @@ const BookDetail = () => {
               >
                 <RatingGroup.Control />
               </RatingGroup.Root>
-              <Text>({book.rating}/5)</Text>
+              <Text
+                fontSize={{
+                  base: "sm",
+                  sm: "sm",
+                  md: "md",
+                  lg: "md",
+                }}
+              >
+                ({book.rating}/5)
+              </Text>
             </HStack>
 
             <Text
               fontSize={{
                 base: "md",
-                sm: "md",
+                sm: "sm",
                 md: "lg",
                 lg: "lg",
+              }}
+              display={{
+                base: "block",
+                sm: "none",
+                md: "none",
+                lg: "block",
               }}
               lineHeight="1.6"
               textAlign="left"
             >
               {book.sinopsis}
             </Text>
+            <Box
+              width="100%"
+              textAlign="left"
+              flexDirection="column"
+              alignItems="flex-start"
+              display={{
+                base: "none",
+                sm: "flex",
+                md: "flex",
+                lg: "none",
+              }}
+            >
+              <Text
+                fontSize={{
+                  base: "md",
+                  sm: "sm",
+                  md: "lg",
+                  lg: "lg",
+                }}
+                lineHeight="1.6"
+                textAlign="left"
+                mb={isLongSinopsis ? 2 : 0}
+              >
+                {getSinopsisText()}
+              </Text>
 
-            <HStack gap="4" flexWrap="wrap">
-              <Badge colorPalette="blue">
-                <strong>Pages:</strong> {book.pages}
-              </Badge>
-              <Badge colorPalette="green">
-                <strong>Genres:</strong> {book.genres?.join(", ")}
-              </Badge>
-              <Badge colorPalette="purple">
-                <strong>ISBN:</strong> {book.isbn}
-              </Badge>
-            </HStack>
+              {isLongSinopsis && (
+                <Button
+                  variant="ghost"
+                  bg="transparent"
+                  size="sm"
+                  color="white"
+                  border="transparent"
+                  onClick={() => setIsSinopsisExpanded(!isSinopsisExpanded)}
+                  _focus={{ outline: "none !important" }}
+                  padding="0"
+                  cursor="pointer"
+                  height="auto"
+                  fontWeight="normal"
+                  textDecoration="underline"
+                  alignSelf="start"
+                >
+                  {isSinopsisExpanded ? "Read Less" : "Read More"}
+                </Button>
+              )}
+            </Box>
+            {!isSinopsisExpanded && (
+              <Stack
+                direction={{ base: "row", sm: "row" }}
+                gap="3"
+                flexWrap="wrap"
+              >
+                <Badge
+                  colorPalette="blue"
+                  size={{ base: "sm", md: "md" }}
+                  whiteSpace="nowrap"
+                  width="auto"
+                >
+                  <strong>Pages:</strong> {book.pages}
+                </Badge>
+                <Badge
+                  colorPalette="green"
+                  size={{ base: "sm", md: "md" }}
+                  maxWidth="100%"
+                >
+                  <strong>Genres:</strong> {book.genres?.slice(0, 2).join(", ")}
+                  {book.genres?.length > 2 && "..."}
+                </Badge>
+                <Badge
+                  colorPalette="purple"
+                  size={{ base: "sm", md: "md" }}
+                  display={{ base: "none", sm: "none", md: "flex", lg: "flex" }}
+                >
+                  <strong>ISBN:</strong> {book.isbn}
+                </Badge>
+              </Stack>
+            )}
 
-            <HStack gap="4" paddingTop="1.5rem">
+            <HStack
+              display={{
+                base: "flex",
+                sm: "none",
+                md: "none",
+                lg: "flex",
+              }}
+              gap="4"
+              paddingTop="1.5rem"
+            >
               <Button
                 bg="brand.800"
                 color="brand.100"
@@ -336,28 +551,43 @@ const BookDetail = () => {
                   boxShadow: "sm",
                   borderColor: "brand.300",
                 }}
+                size={{ base: "sm", sm: "sm", md: "sm", lg: "md" }}
+                width={{ base: "100%", sm: "auto" }}
+                maxWidth={{
+                  base: "140px",
+                  sm: "140px",
+                  md: "150px",
+                  lg: "170px",
+                }}
               >
                 <Box
                   as={FaBook}
                   width={{
-                    base: "16px",
-                    sm: "20px",
-                    md: "20px",
+                    base: "14px",
+                    sm: "16px",
+                    md: "16px",
                     lg: "20px",
                   }}
                   height={{
-                    base: "16px",
-                    sm: "20px",
-                    md: "20px",
+                    base: "14px",
+                    sm: "16px",
+                    md: "16px",
                     lg: "20px",
                   }}
+                  mr={{ base: 0, sm: 0, md: 2, lg: 2 }}
                 />
                 <Text
                   display={{
-                    base: "none",
+                    base: "block",
                     sm: "block",
                     md: "block",
                     lg: "block",
+                  }}
+                  fontSize={{
+                    base: "sm",
+                    sm: "sm",
+                    md: "md",
+                    lg: "lg",
                   }}
                 >
                   Add to Library
@@ -372,28 +602,43 @@ const BookDetail = () => {
                   boxShadow: "sm",
                   borderColor: "brand.300",
                 }}
+                size={{ base: "sm", sm: "sm", md: "sm", lg: "md" }}
+                width={{ base: "100%", sm: "auto" }}
+                maxWidth={{
+                  base: "140px",
+                  sm: "140px",
+                  md: "150px",
+                  lg: "150px",
+                }}
               >
                 <Box
                   as={FaBookmark}
                   width={{
-                    base: "16px",
-                    sm: "20px",
-                    md: "20px",
+                    base: "14px",
+                    sm: "16px",
+                    md: "16px",
                     lg: "20px",
                   }}
                   height={{
-                    base: "16px",
-                    sm: "20px",
-                    md: "20px",
+                    base: "14px",
+                    sm: "16px",
+                    md: "16px",
                     lg: "20px",
                   }}
+                  mr={{ base: 0, sm: 0, md: 2, lg: 2 }}
                 />
                 <Text
                   display={{
-                    base: "none",
+                    base: "block",
                     sm: "block",
                     md: "block",
                     lg: "block",
+                  }}
+                  fontSize={{
+                    base: "sm",
+                    sm: "sm",
+                    md: "md",
+                    lg: "lg",
                   }}
                 >
                   Add to TBR
@@ -402,14 +647,16 @@ const BookDetail = () => {
             </HStack>
           </VStack>
         </Box>
-      </HStack>
+      </Stack>
 
+      {/* Resto del componente (tabs) se mantiene igual */}
       <Box mt="8">
         <Tabs.Root
           value={activeTab}
           onValueChange={(e) => setActiveTab(e.value)}
+          gap={2}
         >
-          <Tabs.List>
+          <Tabs.List gap={2}>
             <Tabs.Trigger
               value="reviews"
               bg="brand.900"

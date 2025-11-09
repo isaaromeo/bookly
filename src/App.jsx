@@ -142,7 +142,7 @@ const MainContent = styled.main`
   padding-top: 0;
   width: 100%;
 
-  @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
+  @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "820px"}) {
     padding: 0;
   }
 `;

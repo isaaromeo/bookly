@@ -9,7 +9,7 @@ import NotFound from "./components/NotFound.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
-import BookDetail from "./pages/BookDetail2.jsx";
+import BookDetail from "./pages/BookDetail.jsx";
 import SearchResults from "./pages/SearchResults.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import AdminTools from "./pages/AdminTools.jsx";
