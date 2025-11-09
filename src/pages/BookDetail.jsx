@@ -28,6 +28,7 @@ import { useAuth } from "../hooks/useAuth";
 import { Tab } from "../styledComponents/Tab"; 
 import coverPlaceholder from "../assets/images/placeholder-cover.jpg"
 import { toaster } from "../components/ui/toaster";
+import { FaBook, FaBookmark } from "react-icons/fa";
 
 const BookDetailContainer = styled.div`
   max-width: 1200px;
@@ -236,7 +237,6 @@ const BookDetail = () => {
 
   return (
     <BookDetailContainer>
- 
       <HStack
         gap="8"
         align="start"
@@ -248,16 +248,38 @@ const BookDetail = () => {
             src={book.cover || coverPlaceholder}
             alt={book.title}
             width="100%"
+            maxWidth={{
+              base: "400px",
+              sm: "400px",
+              md: "400px",
+              lg: "400px",
+            }}
             borderRadius="lg"
             boxShadow="lg"
           />
         </Box>
         <Box flex="1">
           <VStack gap="3" align="start">
-            <Text fontSize="3xl" fontWeight="bold">
+            <Text
+              fontSize={{
+                base: "lg",
+                sm: "xl",
+                md: "2xl",
+                lg: "3xl",
+              }}
+              fontWeight="bold"
+            >
               {book.title}
             </Text>
-            <Text fontSize="xl" color="fg.muted">
+            <Text
+              fontSize={{
+                base: "sm",
+                sm: "sm",
+                md: "md",
+                lg: "xl",
+              }}
+              color="fg.muted"
+            >
               by {book.author}
             </Text>
 
@@ -267,7 +289,12 @@ const BookDetail = () => {
                 readOnly
                 count={5}
                 value={book.rating}
-                size="md"
+                size={{
+                  base: "xs",
+                  sm: "sm",
+                  md: "md",
+                  lg: "md",
+                }}
                 colorPalette="yellow"
               >
                 <RatingGroup.Control />
@@ -275,7 +302,16 @@ const BookDetail = () => {
               <Text>({book.rating}/5)</Text>
             </HStack>
 
-            <Text fontSize="lg" lineHeight="1.6" textAlign="left">
+            <Text
+              fontSize={{
+                base: "md",
+                sm: "md",
+                md: "lg",
+                lg: "lg",
+              }}
+              lineHeight="1.6"
+              textAlign="left"
+            >
               {book.sinopsis}
             </Text>
 
@@ -301,7 +337,31 @@ const BookDetail = () => {
                   borderColor: "brand.300",
                 }}
               >
-                Add to Library
+                <Box
+                  as={FaBook}
+                  width={{
+                    base: "16px",
+                    sm: "20px",
+                    md: "20px",
+                    lg: "20px",
+                  }}
+                  height={{
+                    base: "16px",
+                    sm: "20px",
+                    md: "20px",
+                    lg: "20px",
+                  }}
+                />
+                <Text
+                  display={{
+                    base: "none",
+                    sm: "block",
+                    md: "block",
+                    lg: "block",
+                  }}
+                >
+                  Add to Library
+                </Text>
               </Button>
               <Button
                 bg="brand.800"
@@ -313,33 +373,31 @@ const BookDetail = () => {
                   borderColor: "brand.300",
                 }}
               >
-                Add to TBR
-              </Button>
-              <Button
-                onClick={() => {
-                  console.log("Testing toaster...");
-
-                  // Prueba múltiples métodos
-                  if (window.chakraToast) {
-                    window.chakraToast({
-                      title: "Test via window",
-                      status: "success",
-                    });
-                  }
-
-                  // Método directo
-                  const testToaster = createToaster();
-                  testToaster.create({
-                    title: "Direct Toaster Test",
-                    description: "This should work",
-                    type: "success",
-                  });
-
-                  console.log("Toaster test completed");
-                }}
-                colorPalette="green"
-              >
-                Debug Toaster
+                <Box
+                  as={FaBookmark}
+                  width={{
+                    base: "16px",
+                    sm: "20px",
+                    md: "20px",
+                    lg: "20px",
+                  }}
+                  height={{
+                    base: "16px",
+                    sm: "20px",
+                    md: "20px",
+                    lg: "20px",
+                  }}
+                />
+                <Text
+                  display={{
+                    base: "none",
+                    sm: "block",
+                    md: "block",
+                    lg: "block",
+                  }}
+                >
+                  Add to TBR
+                </Text>
               </Button>
             </HStack>
           </VStack>

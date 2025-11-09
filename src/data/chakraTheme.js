@@ -1,6 +1,13 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
 
 const config = defineConfig({
+  conditions: {
+    sm: "@media screen and (min-width: 540px)",
+    md: "@media screen and (min-width: 768px)",
+    lg: "@media screen and (min-width: 1024px)",
+    xl: "@media screen and (min-width: 1280px)",
+    "2xl": "@media screen and (min-width: 1536px)",
+  },
   theme: {
     tokens: {
       fontWeights: {
@@ -55,52 +62,20 @@ const config = defineConfig({
   },
 });
 
-export const system = createSystem(defaultConfig, config);
-
-console.log(" CHAKRA SYSTEM DEBUG ");
-console.log("FontWeights tokens:", system.tokens.getByName("fontWeights.thin"));
-console.log(
-  "All fontWeights:",
-  Array.from(system.tokens.fontWeights?.entries() || [])
-);
-console.log("System keys:", Object.keys(system));
-// const config = defineConfig({
-//   theme: {
-//     tokens: {
-//       colors: {
-         
-//         brand: {
-//           50: { value: "#f0e6ff" },
-//           100: { value: "#d4bfff" },
-//           200: { value: "#b899ff" },
-//           300: { value: "#9d73ff" },
-//           400: { value: "#814dff" },
-//           500: { value: "#836e99" }, 
-//           600: { value: "#6a5a7d" },
-//           700: { value: "#514761" },
-//           800: { value: "#383445" },
-//           900: { value: "#1f2129" },
-//         },
-//         primary: {
-//           500: { value: "#836e99" },
-//           600: { value: "#6a5a7d" },
-//         },
-//         secondary: {
-//           500: { value: "#d53f8c" },
-//         },
-//         accent: {
-//           500: { value: "#22c55e" },
-//         },
-//       },
-//     },
-//     semanticTokens: {
-//       colors: {
-
-//         "bg.canvas": { value: "{colors.gray.50}" },
-//         "bg.surface": { value: "{colors.white}" },
-//       },
-//     },
-//   },
-// });
-
 // export const system = createSystem(defaultConfig, config);
+const system = createSystem(defaultConfig, config);
+system.breakpoints = {
+  ...system.breakpoints,
+  conditions: {
+    ...system.breakpoints.conditions,
+    xs: "@media screen and (min-width: 480px)",
+    sm: "@media screen and (min-width: 542px)",
+    md: "@media screen and (min-width: 768px)",
+    lg: "@media screen and (min-width: 1024px)",
+    xl: "@media screen and (min-width: 1280px)",
+    "2xl": "@media screen and (min-width: 1536px)",
+  },
+};
+export { system };
+
+console.log("Breakpoints:", system.tokens.breakpoints);

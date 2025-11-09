@@ -50,7 +50,7 @@ export const Search = () => {
         base: "60%",
         sm: "70%",
         md: "70%",
-        lg: "100%",
+        lg: "75%",
       }}
       
       ref={searchRef}
