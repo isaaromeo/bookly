@@ -115,36 +115,14 @@ const Home = () => {
   const trendingBooksList = books?.slice(0, 8) || [];
   const newReleases = books?.slice(8, 16) || [];
 
-  const isaId = "68f26a93086e5c6b2e14f139";
-  const pedriId = "68fd3eb969960b641fcd907d";
-  // const {
-  //   data: dataIsa,
-  //   loading: loadingIsa,
-  //   error: errorIsa,
-  // } = useBooklyApi.useUser(isaId);
 
-  // const {
-  //   data: dataPedri,
-  //   loading: loadingPedri,
-  //   error: errorPedri,
-  // } = useBooklyApi.useUser(pedriId);
+ 
 
   const handleBookSelect = (book) => {
     navigate(`/books/${book._id}`);
   };
 
-  // const realRecommendations = [
-  //   {
-  //     user: dataIsa?.username || "Isa",
-  //     liked: dataIsa?.library?.slice(0, 3) || [],
-  //     discovered: dataIsa?.library?.slice(0, 3) || [],
-  //   },
-  //   {
-  //     user: dataPedri?.username || "Pedri",
-  //     liked: dataPedri?.library?.slice(0, 3) || [],
-  //     discovered: dataPedri?.library?.slice(0, 3) || [],
-  //   },
-  // ];
+
 
   //|| loadingIsa || loadingPedri
   if (loading) {

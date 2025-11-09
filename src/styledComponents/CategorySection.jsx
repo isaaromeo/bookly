@@ -38,7 +38,14 @@ const CategorySection = ({
         <Heading size="lg" id={title.toLowerCase().replace(/\s+/g, "-")}>
           {title}
         </Heading>
-        <Button variant="ghost" size="sm">
+        <Button
+          variant="ghost"
+          _hover={{
+            boxShadow: "sm",
+            borderColor: "brand.300",
+          }}
+          size="sm"
+        >
           See All
         </Button>
       </HStack>

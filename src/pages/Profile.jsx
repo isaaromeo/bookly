@@ -14,6 +14,7 @@ import {
   Badge,
   Grid,
   GridItem,
+  Flex,
 } from "@chakra-ui/react";
 import styled from "styled-components";
 import {
@@ -36,7 +37,7 @@ const ProfileContainer = styled.div`
 
   @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
     margin: 0;
-    padding: 1rem;
+    padding: 0rem;
   }
 `;
 
@@ -173,7 +174,7 @@ const Profile = () => {
               justifyContent={{
                 base: "start",
                 sm: "start",
-                md: "center",
+                md: "start",
                 lg: "center",
               }}
               height="100%"
@@ -184,14 +185,14 @@ const Profile = () => {
               <Avatar.Root
                 width={{
                   base: "70px",
-                  sm: "100px",
-                  md: "120px",
+                  sm: "70px",
+                  md: "70px",
                   lg: "120px",
                 }}
                 height={{
                   base: "70px",
-                  sm: "100px",
-                  md: "120px",
+                  sm: "70px",
+                  md: "70px",
                   lg: "120px",
                 }}
               >
@@ -200,15 +201,27 @@ const Profile = () => {
               </Avatar.Root>
             </GridItem>
 
-            {/* Columna 2 - Información del usuario (Fila 1) */}
             <GridItem
               display="flex"
               alignItems="center"
               justifyContent="start"
               height="100%"
+              ml={{
+                base: "0px",
+                sm: "0px",
+                md: "1rem",
+                lg: "1rem",
+              }}
             >
               <VStack align="start" gap="3">
-                <HStack gap="3">
+                <HStack
+                  gap={{
+                    base: "3",
+                    sm: "3",
+                    md: "4",
+                    lg: "6",
+                  }}
+                >
                   <VStack align="start" gap="1" alignItems="center">
                     <Text
                       fontWeight="bold"
@@ -261,7 +274,6 @@ const Profile = () => {
               </VStack>
             </GridItem>
 
-            {/* Columna 3 - Botones (Fila 1) */}
             <GridItem
               display="flex"
               alignItems="center"
@@ -316,7 +328,14 @@ const Profile = () => {
                           lg: "20px",
                         }}
                       />
-                      <Text display={{ base: "none", sm: "block" }}>
+                      <Text
+                        display={{
+                          base: "none",
+                          sm: "block",
+                          md: "block",
+                          lg: "block",
+                        }}
+                      >
                         Edit Profile
                       </Text>
                     </Button>
@@ -360,7 +379,14 @@ const Profile = () => {
                             lg: "20px",
                           }}
                         />
-                        <Text display={{ base: "none", sm: "block" }}>
+                        <Text
+                          display={{
+                            base: "none",
+                            sm: "block",
+                            md: "block",
+                            lg: "block",
+                          }}
+                        >
                           Admin Tools
                         </Text>
                       </Button>
@@ -407,7 +433,14 @@ const Profile = () => {
                       }}
                     />
                     {
-                      <Text display={{ base: "none", sm: "block" }}>
+                      <Text
+                        display={{
+                          base: "none",
+                          sm: "block",
+                          md: "block",
+                          lg: "block",
+                        }}
+                      >
                         {isFollowing ? "Following" : "Follow"}
                       </Text>
                     }
@@ -418,7 +451,6 @@ const Profile = () => {
               </VStack>
             </GridItem>
 
-            {/* Columna 1 - Seguidores (Fila 2) */}
             <GridItem
               display="flex"
               alignItems="center"
@@ -431,53 +463,60 @@ const Profile = () => {
                 marginLeft={{ base: "0", md: "1rem" }}
                 width="100%"
               >
-                <HStack gap="3" align="center">
+                <Flex
+                  align="center"
+                  direction="column"
+                  gap={{
+                    base: "1",
+                    md: "3",
+                  }}
+                  justify="flex-start"
+                >
                   <Text
                     fontSize={{
                       base: "sm",
-                      sm: "xl",
-                      md: "2xl",
-                      lg: "3xl",
+                      sm: "md",
+                      md: "lg",
+                      lg: "xl",
                     }}
                     fontWeight="bold"
+                    alignSelf="start"
                   >
                     {user.username}
                   </Text>
-                  <Badge
-                    colorPalette="purple"
-                    fontSize={{ base: "xs", md: "sm" }}
-                    display={{
-                      base: "none",
-                      sm: "none",
-                      md: "block",
-                      lg: "block",
+                  <Text
+                    color="gray.500"
+                    fontSize={{
+                      base: "0.7rem",
+                      sm: "xs",
+                      md: "sm",
+                      lg: "lg",
                     }}
                   >
-                    {user.rol}
+                    {user.email}
+                  </Text>
+                  <Badge
+                    colorPalette="purple"
+                    fontSize={{
+                      base: "xs",
+                      sm: "sm",
+                      md: "xs",
+                      lg: "lg",
+                    }}
+                    alignSelf="start"
+                  >
+                    {user.rol === "admin" ? "admin" : "bookworm"}
                   </Badge>
-                </HStack>
-                <Text
-                  color="gray.500"
-                  fontSize={{
-                    base: "0.7rem",
-                    sm: "sm",
-                    md: "md",
-                    lg: "lg",
-                  }}
-                >
-                  {user.email}
-                </Text>
+                </Flex>
               </VStack>
             </GridItem>
 
-            {/* Columna 2 y 3 vacías en Fila 2 */}
             <GridItem>{/* Columna 2  Fila 2 */}</GridItem>
             <GridItem>{/* Columna 3  Fila 2 */}</GridItem>
           </Grid>
         </Card.Body>
       </Card.Root>
 
-      {/* Resto del componente (tabs) se mantiene igual */}
       <Card.Root bg="brand.900" mt="4">
         <Card.Header>
           <Tabs.Root
@@ -501,7 +540,7 @@ const Profile = () => {
                 <Text
                   display={{
                     base: "none",
-                    sm: "none",
+                    sm: "block",
                     md: "block",
                     lg: "block",
                   }}
@@ -526,7 +565,7 @@ const Profile = () => {
                 <Text
                   display={{
                     base: "none",
-                    sm: "none",
+                    sm: "block",
                     md: "block",
                     lg: "block",
                   }}
@@ -551,7 +590,7 @@ const Profile = () => {
                 <Text
                   display={{
                     base: "none",
-                    sm: "none",
+                    sm: "block",
                     md: "block",
                     lg: "block",
                   }}
@@ -592,12 +631,13 @@ const Profile = () => {
                 _focus={{ outline: "none !important" }}
                 padding={{
                   base: "0.3em 0.8em",
-                  sm: "0.3em 0.8em",
+                  sm: "0.2em 0.em",
                   md: "block",
                   lg: "block",
                 }}
               >
-                <FaUserPlus />
+               <FaUserPlus /> 
+                
                 <Text
                   display={{
                     base: "none",
@@ -606,11 +646,10 @@ const Profile = () => {
                     lg: "block",
                   }}
                   fontSize={{
-                    sm: "md",
+                    sm: "xs",
                     md: "md",
                     lg: "lg",
                   }}
-                  ml="2"
                 >
                   Following
                 </Text>

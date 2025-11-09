@@ -132,6 +132,7 @@ const Explore = () => {
           padding={{
             base: "0",
           }}
+          justifyItems="center"
         >
           <Heading
             fontSize={{
@@ -142,6 +143,9 @@ const Explore = () => {
             }}
             textAlign="center"
             color="brand.100"
+            style={{
+              fontFamily: "'Cinzel', serif",
+            }}
           >
             Explore Our Library
           </Heading>
@@ -151,6 +155,12 @@ const Explore = () => {
               sm: "md",
               md: "lg",
               lg: "lg",
+            }}
+            width={{
+              base: "100%",
+              sm: "90%",
+              md: "80%",
+              lg: "80%",
             }}
             color="secondary.200"
             textAlign="center"
