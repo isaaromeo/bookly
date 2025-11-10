@@ -9,7 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useBookSearch } from "../hooks/useBookSearch";
 import SearchInput from "./SearchInput.jsx";
-import BookList from "./BookList.jsx";
+import BookList from "./Booklist.jsx";
 
 export const Search = () => {
 
