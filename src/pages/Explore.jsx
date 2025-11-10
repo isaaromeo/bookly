@@ -266,7 +266,7 @@ const {
             />
 
             <CategorySection
-              title="Romantic Stories"
+              title="Romance"
               books={romanceBooks}
               loading={romanceLoading}
               onBookSelect={handleBookSelect}
