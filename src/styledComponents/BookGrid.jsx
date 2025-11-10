@@ -56,13 +56,14 @@ export const BookGrid = ({
         base: "repeat(2, 1fr)",
         sm: "repeat(3, 1fr)",
         md: "repeat(3, 1fr)",
-        lg: "repeat(auto-fit, minmax(200px, 1fr))",
+        lg: "repeat(auto-fill, minmax(180px, 1fr))", // auto-fill en lugar de auto-fit
+        xl: "repeat(auto-fill, minmax(200px, 1fr))",
       }}
       gap="4"
       justifyItems={{
         base: "center",
         sm: "center",
-        md: "center",
+        md: "start",
         lg: "start",
       }}
       width="100%"
