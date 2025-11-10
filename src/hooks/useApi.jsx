@@ -52,6 +52,7 @@ export const useApi = (endpoint, options = {}) => {
       setData(result);
 
       if (cacheKey) {
+        console.log("cache used:", cacheKey)
         localStorage.setItem(cacheKey, JSON.stringify(result));
       }
     } catch (err) {

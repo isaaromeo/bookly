@@ -19,7 +19,6 @@ export const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
 
-  //Con nuevo hook useApi general
   const { results: searchBooks, loading, error } = useBookSearch(query);
   useEffect(() => {
     if (!query) {

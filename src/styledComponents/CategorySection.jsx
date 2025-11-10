@@ -11,6 +11,7 @@ import {
   Container,
   Heading,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const CategorySection = ({
   title,
@@ -20,6 +21,12 @@ const CategorySection = ({
   onBookSelect,
   categoryRef,
 }) => {
+
+  const navigate = useNavigate();
+
+  const handleSeeAll = () => {
+      navigate(`/genre?genre=${title.toLowerCase().replace(/\s+/g, "-")}`);
+    };
 
   if (error) {
     return (
@@ -45,6 +52,7 @@ const CategorySection = ({
             borderColor: "brand.300",
           }}
           size="sm"
+          onClick={handleSeeAll}
         >
           See All
         </Button>

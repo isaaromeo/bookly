@@ -12,6 +12,7 @@ import Profile from "./pages/Profile.jsx";
 import BookDetail from "./pages/BookDetail.jsx";
 import SearchResults from "./pages/SearchResults.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
+import GenreResults from "./pages/GenreResults.jsx";
 import AdminTools from "./pages/AdminTools.jsx";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="editProfile" element={<EditProfile />} />
             <Route path="adminTools" element={<AdminTools />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="genre" element={<GenreResults />} />
           </Route>
         </Routes>
       </AuthProvider>

@@ -59,7 +59,12 @@ const Explore = () => {
   const mysteryRef = useRef(null);
   const scifiRef = useRef(null);
   const adventureRef = useRef(null);
+  const poetryRef = useRef(null);
+  const distopyanRef = useRef(null);
+  const businessRef = useRef(null);
+  const selfhelpRef = useRef(null);
   const thrillerRef = useRef(null);
+  
 
   
   const categories = [
@@ -68,14 +73,14 @@ const Explore = () => {
     { name: "Mystery", ref: mysteryRef },
     { name: "Sci-Fi", ref: scifiRef },
     { name: "Adventure", ref: adventureRef },
-    { name: "History", ref: null },
+    { name: "Dystopian", ref: null },
     { name: "Thriller", ref: thrillerRef },
     { name: "Business", ref: null },
-    { name: "Technology", ref: null },
-    { name: "Art", ref: null },
+    { name: "Self-Help", ref: null },
+    { name: "Poetry", ref: null },
   ];
 
- //Con nuevo hook useApi general
+
  const {
    data: fantasyBooks,
    loading: fantasyLoading,
@@ -97,10 +102,36 @@ const Explore = () => {
   error: misteryError 
  } = useBooklyApi.useBooksByGenre("mystery");
  const { 
+  data: businessBooks,
+  loading: businessLoading,
+  error: businessError
+ } = useBooklyApi.useBooksByGenre("business");
+const {
+  data: poetryBooks,
+  loading: poetryLoading,
+  error: poetryError,
+  } = useBooklyApi.useBooksByGenre("poetry");
+const {
+  data: distopyanBooks,
+  loading: distopyanLoading,
+  error: distopyanError,
+  } = useBooklyApi.useBooksByGenre("dystopian");
+const {
+  data: selfhelpBooks,
+  loading: selfhelpLoading,
+  error: selfhelpError,
+  } = useBooklyApi.useBooksByGenre("self-help");
+const {
+  data: thrillerBooks,
+  loading: thrillerLoading,
+  error: thrillerError,
+ } = useBooklyApi.useBooksByGenre("thriller");
+const {
   data: scifiBooks,
   loading: scifiLoading,
-  error: scifiError
- } = useBooklyApi.useBooksByGenre("sci-fi");
+  error: scifiError,
+} = useBooklyApi.useBooksByGenre("sc-fi");
+
 
  const { data: allBooks, loading: allLoading } = useBooklyApi.useBooks();
 
@@ -224,10 +255,10 @@ const Explore = () => {
           />
         </VStack>
 
-        <Box padding="6" maxWidth="1200px" margin="0 auto">
+        <Box  maxWidth="1200px" margin="0 auto">
           <VStack gap="8" align="stretch">
             <CategorySection
-              title="Fantasy Adventures"
+              title="Fantasy"
               books={fantasyBooks}
               loading={fantasyLoading}
               onBookSelect={handleBookSelect}
@@ -251,11 +282,59 @@ const Explore = () => {
             />
 
             <CategorySection
+              title="Adventures"
+              books={adventureBooks}
+              loading={adventureLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={adventureRef}
+            />
+
+            <CategorySection
               title="Sci-Fi"
               books={scifiBooks}
               loading={scifiLoading}
               onBookSelect={handleBookSelect}
               categoryRef={scifiRef}
+            />
+
+            <CategorySection
+              title="Thriller"
+              books={thrillerBooks}
+              loading={thrillerLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={thrillerRef}
+            />
+
+            <CategorySection
+              title="Dystopian"
+              books={distopyanBooks}
+              loading={distopyanLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={distopyanRef}
+            />
+
+            <CategorySection
+              title="Business"
+              books={businessBooks}
+              loading={businessLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={businessRef}
+            />
+
+            <CategorySection
+              title="Poetry"
+              books={poetryBooks}
+              loading={poetryLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={poetryRef}
+            />
+
+            <CategorySection
+              title="Self-Help"
+              books={selfhelpBooks}
+              loading={selfhelpLoading}
+              onBookSelect={handleBookSelect}
+              categoryRef={selfhelpRef}
             />
 
             <VStack gap="6" align="stretch" mb="8">
