@@ -135,10 +135,8 @@ Bookly es una plataforma web estilo Goodreads diseñada para amantes de la lectu
 - Manejo seguro de datos de usuario  
 
 ### Optimizaciones
-- Lazy loading de componentes  
 - Caching inteligente  
-- Optimización de imágenes  
-- Bundle splitting  
+
 
 ---
 
