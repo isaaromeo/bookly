@@ -42,8 +42,6 @@ const EditProfile = () => {
 
   const [profilePic, setProfilePic] = useState(null);
   const [previewImage, setPreviewImage] = useState("");
-  const [error, setError] = useState("");
-
 
   useEffect(() => {
     if (authUser) {
@@ -81,7 +79,7 @@ const EditProfile = () => {
 
   const validateForm = () => {
     if (!formData.username.trim()) {
-      setError("Username is required");
+      
       toaster.create({
         title: "Validation Error",
         description: "Username is required",
@@ -92,7 +90,7 @@ const EditProfile = () => {
 
     if (formData.newPassword) {
       if (formData.newPassword.length < 8) {
-        setError("New password must be at least 8 characters");
+        
         toaster.create({
           title: "Validation Error",
           description: "New password must be at least 8 characters",
@@ -102,7 +100,7 @@ const EditProfile = () => {
       }
 
       if (formData.newPassword !== formData.confirmPassword) {
-        setError("New passwords don't match");
+        
         toaster.create({
           title: "Validation Error",
           description: "New passwords don't match",
@@ -112,7 +110,7 @@ const EditProfile = () => {
       }
 
       if (!formData.currentPassword) {
-        setError("Current password is required to change password");
+        
         toaster.create({
           title: "Validation Error",
           description: "Current password is required to change password",
@@ -127,7 +125,7 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+   
 
     if (!validateForm()) return;
 
@@ -143,14 +141,11 @@ const EditProfile = () => {
       if (profilePic) {
         updateData.append("profilePic", profilePic);
       }
-      //  console.log("FormData content:");
-      //  for (let [key, value] of updateData.entries()) {
-      //    console.log(`${key}:`, value);
-      //  }
+
       const result = await updateUser(authUser._id, updateData);
 
       if (result) {
-        console.log("Profile updated successfully!", result);
+
         toaster.create({
           title: "Profile Updated!",
           description: "Your profile has been updated successfully",
@@ -164,7 +159,7 @@ const EditProfile = () => {
             localStorage.setItem("user", JSON.stringify(result.user));
             localStorage.setItem("token", token);
             login(result.user || result, token);
-            console.log("result user vs authUser", authUser)
+
         }
         
 
@@ -174,8 +169,7 @@ const EditProfile = () => {
         }, 2000);
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
-      setError(error.message || "Error updating profile");
+
       toaster.create({
         title: "Update Failed",
         description: error.message || "Error updating profile",

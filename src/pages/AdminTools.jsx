@@ -67,7 +67,7 @@ const AdminTools = () => {
 
       setSelectedFile(null);
       document.getElementById("csv-upload").value = "";
-      console.log(data)
+
     } catch (error) {
       console.error("Upload error:", error);
   };
@@ -107,7 +107,7 @@ const AdminTools = () => {
                 paddingTop="6px"
                 onChange={handleFileSelect}
               />
-              {/*TO DO pintar tabla con ejemplo */}
+
               <Field.HelperText>
                 CSV format should include: title, author, isbn, sinopsis, pages,
                 genres, cover, rating

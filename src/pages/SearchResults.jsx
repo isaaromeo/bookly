@@ -10,7 +10,7 @@ import {
   Alert
 } from "@chakra-ui/react";
 import { LuArrowLeft, LuHouse } from "react-icons/lu";
-import BookGrid from "../styledComponents/BookGrid2";
+import BookGrid from "../styledComponents/BookGrid";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useBookSearch } from "../hooks/useBookSearch"; 
 

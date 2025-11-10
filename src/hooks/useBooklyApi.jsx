@@ -45,7 +45,6 @@ export const useBooklyApi = {
 
     const addToLibrary = (userId, bookId) => {
       const url = `/user/${userId}/library/${bookId}`;
-      console.log("Final URL:", url);
 
       return mutate(url, {
         method: "POST",

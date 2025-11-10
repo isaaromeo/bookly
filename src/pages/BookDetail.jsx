@@ -188,8 +188,14 @@ const BookDetail = () => {
 
   const handleAddToLibrary = useCallback(async () => {
     if (!authUser) {
-      alert("Please log in to add books to your library");
+      
+      toaster.create({
+        title: "Authentication Required",
+        description: "Please log in to add books to your library",
+        type: "error",
+      });
       return;
+    
     }
 
     try {
@@ -200,25 +206,46 @@ const BookDetail = () => {
         login(result.user, token);
       }
 
-      alert("Book added to your library!");
+      toaster.create({
+        title: "Book added successfully",
+        description: "Book added to your library!",
+        type: "success",
+      });
     } catch (err) {
       console.error("Error adding to library:", err);
-      alert(`Error: ${err.message}`);
+      toaster.create({
+        title: "Error adding to library",
+        description: `Error: ${err.message}`,
+        type: "error",
+      });
+      
     }
   }, [authUser, id, addToLibrary, login]);
 
   const handleAddToTBR = useCallback(async () => {
     if (!authUser) {
-      alert("Please log in to add books to your TBR");
+      toaster.create({
+        title: "Authentication Required",
+        description: "Please log in to add books to your TBR",
+        type: "error",
+      });
       return;
     }
 
     try {
       await addToTBR(authUser._id, id);
-      alert("Book added to your TBR!");
+      toaster.create({
+        title: "Book added successfully",
+        description: "Book added to your TBR!",
+        type: "success",
+      });
     } catch (err) {
       console.error("Error adding to TBR:", err);
-      alert(`Error: ${err.message}`);
+      toaster.create({
+        title: "Error adding to TBR",
+        description: `Error: ${err.message}`,
+        type: "error",
+      });
     }
   }, [authUser, id, addToTBR]);
 
@@ -649,7 +676,7 @@ const BookDetail = () => {
         </Box>
       </Stack>
 
-      {/* Resto del componente (tabs) se mantiene igual */}
+      
       <Box mt="8">
         <Tabs.Root
           value={activeTab}

@@ -42,8 +42,7 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState("");
+
   const navigate = useNavigate();
   const { register, loading, error } = useBooklyApi.useRegister();
 
@@ -52,12 +51,12 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    // if (error) setError("");
+    
   };
 
   const validateForm = () => {
     if (formData.password.length < 8) {
-      // setError("password must be atleast 8 characters long");
+      
       toaster.create({
         title: "Validation Error",
         description: "Password must be at least 8 characters long",
@@ -66,7 +65,7 @@ const Register = () => {
       return false;
     }
     if (formData.password !== formData.confirmPassword) {
-      // setError("password mismacth");
+      
       toaster.create({
         title: "Validation Error",
         description: "Passwords don't match",
@@ -75,7 +74,7 @@ const Register = () => {
       return false;
     }
     if (!formData.email.includes("@")) {
-      // setError("use a valid email");
+     
       toaster.create({
         title: "Validation Error",
         description: "Please use a valid email address",
@@ -84,7 +83,7 @@ const Register = () => {
       return false;
     }
     if (formData.username.length < 3) {
-      // setError("Username must be more than 3 charaters long");
+      
       toaster.create({
         title: "Validation Error",
         description: "Username must be at least 3 characters long",

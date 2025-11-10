@@ -169,7 +169,7 @@ export const UserMenu = () => {
               <Menu.Separator />
             </>
           ) : (
-            // Usuario no autenticado
+           
             <>
               <Menu.ItemGroup id="welcome">
                 <Menu.Item

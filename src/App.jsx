@@ -5,8 +5,7 @@ import UserMenu from "./styledComponents/UserMenu.jsx";
 import { ThemeProvider } from "styled-components";
 import { Provider } from "./components/ui/provider";
 import { AuthProvider } from "./context/AuthContext";
-import { useColorMode } from "./components/ui/color-mode";
-import { booklyTheme, lightTheme } from "./data/booklyTheme";
+import { booklyTheme } from "./data/booklyTheme";
 import styled from "styled-components";
 import { Toaster } from "./components/ui/toaster";
 import { Heading } from "@chakra-ui/react";
@@ -16,12 +15,12 @@ const AppContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  color: ${(props) => props.theme?.colors?.app?.primaryText || "#2d3748"};
+  
 `;
 
 const Header = styled.header`
   background: ${(props) =>
-    props.theme?.colors?.app?.cardHeaderBackground || "#ffffff"};
+    props.theme?.colors?.app?.cardHeaderBackground};
   padding: 1rem 0;
   position: sticky;
   top: 0;
@@ -60,7 +59,7 @@ const LogoSection = styled.div`
 const BackButton = styled.button`
   background: transparent;
   border: none;
-  color: ${(props) => props.theme?.colors?.app?.primaryText || "#2d3748"};
+  color: brand.900;
   font-size: 1.5rem;
   padding: 0.5rem;
   transition: all 0.2s ease-in-out;
@@ -81,8 +80,7 @@ const BackButton = styled.button`
 `;
 
 const PageTitle = styled.h1`
-  font-family: ${(props) =>
-    props.theme?.typography?.fonts?.heading || "Cinzel, serif"};
+  font-family: "Cinzel";
   font-size: 2.2rem;
   color: ${(props) => props.theme?.colors?.app?.primaryText || "#2d3748"};
   margin-left: 10px;
@@ -110,9 +108,7 @@ const PageLogo = styled.p`
     display: none;
     
   }
-  @media (max-width: ${(props) => props.theme.breakpoints?.tablet || "768px"}) {
-    font-size: 0.7rem;
-  }
+  
 `;
 
 const Navbar = styled.div`
@@ -177,8 +173,8 @@ const FooterContainer = styled.div`
 `;
 
 function ThemeWrapper({ children }) {
-  const { colorMode } = useColorMode();
-  const currentTheme = colorMode === "light" ? lightTheme : booklyTheme;
+
+  const currentTheme =  booklyTheme;
 
   return <ThemeProvider theme={currentTheme}>{children}</ThemeProvider>;
 }
@@ -202,18 +198,25 @@ function App() {
                 >
                   <PageTitle>Bookly</PageTitle>
                   <Heading
-                    size="2xl"
+                    fontSize={{
+                      sm: "xl",
+                      md: "2xl",
+                      lg: "2xl",
+                    }}
                     paddingTop="5px"
                     display={{
                       base: "none",
-                      sm: "none",
+                      sm: "block",
                       md: "block",
                       lg: "block",
                     }}
+                    className="custom-logo-bar"
                   >
                     |
                   </Heading>
-                  <PageLogo>Meet your new fav read!</PageLogo>
+                  <PageLogo className="custom-logo">
+                    Meet your new fav read!
+                  </PageLogo>
                 </LogoSection>
 
                 <Navbar>

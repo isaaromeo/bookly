@@ -25,10 +25,10 @@ export const useMutation = () => {
 
           if (hasBody) {
             if (isFormData) {
-              // Para FormData: NO Content-Type, body directo
+
               config.body = options.body;
             } else {
-              // Para JSON: Content-Type + stringify
+
               config.headers["Content-Type"] = "application/json";
               config.body = JSON.stringify(options.body);
             }
@@ -42,7 +42,7 @@ export const useMutation = () => {
       let result;
       try {
         result = await response.json();
-        console.log("Response data:", result);
+
       } catch (parseError) {
         console.error("Error parsing response:", parseError);
         throw new Error(`Failed to parse response: ${parseError.message}`);

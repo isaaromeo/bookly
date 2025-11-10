@@ -19,7 +19,7 @@ import {
 import BookGrid from "../styledComponents/BookGrid";
 import UserRecomend from "../styledComponents/UserRecomend";
 import Stats from "../styledComponents/Stats";
-import headerImage from "../assets/headerOK.png";
+
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import styled from "styled-components";
 import { LuTrendingUp } from "react-icons/lu";
@@ -130,7 +130,7 @@ const {
   data: scifiBooks,
   loading: scifiLoading,
   error: scifiError,
-} = useBooklyApi.useBooksByGenre("sc-fi");
+} = useBooklyApi.useBooksByGenre("sci-fi");
 
 
  const { data: allBooks, loading: allLoading } = useBooklyApi.useBooks();
@@ -282,7 +282,7 @@ const {
             />
 
             <CategorySection
-              title="Adventures"
+              title="Adventure"
               books={adventureBooks}
               loading={adventureLoading}
               onBookSelect={handleBookSelect}

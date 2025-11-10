@@ -17,6 +17,8 @@ import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
 import { useState, useEffect, useCallback } from "react";
 import BookGrid from "../styledComponents/BookGrid";
+import { toaster } from "../components/ui/toaster";
+
 
 export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => {
   const navigate = useNavigate();
@@ -36,14 +38,18 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
   const handleLike = useCallback(
     async (reviewId) => {
       if (!authUser) {
-        alert("Please log in to like reviews");
+        
+        toaster.create({
+          title: "Authentication Required",
+          description: "Please log in to like reviews",
+          type: "error",
+        });
         return;
       }
 
       try {
         const result = await likeReview(reviewId);
 
-        //para que se vea el cambio de like en la interfaz irl
         setLocalContent((prevContent) =>
           prevContent.map((review) =>
             review._id === reviewId ? result.review : review
@@ -58,7 +64,12 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
   const handleFollow = useCallback(
     async (userId) => {
       if (!authUser) {
-        alert("Please log in to follow users");
+        
+        toaster.create({
+          title: "Authentication Required",
+          description: "Please log in to follow users",
+          type: "error",
+        });
         return;
       }
 
@@ -85,6 +96,11 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
           );
         }
       } catch (error) {
+        toaster.create({
+          title: "Error following user",
+          description: `Error: ${error}`,
+          type: "error",
+        });
         console.error("Error following user:", error);
       }
     },
@@ -95,10 +111,6 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
       navigate(`/profile/${userId}`);
     },[navigate]);
 
-  // const isFollowingUser = (userId) => {
-  //   return authUser?.following?.includes(userId);
-  // };
-  
 
   const getIsFollowing = useCallback(
     (userId) => {
@@ -124,7 +136,11 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
     const handleDeleteReview = useCallback(
       async (reviewId) => {
         if (!authUser) {
-          alert("Please log in to delete reviews");
+          toaster.create({
+            title: "Authentication Required",
+            description: "Please log in delete review",
+            type: "error",
+          });
           return;
         }
 
@@ -140,9 +156,18 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
           );
 
           alert("Review deleted successfully!");
+          toaster.create({
+            title: "Success!",
+            description: "Review deleted successfully!",
+            type: "success",
+          });
         } catch (error) {
           console.error("Error deleting review:", error);
-          alert(`Error: ${error.message}`);
+          toaster.create({
+            title: "Error deleting review",
+            description: `Error: ${error}`,
+            type: "error",
+          });
         }
       },
       [authUser, deleteReview]
@@ -152,7 +177,6 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
     const getReviewUserId = (review) => {
       if (!review || !review.user) return null;
 
-      // El user puede ser un objeto completo o solo el ID
       if (typeof review.user === "object" && review.user._id) {
         return review.user._id;
       }
@@ -162,7 +186,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
       return null;
     };
 
-    //es useMemo util para los renders?
+
   const renderReviews = () => (
     <VStack gap="4" align="stretch">
       {localContent.map((review) => {

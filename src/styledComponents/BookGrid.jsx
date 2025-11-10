@@ -1,4 +1,4 @@
-// src/styledComponents/BookGrid.jsx - Mejorado
+
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import {

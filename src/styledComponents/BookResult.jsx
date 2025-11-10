@@ -14,7 +14,6 @@ import {
 
 export const BookResult = ({books, isLoading}) => {
     const navigate = useNavigate();
-    console.log("📖 BookResult renderizado con", books?.length, "libros");
 
   return (
 

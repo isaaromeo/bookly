@@ -29,6 +29,8 @@ import { LuSettings, LuPen } from "react-icons/lu";
 import { Tab } from "../styledComponents/Tab.jsx";
 import { useBooklyApi } from "../hooks/useBooklyApi";
 import { useAuth } from "../hooks/useAuth";
+import { toaster} from "../components/ui/toaster.jsx"
+
 
 const ProfileContainer = styled.div`
   max-width: 1200px;
@@ -79,7 +81,12 @@ const Profile = () => {
 
   const handleFollow = useCallback(async () => {
     if (!authUser) {
-      alert("You must be logged in to follow users");
+      
+      toaster.create({
+        title: "Authentication Required",
+        description: "You must be logged in to follow users",
+        type: "error",
+      });
       return;
     }
     try {
@@ -91,7 +98,12 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error following user:", error);
-      alert("Error following user");
+      toaster.create({
+        title: "Error following user",
+        description: `Error: ${error}`,
+        type: "error",
+      });
+      
     }
   }, [authUser, profileUserId, followUser, login, refetch]);
 
@@ -157,7 +169,7 @@ const Profile = () => {
     <ProfileContainer>
       <Card.Root id="profile-header">
         <Card.Body bg="brand.900" padding={{ base: "4", md: "6" }}>
-          {/* Layout Grid con 3 columnas y 2 filas */}
+          
           <Grid
             templateColumns={{
               base: "auto 1fr auto",
@@ -167,7 +179,7 @@ const Profile = () => {
             gap={{ base: "3", md: "4" }}
             alignItems="start"
           >
-            {/* Columna 1 - Avatar (Fila 1) */}
+            
             <GridItem
               display="flex"
               alignItems="center"

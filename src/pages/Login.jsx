@@ -28,8 +28,7 @@ const Login = () => {
     email: "",
     password: "",
   });
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState("");
+
   const navigate = useNavigate();
   const { login: authLogin } = useAuth(); 
   const { login, loading, error } = useBooklyApi.useLogin(); 
@@ -43,32 +42,9 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setLoading(true);
-    // setError("");
 
     try {
-    //   const response = await fetch(
-    //     "https://bookly-back.onrender.com/api/user/login",
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(formData),
-    //     }
-    //   );
 
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     login(data.user, data.token);
-    //     navigate(`/profile/${data.user._id}`);
-    //   } else {
-    //     const errorData = await response.json();
-    //     setError(errorData.message || "Login error. Verify your credentials");
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    //   setError(error.message);
     const result = await login(formData);
       
       if (result && result.user && result.token) {
@@ -106,12 +82,6 @@ const Login = () => {
         </Card.Header>
 
         <Card.Body>
-          {/* {error && (
-            <Alert.Root status="error" mb="4">
-              <Alert.Indicator />
-              <Alert.Title>{error}</Alert.Title>
-            </Alert.Root>
-          )} */}
 
           <form onSubmit={handleSubmit}>
             <VStack gap="4">

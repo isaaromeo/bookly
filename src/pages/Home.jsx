@@ -111,20 +111,14 @@ const Home = () => {
   const navigate = useNavigate();
 
   //TODO filtrar de forma real
-  const featuredBooks = books?.slice(0, 10) || [];
   const trendingBooksList = books?.slice(0, 8) || [];
-  const newReleases = books?.slice(8, 16) || [];
 
-
- 
 
   const handleBookSelect = (book) => {
     navigate(`/books/${book._id}`);
   };
 
 
-
-  //|| loadingIsa || loadingPedri
   if (loading) {
     return (
       <Box
@@ -138,7 +132,7 @@ const Home = () => {
     );
   }
 
-  //|| errorIsa || errorPedri
+
   if (error) {
     return (
       <Box textAlign="center" py="8">

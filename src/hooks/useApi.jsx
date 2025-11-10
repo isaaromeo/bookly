@@ -33,11 +33,10 @@ export const useApi = (endpoint, options = {}) => {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
           setData(JSON.parse(cached));
-          console.log("cache used");
+
           setLoading(false);
         }
       }
-      console.log(`https://bookly-back.onrender.com/api${endpoint}`);
 
       const response = await fetch(
         `https://bookly-back.onrender.com/api${endpoint}`,
@@ -52,11 +51,11 @@ export const useApi = (endpoint, options = {}) => {
       setData(result);
 
       if (cacheKey) {
-        console.log("cache used:", cacheKey)
+
         localStorage.setItem(cacheKey, JSON.stringify(result));
       }
     } catch (err) {
-      console.error("API Error:", err);
+
       setError(err.message);
       setData(null);
     } finally {
