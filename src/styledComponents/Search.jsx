@@ -8,8 +8,8 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useBookSearch } from "../hooks/useBookSearch";
-import SearchInput from "./SearchInput";
-import BookList from "./BookList";
+import SearchInput from "./SearchInput.jsx";
+import BookList from "./BookList.jsx";
 
 export const Search = () => {
 
