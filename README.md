@@ -75,6 +75,13 @@ Bookly es una plataforma web estilo Goodreads diseñada para amantes de la lectu
 - **Panel Admin:** Herramientas para administradores  
 
 
+## 🌍 Links Importantes
+
+- 🔗 **Repositorio del Proyecto:** [GitHub - Bookly](https://github.com/tu-usuario/bookly)
+- 🚀 **Despliegue back:** [bookly-back]([https://bookly.app](https://bookly-back.onrender.com))
+- 📘 **Despliegue front:** [.bookly.app]([https://docs.bookly.app](https://bookly-5mqnee6gg-isa-s-projects-4c4af2d7.vercel.app/))
+- 🧠 **Credenciales Admin:** email: isa2@gmail.com || psw: isa12345
+
 ---
 
 ## 🎯 Mejoras Futuras Planeadas
