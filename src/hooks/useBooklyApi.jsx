@@ -215,6 +215,7 @@ export const useBooklyApi = {
     const { mutate, loading, error, data } = useMutation();
 
     const postReview = (bookId, reviewData, userId) => {
+      console.log(bookId, reviewData, userId)
       return mutate(`/reviews`, {
         method: "POST",
         body: {

@@ -33,7 +33,7 @@ export const useMutation = () => {
               config.body = JSON.stringify(options.body);
             }
           }
-
+      console.log("useMutation config: ",config)
       const response = await fetch(
         `https://bookly-back.onrender.com/api${endpoint}`,
         config
