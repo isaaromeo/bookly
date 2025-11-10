@@ -60,7 +60,7 @@ const Explore = () => {
   const scifiRef = useRef(null);
   const adventureRef = useRef(null);
   const poetryRef = useRef(null);
-  const distopyanRef = useRef(null);
+  const dystopianRef = useRef(null);
   const businessRef = useRef(null);
   const selfhelpRef = useRef(null);
   const thrillerRef = useRef(null);
@@ -73,11 +73,11 @@ const Explore = () => {
     { name: "Mystery", ref: mysteryRef },
     { name: "Sci-Fi", ref: scifiRef },
     { name: "Adventure", ref: adventureRef },
-    { name: "Dystopian", ref: null },
+    { name: "Dystopian", ref: dystopianRef },
     { name: "Thriller", ref: thrillerRef },
-    { name: "Business", ref: null },
-    { name: "Self-Help", ref: null },
-    { name: "Poetry", ref: null },
+    { name: "Business", ref: businessRef },
+    { name: "Self-Help", ref: selfhelpRef },
+    { name: "Poetry", ref: poetryRef },
   ];
 
 
@@ -112,9 +112,9 @@ const {
   error: poetryError,
   } = useBooklyApi.useBooksByGenre("poetry");
 const {
-  data: distopyanBooks,
-  loading: distopyanLoading,
-  error: distopyanError,
+  data: dystopianBooks,
+  loading: dystopianLoading,
+  error: dystopianError,
   } = useBooklyApi.useBooksByGenre("dystopian");
 const {
   data: selfhelpBooks,
@@ -307,10 +307,10 @@ const {
 
             <CategorySection
               title="Dystopian"
-              books={distopyanBooks}
-              loading={distopyanLoading}
+              books={dystopianBooks}
+              loading={dystopianLoading}
               onBookSelect={handleBookSelect}
-              categoryRef={distopyanRef}
+              categoryRef={dystopianRef}
             />
 
             <CategorySection
