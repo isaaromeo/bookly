@@ -23,6 +23,7 @@ Bookly es una plataforma web estilo Goodreads diseñada para amantes de la lectu
 
 ### 📁 Admin Tools
 - Permiten a los usuarios Admin subir libros de forma masiva en formato CSV a la bbdd **(revisar sección Links importantes para encontrar credenciales Admin)**
+- CSV template: [Ver la documentación](./docs/books_template.csv)
 
 ### 📝 Sistema de Reseñas
 - Calificación con estrellas (1-5)  
