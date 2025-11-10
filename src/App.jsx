@@ -9,7 +9,7 @@ import { booklyTheme } from "./data/booklyTheme";
 import styled from "styled-components";
 import { Toaster } from "./components/ui/toaster";
 import { Heading } from "@chakra-ui/react";
-import "./index.css";
+
 
 
 const AppContainer = styled.div`

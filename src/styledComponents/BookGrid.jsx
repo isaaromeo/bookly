@@ -59,7 +59,12 @@ export const BookGrid = ({
         lg: "repeat(auto-fit, minmax(200px, 1fr))",
       }}
       gap="4"
-      justifyItems="center"
+      justifyItems={{
+        base: "center",
+        sm: "center",
+        md: "center",
+        lg: "start",
+      }}
       width="100%"
     >
       {memoizedBooks.map((book) => (
@@ -142,7 +147,7 @@ export const BookGrid = ({
                     lg: "scale(1)",
                   }}
                   transformOrigin="left center"
-                  margin={{ base: "0"}}
+                  margin={{ base: "0" }}
                 >
                   <RatingGroup.Root
                     readOnly
@@ -155,7 +160,6 @@ export const BookGrid = ({
                       lg: "sm",
                     }}
                     colorPalette="yellow"
-                    
                   >
                     <RatingGroup.HiddenInput />
                     <RatingGroup.Control />
