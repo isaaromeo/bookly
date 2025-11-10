@@ -22,7 +22,7 @@ Bookly es una plataforma web estilo Goodreads diseñada para amantes de la lectu
 - Roles de usuario: Reader, Admin  
 
 ### 📁 Admin Tools
-- Permiten a los usuarios Admin subir libros de forma masiva en formato CSV a la bbdd
+- Permiten a los usuarios Admin subir libros de forma masiva en formato CSV a la bbdd **(revisar sección Links importantes para encontrar credenciales Admin)**
 
 ### 📝 Sistema de Reseñas
 - Calificación con estrellas (1-5)  
