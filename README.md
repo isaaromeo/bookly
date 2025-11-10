@@ -66,8 +66,11 @@ Bookly es una plataforma web estilo Goodreads diseñada para amantes de la lectu
 1. **Registro/Login:** Crear cuenta o iniciar sesión  
 2. **Explorar:** Navegar por categorías o usar búsqueda  
 3. **Descubrir:** Ver detalles de libros y reseñas de comunidad  
-4. **Interactuar:** Añadir a biblioteca, escribir reseñas, seguir usuarios  
-5. **Gestionar:** Administrar perfil y contenido personal  
+4. **Interactuar:** Añadir a biblioteca, escribir reseñas, seguir usuarios
+   - Al reseñar un libro, se añade automaticamente a tu libreria
+   - Si añades un libro a tu TBR(To be read) y posteriormente lo añades a la libreria, se borra del TBR para pasar a la librería
+   - Si reseñas un libro que esta en tu TBR, este pasa a tu librería y se borra del TBR 
+6. **Gestionar:** Administrar perfil y contenido personal  
 
 ### Funcionalidades Clave
 - **Biblioteca Personal:** Añadir/eliminar libros leídos  
@@ -78,9 +81,10 @@ Bookly es una plataforma web estilo Goodreads diseñada para amantes de la lectu
 
 ## 🌍 Links Importantes
 
-- 🔗 **Repositorio del Proyecto:** [GitHub - Bookly](https://github.com/tu-usuario/bookly)
+- 🔗 **Repositorio del front:** [GitHub - Bookly](https://github.com/tu-usuario/bookly)
+- 🔗 **Repositorio del back:** [GitHub - Bookly-Back](https://github.com/isaaromeo/bookly-back)
 - 🚀 **Despliegue back:** [bookly-back](https://bookly-back.onrender.com)
-- 📘 **Despliegue front:** [.bookly.app](https://bookly-5mqnee6gg-isa-s-projects-4c4af2d7.vercel.app/)
+- 📘 **Despliegue front:** [.bookly.app](https://bookly-sepia.vercel.app/)
 - 🧠 **Credenciales Admin:** email: isa2@gmail.com || psw: isa12345
 
 ---
