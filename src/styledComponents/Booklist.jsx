@@ -26,12 +26,13 @@ export const BookList = ({ books, loading = false }) => {
       zIndex="dropdown"
       maxHeight="400px"
       overflowY="auto"
+      borderColor="muted.100"
     >
       <Card.Body padding="0">
         {loading ? (
           <VStack gap="3" padding="2" bg="brand.900">
             <Spinner size="md" color="brand.500" />
-            <Text fontSize="sm" color="fg.muted">
+            <Text fontSize="sm" color="muted.100">
               Searching books...
             </Text>
           </VStack>
@@ -66,15 +67,15 @@ export const BookList = ({ books, loading = false }) => {
                       fontWeight="semibold"
                       fontSize="sm"
                       lineClamp="1"
-                      color="fg.emphasized"
+                      color="muted.200"
                     >
                       {book.title}
                     </Text>
-                    <Text fontSize="xs" color="fg.muted" lineClamp="1">
+                    <Text fontSize="xs" color="muted.100" lineClamp="1">
                       by {book.author}
                     </Text>
                     {book.genres && book.genres.length > 0 && (
-                      <Text fontSize="xs" color="fg.subtle" lineClamp="1">
+                      <Text fontSize="xs" color="muted.300" lineClamp="1">
                         {book.genres.join(", ")}
                       </Text>
                     )}

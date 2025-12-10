@@ -202,7 +202,12 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
 
         const reviewUserId = getReviewUserId(review)
         return (
-          <Card.Root key={review._id} width="100%" borderRadius="20px">
+          <Card.Root
+            key={review._id}
+            width="100%"
+            borderColor="brand.600"
+            borderRadius="20px"
+          >
             <Card.Body
               bg={context === "profile" ? "black" : "brand.900"}
               borderRadius="20px"
@@ -248,7 +253,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                           <Avatar.Image src={review.user.profilePic} />
                         )}
                       </Avatar.Root>
-                      <Text fontSize="sm" color="fg.muted">
+                      <Text fontSize="sm" color="muted.100">
                         By {review.user?.username || "Unknown user"}
                       </Text>
                     </HStack>
@@ -263,7 +268,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                         md: "sm",
                         lg: "sm",
                       }}
-                      color="fg.muted"
+                      color="muted.100"
                     >
                       on {review.book.title || "Unknown Book"}
                     </Text>
@@ -282,6 +287,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                   <RatingGroup.Root
                     readOnly
                     count={5}
+                    color="muted.100"
                     defaultValue={review.rating}
                     size={{
                       base: "xs",
@@ -293,6 +299,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                     allowHalf
                     value={review.rating}
                     justifySelf="start"
+                 
                   >
                     <RatingGroup.HiddenInput />
                     <RatingGroup.Control />
@@ -313,6 +320,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                   md: "1rem",
                   lg: "2rem",
                 }}
+                color="muted.200"
               >
                 {review.content}
               </Text>
@@ -326,6 +334,8 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                       lg: "sm",
                     }}
                     variant="ghost"
+                    backgroundColor="brand.800"
+                    color="muted.300"
                     colorPalette={isLikedByUser ? "purple" : "gray"}
                     onClick={() => handleLike(review._id)}
                     _hover={{
@@ -342,7 +352,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                       md: "sm",
                       lg: "sm",
                     }}
-                    color="fg.muted"
+                    color="muted.100"
                   >
                     {likesCount} {likesCount === 1 ? "like" : "likes"}
                   </Text>
@@ -427,7 +437,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                         md: "sm",
                         lg: "sm",
                       }}
-                      color="fg.muted"
+                      color="muted.100"
                     >
                       {user.email}
                     </Text>

@@ -39,6 +39,7 @@ export const SearchInput = ({
             lg: "40px",
           }}
           alignSelf="end"
+          color="muted.200"
         />
       </InputGroup>
     </HStack>

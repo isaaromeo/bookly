@@ -430,7 +430,7 @@ const BookDetail = () => {
                 md: "md",
                 lg: "md",
               }}
-              color="fg.muted"
+              color="muted.100"
               textAlign="left"
             >
               by {book.author}
@@ -459,12 +459,13 @@ const BookDetail = () => {
                   md: "md",
                   lg: "md",
                 }}
+                color="muted.200"
               >
                 ({book.rating}/5)
               </Text>
             </HStack>
 
-            <Text
+            {/* <Text
               fontSize={{
                 base: "md",
                 sm: "sm",
@@ -479,9 +480,10 @@ const BookDetail = () => {
               }}
               lineHeight="1.6"
               textAlign="left"
+              color="muted.200"
             >
               {book.sinopsis}
-            </Text>
+            </Text> */}
             <Box
               width="100%"
               textAlign="left"
@@ -503,6 +505,7 @@ const BookDetail = () => {
                 }}
                 lineHeight="1.6"
                 textAlign="left"
+                color="muted.200"
                 mb={isLongSinopsis ? 2 : 0}
               >
                 {getSinopsisText()}
@@ -513,7 +516,7 @@ const BookDetail = () => {
                   variant="ghost"
                   bg="transparent"
                   size="sm"
-                  color="white"
+                  color="brand.100"
                   border="transparent"
                   onClick={() => setIsSinopsisExpanded(!isSinopsisExpanded)}
                   _focus={{ outline: "none !important" }}
@@ -676,14 +679,13 @@ const BookDetail = () => {
         </Box>
       </Stack>
 
-      
       <Box mt="8">
         <Tabs.Root
           value={activeTab}
           onValueChange={(e) => setActiveTab(e.value)}
           gap={2}
         >
-          <Tabs.List gap={2}>
+          <Tabs.List gap={2} borderBottom="1px solid" borderColor="brand.800">
             <Tabs.Trigger
               value="reviews"
               bg="brand.900"
@@ -693,7 +695,14 @@ const BookDetail = () => {
               }}
               _focus={{
                 outline: "none !important",
+                borderColor: "brand.300",
+                color: "muted.200",
               }}
+              _selected={{
+                color: "brand.50",
+                borderColor: "muted.300",
+              }}
+              color="muted.100"
             >
               Reviews ({reviews ? reviews.length : 0})
             </Tabs.Trigger>
@@ -706,8 +715,14 @@ const BookDetail = () => {
               }}
               _focus={{
                 outline: "none !important",
-                boxShadow: "none !important",
+                borderColor: "brand.300",
+                color: "muted.200",
               }}
+              _selected={{
+                color: "brand.50",
+                borderColor: "muted.300",
+              }}
+              color="muted.100"
             >
               Review book
             </Tabs.Trigger>
@@ -732,7 +747,7 @@ const BookDetail = () => {
               />
             ) : (
               <Box textAlign="center" padding="8">
-                <Text color="fg.muted">
+                <Text color="muted.100">
                   No reviews yet. Be the first to review this book!
                 </Text>
                 {authUser && (
@@ -749,11 +764,11 @@ const BookDetail = () => {
           </Tabs.Content>
 
           <Tabs.Content value="add-review">
-            <Card.Root mt="4">
-              <Card.Body bg="brand.900">
+            <Card.Root mt="4" borderColor="brand.600" bg="brand.900">
+              <Card.Body bg="brand.900" borderRadius="10px">
                 <VStack gap="4">
                   <Field.Root>
-                    <Field.Label>Review title</Field.Label>
+                    <Field.Label color="muted.200">Review title</Field.Label>
                     <Input
                       placeholder="Title"
                       value={newReview.title}
@@ -761,11 +776,12 @@ const BookDetail = () => {
                         setNewReview({ ...newReview, title: e.target.value })
                       }
                       borderColor="brand.700"
+                      color="muted.100"
                     />
                   </Field.Root>
 
                   <Field.Root>
-                    <Field.Label>Rating</Field.Label>
+                    <Field.Label color="muted.200">Rating</Field.Label>
                     <RatingGroup.Root
                       count={5}
                       value={newReview.rating}
@@ -780,7 +796,7 @@ const BookDetail = () => {
                   </Field.Root>
 
                   <Field.Root>
-                    <Field.Label>Review</Field.Label>
+                    <Field.Label color="muted.200">Review</Field.Label>
                     <Input
                       as="textarea"
                       rows={4}
@@ -792,6 +808,7 @@ const BookDetail = () => {
                           content: e.target.value,
                         })
                       }
+                      color="muted.100"
                       borderColor="brand.700"
                     />
                   </Field.Root>
