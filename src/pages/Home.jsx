@@ -249,12 +249,13 @@ const Home = () => {
                 md: "xl",
                 lg: "xl",
               }}
+              color="white"
               textAlign="left"
             >
               Why Book Lovers Choose Bookly
             </Heading>
             <Text
-              color="fg.muted"
+              color="muted.100"
               maxWidth="600px"
               textAlign="left"
               fontSize={{
@@ -277,7 +278,7 @@ const Home = () => {
         </VStack>
         <VStack gap="6" mb="12" align="stretch">
           <HStack justify="space-between">
-            <Heading size="lg">
+            <Heading size="lg" color="muted.200">
               <LuTrendingUp
                 style={{ display: "inline", marginRight: "12px" }}
               />
@@ -310,13 +311,22 @@ const Home = () => {
         </VStack>
 
         <VStack gap="8" mb="12">
-          <Heading size="xl" color="brand.50" textAlign="center">
+          <Heading size="xl" color="muted.200" textAlign="center">
             What Readers Say
           </Heading>
           <SimpleGrid columns={{ base: 1, md: 3 }} gap="6" width="100%">
             {userFeedback.map((feedback, index) => (
-              <Blockquote.Root key={index}>
-                <Card.Root bg="brand.700" variant="outline" height="100%">
+              <Blockquote.Root
+                key={index}
+                
+                borderColor="brand.800"
+              >
+                <Card.Root
+                  bg="brand.700"
+                  borderColor="brand.900"
+                  variant="outline"
+                  height="100%"
+                >
                   <Card.Body bg="brand.500" borderRadius="20px">
                     <Blockquote.Content
                       as="div"

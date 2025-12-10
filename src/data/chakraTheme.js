@@ -58,6 +58,10 @@ const config = defineConfig({
         "secondary.800": { value: "#476460" },
         "secondary.900": { value: "#354E4A" },
 
+        "muted.100": { value: "#a1a1aa" },
+        "muted.200": { value: "#e5e5f0ff" },
+        "muted.300": { value: "#a99ec4e1" },
+
         "colorScheme.brand": { value: "{colors.brand.500}" },
       },
     },

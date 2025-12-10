@@ -211,6 +211,7 @@ function App() {
                       md: "block",
                       lg: "block",
                     }}
+                    color="muted.200"
                     className="custom-logo-bar"
                   >
                     |
@@ -234,6 +235,7 @@ function App() {
                     navigate(-1);
                   }}
                   title="Go back"
+                  color="muted.100"
                 >
                   ←
                 </BackButton>

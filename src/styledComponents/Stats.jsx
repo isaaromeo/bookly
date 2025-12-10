@@ -25,8 +25,9 @@ const Stats = () => {
   return (
     <Card.Root
       bg="secondary.200"
+      borderColor="brand.900"
       mb="12"
-      boxShadow="md"
+      boxShadow="0 20px 20px rgba(0, 0, 0, 0.5)"
       opacity={0.7}
       borderRadius="15px"
     >

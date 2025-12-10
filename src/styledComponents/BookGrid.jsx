@@ -82,6 +82,7 @@ export const BookGrid = ({
           }}
           transition="all 0.3s ease-in-out"
           bg="brand.800"
+          borderColor="brand.800"
           width="95%"
           maxWidth={{
             base: "180px",
@@ -122,12 +123,13 @@ export const BookGrid = ({
                   lg: "lg",
                 }}
                 lineClamp="2"
+                color="white"
               >
                 {book.title}
               </Text>
 
               <Text
-                color="fg.muted"
+                color="muted.100"
                 fontSize={{
                   base: "xs",
                   sm: "xs",
@@ -174,7 +176,7 @@ export const BookGrid = ({
                     md: "sm",
                     lg: "sm",
                   }}
-                  color="fg.muted"
+                  color="muted.100"
                 >
                   ({book.rating}/5)
                 </Text>
@@ -183,7 +185,7 @@ export const BookGrid = ({
               {book.genres && book.genres.length > 0 && (
                 <Text
                   fontSize="sm"
-                  color="fg.subtle"
+                  color="muted.300"
                   lineClamp="2"
                   height="2.5rem"
                 >
