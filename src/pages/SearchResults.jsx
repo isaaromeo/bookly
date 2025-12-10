@@ -60,7 +60,7 @@ export const SearchResults = () => {
 
   return (
     <Box minHeight="100vh" bg="bg.canvas" padding="6">
-      <Text fontSize="xl" color="fg.muted" mb="4" fontWeight="semibold" textAlign="left">
+      <Text fontSize="xl" color="muted.100" mb="4" fontWeight="semibold" textAlign="left">
         Search Results for "{query}"
       </Text>
       <BookGrid

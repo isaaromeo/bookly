@@ -1,4 +1,4 @@
-import { Input, InputGroup, IconButton, HStack } from "@chakra-ui/react";
+import { Input, InputGroup, Box, IconButton, HStack } from "@chakra-ui/react";
 import { LuSearch, LuX } from "react-icons/lu";
 
 export const SearchInput = ({
@@ -10,7 +10,14 @@ export const SearchInput = ({
 
   return (
     <HStack gap="2" width="100%">
-      <InputGroup startElement={<LuSearch />} size={{ base: "sm", md: "md" }}>
+      <InputGroup
+        startElement={
+          <Box color="muted.100">
+            <LuSearch />
+          </Box>
+        }
+        size={{ base: "sm", md: "md" }}
+      >
         <Input
           placeholder={placeholder}
           value={query}

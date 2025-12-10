@@ -204,7 +204,9 @@ const {
       </HeroSection>
       <Container maxWidth="1200px" py="8" alignContent="center">
         <VStack gap="6" mb="8" paddingTop="1rem">
-          <Heading size="lg">Browse by category</Heading>
+          <Heading size="lg" color="muted.200">
+            Browse by category
+          </Heading>
           <SimpleGrid
             columns={{ base: 2, sm: 4, md: 5, lg: 5 }}
             gap="3"
@@ -244,6 +246,7 @@ const {
             }}
             textAlign="left"
             pl="1rem"
+            color="muted.200"
           >
             <LuTrendingUp style={{ display: "inline", marginRight: "12px" }} />
             Trending Now
@@ -255,7 +258,7 @@ const {
           />
         </VStack>
 
-        <Box  maxWidth="1200px" margin="0 auto">
+        <Box maxWidth="1200px" margin="0 auto">
           <VStack gap="8" align="stretch">
             <CategorySection
               title="Fantasy"
@@ -338,8 +341,16 @@ const {
             />
 
             <VStack gap="6" align="stretch" mb="8">
-              <Heading size="lg">Complete Collection</Heading>
-              <Text color="fg.muted">
+              <Heading size="lg" color="brand.50">
+                Complete Collection
+              </Heading>
+              <Text
+                color="brand.100"
+                pt="4px"
+                pb="4px"
+                borderRadius="8px"
+                backgroundColor="brand.600"
+              >
                 Browse through our entire library of {allBooks?.length || 0}{" "}
                 books
               </Text>

@@ -42,7 +42,7 @@ const CategorySection = ({
   return (
     <VStack gap="6" align="stretch" mb="12" ref={categoryRef}>
       <HStack justify="space-between" align="center">
-        <Heading size="lg" id={title.toLowerCase().replace(/\s+/g, "-")}>
+        <Heading size="lg" color="muted.200" id={title.toLowerCase().replace(/\s+/g, "-")}>
           {title}
         </Heading>
         <Button
@@ -53,6 +53,8 @@ const CategorySection = ({
           }}
           size="sm"
           onClick={handleSeeAll}
+          color="brand.100"
+          backgroundColor="brand.900"
         >
           See All
         </Button>

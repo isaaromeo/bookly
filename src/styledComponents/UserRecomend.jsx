@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { LuUsers } from "react-icons/lu";
 import {  useMemo } from "react";
+import coverPlaceholder from "../assets/images/placeholder-cover.jpg";
 
 const UserRecomend = () => {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ const UserRecomend = () => {
   if (booksLoading) {
     return (
       <VStack gap="6" mb="8" paddingX="1rem">
-        <Heading size={{ base: "lg", md: "xl" }} textAlign="center">
+        <Heading size={{ base: "lg", md: "xl" }} color="muted.200" textAlign="center">
           <LuUsers style={{ display: "inline", marginRight: "8px" }} />
           Community Discoveries
         </Heading>
@@ -78,7 +79,11 @@ const UserRecomend = () => {
 
   return (
     <VStack gap="6" mb="8" paddingX="1rem">
-      <Heading size={{ base: "lg", md: "xl" }} textAlign="center">
+      <Heading
+        size={{ base: "lg", md: "xl" }}
+        textAlign="center"
+        color="muted.200"
+      >
         <LuUsers style={{ display: "inline", marginRight: "8px" }} />
         Community Discoveries
       </Heading>
@@ -99,6 +104,7 @@ const UserRecomend = () => {
           maxWidth="800px"
           variant="outline"
           bg="brand.900"
+          borderColor="brand.900"
         >
           <Card.Body padding={{ base: "4", md: "6" }}>
             <VStack gap="4" align="stretch">
@@ -124,7 +130,6 @@ const UserRecomend = () => {
                 align="center"
                 justify="center"
               >
-               
                 <VStack gap="1" flex="1">
                   <SimpleGrid columns={3} gap="1">
                     {rec.liked.map((book, i) => (
@@ -164,6 +169,7 @@ const UserRecomend = () => {
                             transform: "scale(1.05)",
                             transition: "transform 0.2s ease",
                           }}
+                          boxShadow="5px 5px 5px rgba(138, 115, 143, 0.59)"
                         />
                       </Box>
                     ))}
@@ -174,7 +180,6 @@ const UserRecomend = () => {
                   →
                 </Box>
 
-                
                 <VStack gap="1" flex="1">
                   <SimpleGrid columns={3} gap="1">
                     {rec.discovered.map((book, i) => (
@@ -195,7 +200,7 @@ const UserRecomend = () => {
                           New
                         </Badge>
                         <Image
-                          src={book.cover}
+                          src={book.cover || coverPlaceholder}
                           alt={book.title}
                           width={{
                             base: "70px",
@@ -217,6 +222,7 @@ const UserRecomend = () => {
                             transform: "scale(1.05)",
                             transition: "transform 0.2s ease",
                           }}
+                          boxShadow="5px 5px 5px rgba(138, 115, 143, 0.59)"
                         />
                       </Box>
                     ))}

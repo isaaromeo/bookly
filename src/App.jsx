@@ -68,6 +68,7 @@ const BackButton = styled.button`
   align-items: start;
   justify-content: start;
   outline: none !important;
+  color: ${(props) => props.theme?.colors?.app?.primaryText || "#2d3748"};
 
   &:hover {
     color: #8d7a96ab;
@@ -235,6 +236,7 @@ function App() {
                     navigate(-1);
                   }}
                   title="Go back"
+                  className="custom-back-button"
                   color="muted.100"
                 >
                   ←
