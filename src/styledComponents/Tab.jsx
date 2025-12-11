@@ -299,7 +299,6 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                     allowHalf
                     value={review.rating}
                     justifySelf="start"
-                 
                   >
                     <RatingGroup.HiddenInput />
                     <RatingGroup.Control />
@@ -366,7 +365,8 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                       lg: "sm",
                     }}
                     variant="ghost"
-                    colorPalette="red"
+                    backgroundColor="brand.800"
+                    color="muted.300"
                     onClick={() => handleDeleteReview(review._id)}
                     loading={deletingReview}
                     alignSelf="end"
@@ -398,7 +398,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
           const isFollowing = getIsFollowing(user._id);
           const isOwnProfile = authUser?._id === user._id;
         return (
-          <Card.Root key={user._id} width="100%" borderRadius="20px">
+          <Card.Root key={user._id} width="100%" borderColor="black" backgroundColor="black" borderRadius="20px">
             <Card.Body
               padding={{
                 base: "1rem",
@@ -406,6 +406,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                 md: "1.5rem",
                 lg: "1.5rem",
               }}
+
             >
               <HStack justify="space-between" align="center">
                 <HStack
@@ -427,6 +428,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                         md: "md",
                         lg: "md",
                       }}
+                      color="muted.200"
                     >
                       {user.username}
                     </Text>
@@ -493,6 +495,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
                       md: "150px",
                       lg: "150px",
                     }}
+                    color="muted.200"
                   >
                     <Box
                       as={isFollowing ? FaUserCheck : FaUserPlus}
@@ -536,7 +539,7 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
 
 
   const renderEmpty = () => (
-    <Text color="gray.500">
+    <Text color="muted.100">
       There are no elements added to your {tabTitle}.
     </Text>
   );

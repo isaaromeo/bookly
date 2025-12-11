@@ -167,9 +167,8 @@ const Profile = () => {
 
   return (
     <ProfileContainer>
-      <Card.Root id="profile-header">
+      <Card.Root id="profile-header" borderColor="brand.900">
         <Card.Body bg="brand.900" padding={{ base: "4", md: "6" }}>
-          
           <Grid
             templateColumns={{
               base: "auto 1fr auto",
@@ -179,7 +178,6 @@ const Profile = () => {
             gap={{ base: "3", md: "4" }}
             alignItems="start"
           >
-            
             <GridItem
               display="flex"
               alignItems="center"
@@ -243,6 +241,7 @@ const Profile = () => {
                         md: "md",
                         lg: "xl",
                       }}
+                      color="muted.200"
                     >
                       {user.followers?.length || 0}
                     </Text>
@@ -267,6 +266,7 @@ const Profile = () => {
                         md: "md",
                         lg: "xl",
                       }}
+                      color="muted.200"
                     >
                       {user.following?.length || 0}
                     </Text>
@@ -443,6 +443,7 @@ const Profile = () => {
                         md: "20px",
                         lg: "20px",
                       }}
+                      color="muted.200"
                     />
                     {
                       <Text
@@ -452,6 +453,7 @@ const Profile = () => {
                           md: "block",
                           lg: "block",
                         }}
+                        color="muted.200"
                       >
                         {isFollowing ? "Following" : "Follow"}
                       </Text>
@@ -493,17 +495,18 @@ const Profile = () => {
                     }}
                     fontWeight="bold"
                     alignSelf="start"
+                    color="muted.200"
                   >
                     {user.username}
                   </Text>
                   <Text
-                    color="gray.500"
                     fontSize={{
                       base: "0.7rem",
                       sm: "xs",
                       md: "sm",
                       lg: "lg",
                     }}
+                    color="muted.100"
                   >
                     {user.email}
                   </Text>
@@ -523,19 +526,23 @@ const Profile = () => {
               </VStack>
             </GridItem>
 
-            <GridItem>{/* Columna 2  Fila 2 */}</GridItem>
-            <GridItem>{/* Columna 3  Fila 2 */}</GridItem>
+            <GridItem></GridItem>
+            <GridItem></GridItem>
           </Grid>
         </Card.Body>
       </Card.Root>
 
-      <Card.Root bg="brand.900" mt="4">
+      <Card.Root bg="brand.900" mt="4" borderColor="brand.900">
         <Card.Header>
           <Tabs.Root
             value={activeTab}
             onValueChange={(e) => setActiveTab(e.value)}
           >
-            <Tabs.List gap="0.5">
+            <Tabs.List
+              gap="0.5"
+              borderBottom="1px solid"
+              borderColor="brand.900"
+            >
               <Tabs.Trigger
                 value="library"
                 bg="brand.700"
@@ -546,6 +553,12 @@ const Profile = () => {
                   sm: "0.3em 0.8em",
                   md: "block",
                   lg: "block",
+                }}
+                color="muted.100"
+                _selected={{
+                  color: "muted.200",
+                  borderBottom: "1px solid",
+                  borderColor: "brand.100",
                 }}
               >
                 <FaBook />
@@ -572,6 +585,12 @@ const Profile = () => {
                   md: "block",
                   lg: "block",
                 }}
+                color="muted.100"
+                _selected={{
+                  color: "muted.200",
+                  borderBottom: "1px solid",
+                  borderColor: "brand.100",
+                }}
               >
                 <FaBookmark />
                 <Text
@@ -596,6 +615,12 @@ const Profile = () => {
                   sm: "0.3em 0.8em",
                   md: "block",
                   lg: "block",
+                }}
+                color="muted.100"
+                _selected={{
+                  color: "muted.200",
+                  borderBottom: "1px solid",
+                  borderColor: "brand.100",
                 }}
               >
                 <FaBook />
@@ -622,6 +647,12 @@ const Profile = () => {
                   md: "block",
                   lg: "block",
                 }}
+                color="muted.100"
+                _selected={{
+                  color: "muted.200",
+                  borderBottom: "1px solid",
+                  borderColor: "brand.100",
+                }}
               >
                 <FaUserFriends />
                 <Text
@@ -647,9 +678,15 @@ const Profile = () => {
                   md: "block",
                   lg: "block",
                 }}
+                color="muted.100"
+                _selected={{
+                  color: "muted.200",
+                  borderBottom: "1px solid",
+                  borderColor: "brand.100",
+                }}
               >
-               <FaUserPlus /> 
-                
+                <FaUserPlus />
+
                 <Text
                   display={{
                     base: "none",

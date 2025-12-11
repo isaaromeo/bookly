@@ -79,6 +79,7 @@ const ProfileHead = ({ user, isOwnProfile = false }) => {
                   leftIcon={isFollowing ? <FaUserCheck /> : <FaUserPlus />}
                   loading={followLoading}
                   onClick={handleFollow}
+                  color="muted.200"
                 >
                   {isFollowing ? "Following" : "Follow"}
                 </Button>

@@ -86,7 +86,7 @@ export const BookList = ({ books, loading = false }) => {
           </VStack>
         ) : (
           <VStack padding="6" bg="brand.900">
-            <Text fontSize="sm" color="fg.muted">
+            <Text fontSize="sm" color="muted.100">
               No books found :(
             </Text>
           </VStack>

@@ -53,7 +53,7 @@ export const UserMenu = () => {
       <Menu.Trigger asChild>
         <Button
           variant="ghost"
-          
+          border="none"
           _hover={{
             boxShadow: "sm",
             borderColor: "brand.300",
@@ -69,6 +69,7 @@ export const UserMenu = () => {
             md: "md",
             lg: "md",
           }}
+          backgroundColor="brand.900"
         >
           <Avatar.Root
             size={{
@@ -77,6 +78,8 @@ export const UserMenu = () => {
               md: "sm",
               lg: "sm",
             }}
+            border="none"
+            borderColor="brand.900"
           >
             {user ? (
               <>
@@ -114,10 +117,14 @@ export const UserMenu = () => {
                       )}
                     </Avatar.Root>
                     <VStack align="start" gap="0" flex="1">
-                      <Text fontWeight="semibold" fontSize="sm">
+                      <Text
+                        fontWeight="semibold"
+                        fontSize="sm"
+                        color="muted.200"
+                      >
                         {user.username}
                       </Text>
-                      <Text fontSize="xs" color="fg.muted">
+                      <Text fontSize="xs" color="muted.100">
                         {user.email}
                       </Text>
                     </VStack>
@@ -125,7 +132,7 @@ export const UserMenu = () => {
                 </Menu.Item>
               </Menu.ItemGroup>
 
-              <Menu.Separator bg="brand.200" />
+              <Menu.Separator bg="muted.300" borderColor="muted.300" />
 
               <Menu.Item
                 value="profile"
@@ -155,7 +162,7 @@ export const UserMenu = () => {
                 Home
               </Menu.Item>
 
-              <Menu.Separator />
+              <Menu.Separator bg="muted.300" borderColor="muted.300" />
 
               <Menu.Item
                 value="logout"
@@ -166,10 +173,9 @@ export const UserMenu = () => {
                 <LuLogOut />
                 Logout
               </Menu.Item>
-              <Menu.Separator />
+              <Menu.Separator bg="muted.300" borderColor="muted.300" />
             </>
           ) : (
-           
             <>
               <Menu.ItemGroup id="welcome">
                 <Menu.Item
@@ -183,7 +189,7 @@ export const UserMenu = () => {
                 </Menu.Item>
               </Menu.ItemGroup>
 
-              <Menu.Separator colorPalette="gray" />
+              <Menu.Separator bg="muted.300" borderColor="muted.300" />
 
               <Menu.Item
                 value="login"
@@ -204,7 +210,7 @@ export const UserMenu = () => {
                 Register
               </Menu.Item>
 
-              <Menu.Separator />
+              <Menu.Separator bg="muted.300" borderColor="muted.300" />
 
               <Menu.Item
                 color="brand.100"
