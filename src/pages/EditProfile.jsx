@@ -188,7 +188,7 @@ const EditProfile = () => {
 
   return (
     <EditProfileContainer>
-      <Card.Root bg="brand.900">
+      <Card.Root bg="brand.900" borderColor="brand.900">
         <Card.Header>
           <Heading size="2xl" color="brand.500">
             <HStack spacing={2}>
@@ -203,7 +203,7 @@ const EditProfile = () => {
           <form onSubmit={handleSubmit}>
             <VStack gap="6">
               <Field.Root>
-                <Field.Label textAlign="center">Profile Picture</Field.Label>
+                <Field.Label textAlign="center" color="muted.200">Profile Picture</Field.Label>
                 <VStack gap="3">
                   <Avatar.Root size="xl" alignSelf="start" position="relative">
                     <Avatar.Fallback name={formData.username} />
@@ -233,20 +233,25 @@ const EditProfile = () => {
                     onChange={handleImageChange}
                     display="none"
                   />
-                  <Text fontSize="sm" color="fg.muted">
+                  <Text fontSize="sm" color="muted.100">
                     Click the camera icon to change your profile picture
                   </Text>
                 </VStack>
               </Field.Root>
 
               <Field.Root>
-                <Field.Label>Username</Field.Label>
+                <Field.Label color="muted.200">Username</Field.Label>
                 <Input
                   name="username"
                   value={formData.username}
                   onChange={handleInputChange}
                   placeholder="Enter your username"
                   borderColor="brand.700"
+                  color="muted.100"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                 />
               </Field.Root>
               <Card.Root
@@ -256,12 +261,12 @@ const EditProfile = () => {
                 width="100%"
               >
                 <Card.Header>
-                  <Text fontWeight="semibold">Change Password (Optional)</Text>
+                  <Text fontWeight="semibold" color="muted.300">Change Password</Text>
                 </Card.Header>
                 <Card.Body>
                   <VStack gap="4">
                     <Field.Root>
-                      <Field.Label>Current Password</Field.Label>
+                      <Field.Label color="muted.200">Current Password</Field.Label>
                       <Input
                         name="currentPassword"
                         type="password"
@@ -269,10 +274,15 @@ const EditProfile = () => {
                         onChange={handleInputChange}
                         placeholder="Enter current password"
                         borderColor="brand.700"
+                        color="muted.100"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                       />
                     </Field.Root>
                     <Field.Root>
-                      <Field.Label>New Password</Field.Label>
+                      <Field.Label color="muted.200">New Password</Field.Label>
                       <Input
                         name="newPassword"
                         type="password"
@@ -280,10 +290,15 @@ const EditProfile = () => {
                         onChange={handleInputChange}
                         placeholder="Enter new password (min 8 characters)"
                         borderColor="brand.700"
+                        color="muted.100"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                       />
                     </Field.Root>
                     <Field.Root>
-                      <Field.Label>Confirm New Password</Field.Label>
+                      <Field.Label color="muted.200">Confirm New Password</Field.Label>
                       <Input
                         name="confirmPassword"
                         type="password"
@@ -291,6 +306,11 @@ const EditProfile = () => {
                         onChange={handleInputChange}
                         placeholder="Confirm new password"
                         borderColor="brand.700"
+                        color="muted.100"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
                       />
                     </Field.Root>
                   </VStack>

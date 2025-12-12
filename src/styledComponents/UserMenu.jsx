@@ -105,7 +105,14 @@ export const UserMenu = () => {
           {user ? (
             <>
               <Menu.ItemGroup id="user-info">
-                <Menu.Item value="user-header" closeOnSelect={false}>
+                <Menu.Item 
+                value="user-header" 
+                _hover={{
+                  bgColor:"brand.900"
+                }}
+                closeOnSelect={false}
+                onClick={() => handleAction("profile")}
+                >
                   <HStack gap="3" width="100%">
                     <Avatar.Root size="sm" colorPalette="purple">
                       <Avatar.Fallback name={user.username} />
@@ -139,6 +146,9 @@ export const UserMenu = () => {
                 onClick={() => handleAction("profile")}
                 color="brand.100"
                 cursor="pointer"
+                _hover={{
+                  bgColor:"brand.800"
+                }}
               >
                 <LuUser />
                 My Profile
@@ -148,6 +158,9 @@ export const UserMenu = () => {
                 color="brand.100"
                 cursor="pointer"
                 onClick={() => handleAction("books")}
+                _hover={{
+                  bgColor:"brand.800"
+                }}
               >
                 <LuBook />
                 Explore Books
@@ -157,6 +170,9 @@ export const UserMenu = () => {
                 color="brand.100"
                 cursor="pointer"
                 onClick={() => handleAction("home")}
+                _hover={{
+                  bgColor:"brand.800"
+                }}
               >
                 <LuHouse />
                 Home
@@ -168,7 +184,7 @@ export const UserMenu = () => {
                 value="logout"
                 onClick={() => handleAction("logout")}
                 color="fg.error"
-                _hover={{ bg: "bg.error", color: "fg.error" }}
+                _hover={{ bg: "brand.800", color: "fg.error" }}
               >
                 <LuLogOut />
                 Logout

@@ -80,7 +80,7 @@ const AdminTools = () => {
 
   return (
     <AdminToolsContainer>
-      <Card.Root bg="brand.900">
+      <Card.Root bg="brand.900" borderColor="brand.900">
         <Card.Header>
           <Heading size="2xl" color="brand.500">
             <HStack spacing={2}>
@@ -93,12 +93,12 @@ const AdminTools = () => {
 
         <Card.Body>
           <VStack gap="4" align="stretch">
-            <Text color="fg.muted">
+            <Text color="muted.100">
               Upload a CSV file to bulk import books into the database.
             </Text>
 
             <Field.Root>
-              <Field.Label>Select CSV File</Field.Label>
+              <Field.Label color="muted.200">Select CSV File</Field.Label>
               <Input
                 id="csv-upload"
                 type="file"
@@ -106,9 +106,14 @@ const AdminTools = () => {
                 borderColor="brand.700"
                 paddingTop="6px"
                 onChange={handleFileSelect}
+                color="muted.100"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
               />
 
-              <Field.HelperText>
+              <Field.HelperText color="muted.300">
                 CSV format should include: title, author, isbn, sinopsis, pages,
                 genres, cover, rating
               </Field.HelperText>
