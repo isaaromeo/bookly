@@ -465,7 +465,7 @@ const BookDetail = () => {
               </Text>
             </HStack>
 
-            {/* <Text
+             <Text
               fontSize={{
                 base: "md",
                 sm: "sm",
@@ -483,7 +483,7 @@ const BookDetail = () => {
               color="muted.200"
             >
               {book.sinopsis}
-            </Text> */}
+            </Text> 
             <Box
               width="100%"
               textAlign="left"
