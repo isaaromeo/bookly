@@ -133,14 +133,14 @@ const Register = () => {
     <RegisterContainer>
       <Card.Root
         bg="brand.900"
-        
+        borderColor="brand.900"
         
       >
         <Card.Header>
           <Card.Title textAlign="center" fontSize="2xl" color="brand.100">
             Create Account
           </Card.Title>
-          <Text textAlign="center" color="fg.muted">
+          <Text textAlign="center" color="muted.100">
             Join the Bookly community!
           </Text>
         </Card.Header>
@@ -149,10 +149,11 @@ const Register = () => {
           <form onSubmit={handleSubmit}>
             <VStack gap="4">
               <Field.Root>
-                <Field.Label>Username</Field.Label>
+                <Field.Label color="muted.200">Username</Field.Label>
                 <Input
                   name="username"
                   placeholder="Your username"
+                  color="muted.100"
                   value={formData.username}
                   onChange={handleChange}
                   borderColor="brand.700"
@@ -165,11 +166,12 @@ const Register = () => {
               </Field.Root>
 
               <Field.Root>
-                <Field.Label>Email</Field.Label>
+                <Field.Label color="muted.200">Email</Field.Label>
                 <Input
                   name="email"
                   type="email"
                   placeholder="your@email.com"
+                  color="muted.100"
                   value={formData.email}
                   onChange={handleChange}
                   borderColor="brand.700"
@@ -182,11 +184,12 @@ const Register = () => {
               </Field.Root>
 
               <Field.Root>
-                <Field.Label>Password</Field.Label>
+                <Field.Label color="muted.200">Password</Field.Label>
                 <Input
                   name="password"
                   type="password"
                   placeholder="Minimum 8 characters"
+                  color="muted.100"
                   value={formData.password}
                   onChange={handleChange}
                   borderColor="brand.700"
@@ -199,11 +202,12 @@ const Register = () => {
               </Field.Root>
 
               <Field.Root>
-                <Field.Label>Confirm Password</Field.Label>
+                <Field.Label color="muted.200">Confirm Password</Field.Label>
                 <Input
                   name="confirmPassword"
                   type="password"
                   placeholder="Confirm your password"
+                  color="muted.100"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   borderColor="brand.700"
@@ -231,13 +235,13 @@ const Register = () => {
             </VStack>
           </form>
 
-          <Box mt="4" p="4" bg="bg.subtle" borderRadius="md">
-            <Text fontSize="sm" fontWeight="semibold" mb="2">
+          <Box mt="4" p="4" bg="brand.600" borderRadius="md">
+            <Text fontSize="sm" fontWeight="semibold" color="brand.900" mb="2">
               Account requirements:
             </Text>
-            <Text fontSize="sm">• Username (min. 3 characters)</Text>
-            <Text fontSize="sm">• Valid email</Text>
-            <Text fontSize="sm">• Password (min. 8 characters)</Text>
+            <Text fontSize="sm" color="brand.900">• Username (min. 3 characters)</Text>
+            <Text fontSize="sm" color="brand.900">• Valid email</Text>
+            <Text fontSize="sm" color="brand.900">• Password (min. 8 characters)</Text>
           </Box>
         </Card.Body>
 
@@ -250,13 +254,14 @@ const Register = () => {
                 md: "md",
                 lg: "xl",
               }}
+              color="primary.200"
             >
               Already have an account?
             </Text>
             <Link
               to="/login"
               style={{
-                color: "brand.500",
+                color: "#bb9dee",
                 fontWeight: "bold",
                 textDecoration: "none",
                 fontSize: "1rem",

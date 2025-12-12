@@ -71,12 +71,12 @@ const Login = () => {
 
   return (
     <LoginContainer>
-      <Card.Root bg="brand.900">
+      <Card.Root bg="brand.900" borderColor="brand.900">
         <Card.Header>
           <Card.Title textAlign="center" fontSize="2xl" color="brand.100">
             Log In
           </Card.Title>
-          <Text textAlign="center" color="fg.muted">
+          <Text textAlign="center" color="muted.100">
             Welcome Back to Bookly!
           </Text>
         </Card.Header>
@@ -86,11 +86,12 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <VStack gap="4">
               <Field.Root>
-                <Field.Label>Email</Field.Label>
+                <Field.Label color="muted.200">Email</Field.Label>
                 <Input
                   name="email"
                   type="email"
                   placeholder="tu@email.com"
+                  color="muted.100"
                   value={formData.email}
                   onChange={handleChange}
                   borderColor="brand.700"
@@ -103,11 +104,11 @@ const Login = () => {
               </Field.Root>
 
               <Field.Root>
-                <Field.Label>Password</Field.Label>
+                <Field.Label color="muted.200">Password</Field.Label>
                 <Input
                   name="password"
                   type="password"
-                  placeholder="Tu contraseña"
+                  color="muted.100"
                   value={formData.password}
                   onChange={handleChange}
                   borderColor="brand.700"
@@ -138,14 +139,16 @@ const Login = () => {
 
         <Card.Footer>
           <HStack justify="center" width="100%">
-            <Text>Don't have an account yet?</Text>
+            <Text color="primary.200">Don't have an account yet?</Text>
             <Link
               to="/register"
               style={{
                 color: "#bb9dee",
                 fontWeight: "bold",
                 textDecoration: "none",
+                
               }}
+              
             >
               Register here
             </Link>

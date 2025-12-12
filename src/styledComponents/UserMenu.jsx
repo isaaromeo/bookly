@@ -180,6 +180,7 @@ export const UserMenu = () => {
               <Menu.ItemGroup id="welcome">
                 <Menu.Item
                   bg="primary.900"
+                  mb="8px"
                   value="welcome"
                   closeOnSelect={false}
                 >
@@ -195,6 +196,9 @@ export const UserMenu = () => {
                 value="login"
                 color="brand.100"
                 cursor="pointer"
+                _hover={{
+                  bgColor:"brand.800"
+                }}
                 onClick={() => navigate("/login")}
               >
                 <LuLogIn />
@@ -204,6 +208,9 @@ export const UserMenu = () => {
                 color="brand.100"
                 value="register"
                 cursor="pointer"
+                _hover={{
+                  bgColor:"brand.800"
+                }}
                 onClick={() => navigate("/register")}
               >
                 <LuUserPlus />
@@ -216,6 +223,9 @@ export const UserMenu = () => {
                 color="brand.100"
                 value="books"
                 cursor="pointer"
+                _hover={{
+                  bgColor:"brand.800"
+                }}
                 onClick={() => navigate("/books")}
               >
                 <LuBook />
