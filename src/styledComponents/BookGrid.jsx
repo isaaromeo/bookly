@@ -10,6 +10,7 @@ import {
   HStack,
   RatingGroup,
   Skeleton,
+  Spinner
 } from "@chakra-ui/react";
 import coverPlaceholder from "../assets/images/placeholder-cover.jpg";
 
@@ -23,22 +24,22 @@ export const BookGrid = ({
   const navigate = useNavigate();
   const memoizedBooks = useMemo(() => books || [], [books]);
 
-  if (loading) {
-    return (
-      <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="6">
-        {[...Array(8)].map((_, i) => (
-          <Card.Root key={i}>
-            <Card.Body>
-              <Skeleton height="300px" borderRadius="8px" mb="4" />
-              <Skeleton height="4" mb="2" width="80%" />
-              <Skeleton height="3" mb="3" width="60%" />
-              <Skeleton height="3" width="90%" />
-            </Card.Body>
-          </Card.Root>
-        ))}
-      </Grid>
-    );
-  }
+  if (loading && (!books || books.length === 0)) {
+  return (
+    <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="6">
+      {[...Array(8)].map((_, i) => (
+        <Card.Root key={i} borderColor="brand.900">
+          <Card.Body bg="brand.900">
+            <Skeleton height="300px" borderRadius="8px" mb="4" bg="muted.300" />
+            <Skeleton height="4" mb="2" width="80%" />
+            <Skeleton height="3" mb="3" width="60%" />
+            <Skeleton height="3" width="90%" />
+          </Card.Body>
+        </Card.Root>
+      ))}
+    </Grid>
+  );
+}
 
   if (!memoizedBooks.length) {
     return (

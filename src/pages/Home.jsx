@@ -113,30 +113,30 @@ const Home = () => {
   //TODO filtrar de forma real
   const trendingBooksList = books?.slice(0, 8) || [];
 
-
+  let loading1 = true;
   const handleBookSelect = (book) => {
     navigate(`/books/${book._id}`);
   };
 
 
-  if (loading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minH="50vh"
-      >
-        <Spinner size="xl" />
-      </Box>
-    );
-  }
+  // if (loading1) {
+  //   return (
+  //     <Box
+  //       display="flex"
+  //       justifyContent="center"
+  //       alignItems="center"
+  //       minH="50vh"
+  //     >
+  //       <Spinner size="xl" />
+  //     </Box>
+  //   );
+  // }
 
 
   if (error) {
     return (
       <Box textAlign="center" py="8">
-        <Text color="red.500">Error loading data</Text>
+        <Text color="red.500">Error retrieving data</Text>
       </Box>
     );
   }
@@ -276,7 +276,7 @@ const Home = () => {
             ))}
           </SimpleGrid>
         </VStack>
-        <VStack gap="6" mb="12" align="stretch">
+         <VStack gap="6" mb="12" align="stretch">
           <HStack justify="space-between">
             <Heading size="lg" color="muted.200">
               <LuTrendingUp
@@ -308,7 +308,61 @@ const Home = () => {
             loading={loading}
             onBookSelect={handleBookSelect}
           />
-        </VStack>
+        </VStack> 
+
+        {/* <VStack gap="6" mb="12" align="stretch">
+          <HStack justify="space-between">
+            <Heading size="lg" color="muted.200">
+              <LuTrendingUp style={{ display: "inline", marginRight: "12px" }} />
+              Trending Now
+            </Heading>
+            <Button
+              variant="ghost"
+              _hover={{
+                boxShadow: "sm",
+                borderColor: "brand.300",
+              }}
+              bg="brand.900"
+              color="brand.100"
+              onClick={() => navigate("/books")}
+              size={{
+                base: "xs",
+                sm: "sm",
+                md: "lg",
+                lg: "lg",
+              }}
+            >
+              View All
+            </Button>
+          </HStack>
+  
+          
+          <Box position="relative">
+            {loading1 && (
+              <Box
+                position="absolute"
+                top="0"
+                left="0"
+                right="0"
+                bottom="0"
+                bg="rgba(78, 64, 82, 0.65)"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                zIndex="10"
+                borderRadius="lg"
+              >
+                <Spinner size="lg" />
+              </Box>
+            )}
+    
+            <BookGrid
+              books={trendingBooksList}
+              loading={loading} // No mostrar skeleton general
+              onBookSelect={handleBookSelect}
+            />
+        </Box>
+      </VStack> */}
 
         <VStack gap="8" mb="12">
           <Heading size="xl" color="muted.200" textAlign="center">
