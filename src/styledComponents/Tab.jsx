@@ -187,8 +187,18 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
     };
 
 
-  const renderReviews = () => (
-    <VStack gap="4" align="stretch">
+  const renderReviews = () => {
+    if(!localContent || localContent.length === 0){
+      return (
+            <Box textAlign="center" py="12">
+              <Text fontSize="lg" color="muted.100">
+                No reviews found
+              </Text>
+            </Box>
+          );
+    }
+    return(
+      <VStack gap="4" align="stretch">
       {localContent.map((review) => {
         if (!review) return null;
         const isLikedByUser = authUser && review.likes?.includes(authUser._id);
@@ -380,21 +390,32 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
         );
       })}
     </VStack>
-  );
+    )
+    
+  };
 
   const renderBooks = () => (
     <BookGrid 
       books={localContent}
-      // onBookSelect={() => {
-      //   navigate(`/books/${localContent.book._id}`)}
-      // }
+      
      />
     
   );
 
-  const renderUsers = () => (
+  const renderUsers = () => {
+    if(!localContent || localContent.length === 0){
+      return (
+            <Box textAlign="center" py="12">
+              <Text fontSize="lg" color="muted.100">
+                No users found
+              </Text>
+            </Box>
+          );
+    }
+    
     <VStack gap="4" align="stretch">
-      {localContent.map((user) => {
+      
+      {localContent?.map((user) => {
           const isFollowing = getIsFollowing(user._id);
           const isOwnProfile = authUser?._id === user._id;
         return (
@@ -535,21 +556,21 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
         );
       })}
     </VStack>
-  );
+  };
 
 
-  const renderEmpty = () => (
-    <Text color="muted.100">
-      There are no elements added to your {tabTitle}.
-    </Text>
-  );
+  // const renderEmpty = () => (
+  //   <Text color="muted.100">
+  //     There are no elements added to your {tabTitle}.
+  //   </Text>
+  // );
 
   return (
     <Box>
       {contentType === "books" && renderBooks()}
       {contentType === "reviews" && renderReviews()}
       {contentType === "users" && renderUsers()}
-      {contentType === "empty" && renderEmpty()}
+      {/* {contentType === "empty" && renderEmpty()} */}
     </Box>
   );
 }

@@ -44,7 +44,7 @@ export const BookGrid = ({
   if (!memoizedBooks.length) {
     return (
       <Box textAlign="center" py="12">
-        <Text fontSize="lg" color="fg.muted">
+        <Text fontSize="lg" color="muted.100">
           {emptyMessage}
         </Text>
       </Box>
