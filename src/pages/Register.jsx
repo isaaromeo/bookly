@@ -15,6 +15,7 @@ import { LuUserPlus } from "react-icons/lu";
 import styled from "styled-components";
 import { toaster } from "../components/ui/toaster.jsx";
 import { useBooklyApi } from "@/hooks/useBooklyApi";
+import { useAuth } from "../hooks/useAuth";
 
 const RegisterContainer = styled.div`
   max-width: 650px;
@@ -46,6 +47,9 @@ const Register = () => {
   const navigate = useNavigate();
   const { register, loading, error } = useBooklyApi.useRegister();
 
+  const { login: authLogin } = useAuth();
+  const { login, loading: loginLoading, error: errorLogin } = useBooklyApi.useLogin();
+  
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -101,24 +105,44 @@ const Register = () => {
       return;
     }
 
-
     try {
       const { confirmPassword, ...registerData } = formData;
-
+      //primero se hace el registro
       const result = await register(registerData);
 
-      if (result) {
-        toaster.create({
-          title: "Account Created!",
-          description: "Your account has been created successfully",
-          type: "success",
-        });
+      if (result && result.element) {
+        //login automatico
+        try{
+          const loginResult = await login({
+            email: formData.email,
+            password: formData.password
+          })
 
-        setTimeout(() => {
-          navigate("/login");
-        }, 1500);
-      }
-    } catch (err) {
+          console.log("login: ",loginResult);
+
+          if (loginResult && loginResult.user && loginResult.token) {
+            authLogin(loginResult.user, loginResult.token);
+
+            toaster.create({
+              title: "Welcome to Bookly!",
+              description: "Your account has been created and you're logged in!",
+              type: "success",
+             });
+
+            setTimeout(() => {
+              navigate(`/profile/${loginResult.user._id}`);
+            }, 1500);
+          }
+        
+        } catch(err){
+          toaster.create({
+            title: "Login Failed",
+            description: result?.message || "Error login into your account",
+            type: "error",
+          });
+        }
+
+    }} catch (err) {
       
       toaster.create({
         title: "Registration Failed",
@@ -126,7 +150,7 @@ const Register = () => {
         type: "error",
       });
     }
-    // }
+     
   };
 
   return (
@@ -170,7 +194,7 @@ const Register = () => {
                 <Input
                   name="email"
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder="example@email.com"
                   color="muted.100"
                   value={formData.email}
                   onChange={handleChange}
