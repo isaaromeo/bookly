@@ -29,6 +29,7 @@ import {
   LuTrendingUp,
   LuUserPlus,
   LuUsers,
+  LuUser,
   LuStar,
   LuMoveUpRight
 } from "react-icons/lu";
@@ -38,7 +39,7 @@ import headerImage2 from "../assets/images/headerUpdate.png";
 import FeatureCard from "../styledComponents/FeatureCard";
 import Stats from "../styledComponents/Stats";
 import styled from "styled-components";
-
+import { useAuth } from "../hooks/useAuth";
 
 const HeroSection = styled.section`
   background-image: linear-gradient(
@@ -110,27 +111,14 @@ const Home = () => {
   const { data: books, loading, error } = useBooklyApi.useBooks();
   const navigate = useNavigate();
 
+  const { user: authUser } = useAuth();
+
   //TODO filtrar de forma real
   const trendingBooksList = books?.slice(0, 8) || [];
 
-  let loading1 = true;
   const handleBookSelect = (book) => {
     navigate(`/books/${book._id}`);
   };
-
-
-  // if (loading1) {
-  //   return (
-  //     <Box
-  //       display="flex"
-  //       justifyContent="center"
-  //       alignItems="center"
-  //       minH="50vh"
-  //     >
-  //       <Spinner size="xl" />
-  //     </Box>
-  //   );
-  // }
 
 
   if (error) {
@@ -207,33 +195,63 @@ const Home = () => {
                   lg: "xl",
                 }}
               >
-                <LuBook style={{ marginRight: "8px" }} />
+                <LuBook  />
                 Explore Books
               </Button>
-              <Button
-                variant="solid"
-                bg="brand.50"
-                _hover={{
-                  boxShadow: "sm",
-                  borderColor: "brand.300",
-                }}
-                color="brand.600"
-                onClick={() => navigate("/register")}
-                size={{
-                  base: "xs",
-                  sm: "md",
-                  md: "md",
-                  lg: "lg",
-                }}
-                fontSize={{
-                  base: "xs",
-                  sm: "md",
-                  md: "md",
-                  lg: "xl",
-                }}
-              >
-                Join Community
-              </Button>
+              {!authUser && (
+                <Button
+                  variant="solid"
+                  bg="brand.50"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
+                  color="brand.600"
+                  onClick={() => navigate("/register")}
+                  size={{
+                    base: "xs",
+                    sm: "md",
+                    md: "md",
+                    lg: "lg",
+                  }}
+                  fontSize={{
+                    base: "xs",
+                    sm: "md",
+                    md: "md",
+                    lg: "xl",
+                  }}
+                >
+                  <LuUsers />
+                  Join Community
+                </Button>
+              )}
+              {authUser && (
+                <Button
+                  variant="solid"
+                  bg="brand.50"
+                  _hover={{
+                    boxShadow: "sm",
+                    borderColor: "brand.300",
+                  }}
+                  color="brand.600"
+                  onClick={() => navigate(`/profile/${authUser._id}`)}
+                  size={{
+                    base: "xs",
+                    sm: "md",
+                    md: "md",
+                    lg: "lg",
+                  }}
+                  fontSize={{
+                    base: "xs",
+                    sm: "md",
+                    md: "md",
+                    lg: "xl",
+                  }}
+                >
+                  <LuUser  />
+                  Go to Profile
+                </Button>
+              )}
             </HStack>
           </VStack>
         </Container>
@@ -276,7 +294,7 @@ const Home = () => {
             ))}
           </SimpleGrid>
         </VStack>
-         <VStack gap="6" mb="12" align="stretch">
+        <VStack gap="6" mb="12" align="stretch">
           <HStack justify="space-between">
             <Heading size="lg" color="muted.200">
               <LuTrendingUp
@@ -308,7 +326,7 @@ const Home = () => {
             loading={loading}
             onBookSelect={handleBookSelect}
           />
-        </VStack> 
+        </VStack>
 
         {/* <VStack gap="6" mb="12" align="stretch">
           <HStack justify="space-between">
@@ -370,11 +388,7 @@ const Home = () => {
           </Heading>
           <SimpleGrid columns={{ base: 1, md: 3 }} gap="6" width="100%">
             {userFeedback.map((feedback, index) => (
-              <Blockquote.Root
-                key={index}
-                
-                borderColor="brand.800"
-              >
+              <Blockquote.Root key={index} borderColor="brand.800">
                 <Card.Root
                   bg="brand.700"
                   borderColor="brand.900"
