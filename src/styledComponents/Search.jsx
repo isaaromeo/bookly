@@ -26,6 +26,7 @@ export const Search = () => {
       clearSearch();
     }
   });
+  
 
   const handleBookSelect = (book) => {
     navigate(`/books/${book._id}`);

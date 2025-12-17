@@ -12,9 +12,16 @@ import { LuBook } from "react-icons/lu";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const BookList = ({ books, loading = false }) => {
+export const BookList = ({ books, loading = false, onBookSelect }) => {
   const navigate = useNavigate();
   const memoizedBooks = useMemo(() => books || [], [books]);
+
+  const handleBookClick = (book) => {
+    if (onBookSelect) {
+      onBookSelect(book);
+    }
+    navigate(`/books/${book._id}`);
+  };
 
   return (
     <Card.Root
@@ -45,9 +52,7 @@ export const BookList = ({ books, loading = false }) => {
                 cursor="pointer"
                 border="solid 2px"
                 borderColor="brand.700"
-                onClick={() => {
-                  navigate(`/books/${book._id}`);
-                }}
+                onClick={() => handleBookClick(book)}
                 bg="brand.900"
                 _hover={{
                   bg: "brand.800",
