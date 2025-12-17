@@ -53,44 +53,67 @@ const BookCoverSkeleton = () => (
       height={{ base: "300px", sm: "350px", md: "400px" }}
       borderRadius="lg"
       mb="4"
+      bg="brand.800"
     />
-    <Skeleton height="4" width="80%" />
-    <Skeleton height="3" width="60%" mt="2" />
+    <Skeleton height="4" width="80%" bg="brand.700" />
+    <Skeleton height="3" width="60%" mt="2" bg="brand.700" />
   </Box>
 );
 
 const BookInfoSkeleton = () => (
   <Box flex="1">
     <VStack gap="4" align="start">
-      <Skeleton height={{ base: "6", sm: "7", md: "8" }} width="80%" />
-      <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="60%" />
+      <Skeleton
+        height={{ base: "6", sm: "7", md: "8" }}
+        width="80%"
+        bg="brand.800"
+      />
+      <Skeleton
+        height={{ base: "5", sm: "6", md: "6" }}
+        width="60%"
+        bg="muted.300"
+      />
       <HStack>
-        <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="120px" />
-        <Skeleton height={{ base: "4", sm: "4", md: "4" }} width="40px" />
+        <Skeleton
+          height={{ base: "5", sm: "6", md: "6" }}
+          width="120px"
+          bg="brand.600"
+        />
+        <Skeleton
+          height={{ base: "4", sm: "4", md: "4" }}
+          width="40px"
+          bg="brand.600"
+        />
       </HStack>
-      <SkeletonText noOfLines={{ base: 3, sm: 4, md: 4 }} spacing="3" />
-      <HStack gap="4" flexWrap="wrap">
-        <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="100px" />
-        <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="120px" />
-        <Skeleton height={{ base: "5", sm: "6", md: "6" }} width="80px" />
-      </HStack>
-      <HStack gap="4" flexWrap="wrap">
-        <Skeleton height={{ base: "8", sm: "9", md: "10" }} width="140px" />
-        <Skeleton height={{ base: "8", sm: "9", md: "10" }} width="140px" />
-      </HStack>
+      <Card.Root width="100%" borderColor="brand.900">
+        <Card.Body bg="brand.900">
+          <VStack gap="3" align="start">
+            <HStack justify="space-between" width="100%">
+              <Skeleton height="5" width="100%" bg="brand.700" />
+            </HStack>
+            <SkeletonText
+              noOfLines={3}
+              spacing="2"
+              width="100%"
+              bg="muted.300"
+            />
+            <Skeleton height="3" width="40%" bg="brand.700" />
+          </VStack>
+        </Card.Body>
+      </Card.Root>
     </VStack>
   </Box>
 );
 
 const ReviewSkeleton = () => (
-  <Card.Root width="100%">
-    <Card.Body>
+  <Card.Root width="100%" borderColor="brand.900">
+    <Card.Body bg="brand.900">
       <VStack gap="3" align="start">
         <HStack justify="space-between" width="100%">
-          <Skeleton height="5" width="100%" />
+          <Skeleton height="5" width="100%" bg="brand.700" />
         </HStack>
-        <SkeletonText noOfLines={3} spacing="2" width="100%" />
-        <Skeleton height="3" width="40%" />
+        <SkeletonText noOfLines={3} spacing="2" width="100%" bg="muted.300" />
+        <Skeleton height="3" width="40%" bg="brand.700" />
       </VStack>
     </Card.Body>
   </Card.Root>
@@ -105,7 +128,7 @@ const BookDetail = () => {
     content: "",
     title: "",
   });
-
+ 
   const [activeTab, setActiveTab] = useState("reviews");
   const [isSinopsisExpanded, setIsSinopsisExpanded] = useState(false);
 
@@ -220,19 +243,19 @@ const BookDetail = () => {
       if (result && result.user) {
         console.log("Updated user from result:", result.user);
 
-        // Actualiza el contexto de autenticación
+        //actualiza el contexto de autenticación
         updateUser(result.user);
 
-        // Actualiza localStorage
+        //actauliza localStorage
         const token = localStorage.getItem("token");
         if (token) {
           localStorage.setItem("user", JSON.stringify(result.user));
         }
 
-        // Actualiza estado local
+        //actualiza estado local
         setIsInLibrary(result.isInLibrary || result.isInLibrary === undefined);
 
-        // Si se añadió a library, quitar de TBR
+        //si se añade a library, quitar de TBR
         if (result.isInLibrary) {
           setIsInTBR(false);
         }
@@ -280,16 +303,16 @@ const BookDetail = () => {
       const result = await addToTBR(authUser._id, id);
 
       if (result && result.user) {
-        // Actualiza el contexto de autenticación
+        //actualiza el contexto de autenticación
         updateUser(result.user);
 
-        // Actualiza localStorage
+        //actualiza localStorage
         const token = localStorage.getItem("token");
         if (token) {
           localStorage.setItem("user", JSON.stringify(result.user));
         }
 
-        // Actualiza estado local
+        //actualiza estado local
         setIsInTBR(result.isInTBR || result.isInTBR === undefined);
       }
 

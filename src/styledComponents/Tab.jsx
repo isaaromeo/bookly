@@ -412,150 +412,158 @@ export const Tab = ({ content, tabTitle, contentType, context = "profile" }) => 
             </Box>
           );
     }
-    
-    <VStack gap="4" align="stretch">
-      
-      {localContent?.map((user) => {
+    return (
+      <VStack gap="4" align="stretch">
+        {localContent?.map((user) => {
           const isFollowing = getIsFollowing(user._id);
           const isOwnProfile = authUser?._id === user._id;
-        return (
-          <Card.Root key={user._id} width="100%" borderColor="black" backgroundColor="black" borderRadius="20px">
-            <Card.Body
-              padding={{
-                base: "1rem",
-                sm: "1rem",
-                md: "1.5rem",
-                lg: "1.5rem",
-              }}
-
+          return (
+            <Card.Root
+              key={user._id}
+              width="100%"
+              borderColor="black"
+              backgroundColor="black"
+              borderRadius="20px"
             >
-              <HStack justify="space-between" align="center">
-                <HStack
-                  gap="4"
-                  flex="1"
-                  cursor="pointer"
-                  onClick={() => handleUserClick(user._id)}
-                >
-                  <Avatar.Root size="md">
-                    <Avatar.Fallback name={user.username} />
-                    {user.profilePic && <Avatar.Image src={user.profilePic} />}
-                  </Avatar.Root>
-                  <VStack align="start" gap="1">
-                    <Text
-                      fontWeight="semibold"
-                      fontSize={{
-                        base: "sm",
-                        sm: "sm",
-                        md: "md",
-                        lg: "md",
-                      }}
-                      color="muted.200"
-                    >
-                      {user.username}
-                    </Text>
-                    <Text
-                      fontSize={{
-                        base: "xs",
-                        sm: "xs",
-                        md: "sm",
-                        lg: "sm",
-                      }}
-                      color="muted.100"
-                    >
-                      {user.email}
-                    </Text>
-                    <HStack gap="4">
-                      <Text
-                        fontSize={{
-                          base: "0.7rem",
-                          sm: "0.7rem",
-                          md: "xs",
-                          lg: "xs",
-                        }}
-                        color="brand.100"
-                      >
-                        {user.followers?.length || 0} followers
-                      </Text>
-                      <Text
-                        fontSize={{
-                          base: "0.7rem",
-                          sm: "0.7rem",
-                          md: "xs",
-                          lg: "xs",
-                        }}
-                        color="brand.100"
-                      >
-                        {user.following?.length || 0} following
-                      </Text>
-                    </HStack>
-                  </VStack>
-                </HStack>
-
-                {!isOwnProfile && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    bg={isFollowing ? "brand.800" : "brand.600"}
-                    _focus={{
-                      outline: "none !important",
-                    }}
-                    onClick={() => handleFollow(user._id)}
-                    _hover={{
-                      boxShadow: "sm",
-                      borderColor: "brand.300",
-                    }}
-                    maxWidth={{
-                      base: "20px",
-                      sm: "100px",
-                      md: "150px",
-                      lg: "150px",
-                    }}
-                    maxHeight={{
-                      base: "30px",
-                      sm: "150px",
-                      md: "150px",
-                      lg: "150px",
-                    }}
-                    color="muted.200"
+              <Card.Body
+                padding={{
+                  base: "1rem",
+                  sm: "1rem",
+                  md: "1.5rem",
+                  lg: "1.5rem",
+                }}
+              >
+                <HStack justify="space-between" align="center">
+                  <HStack
+                    gap="4"
+                    flex="1"
+                    cursor="pointer"
+                    onClick={() => handleUserClick(user._id)}
                   >
-                    <Box
-                      as={isFollowing ? FaUserCheck : FaUserPlus}
-                      width={{
-                        base: "14px",
-                        sm: "20px",
-                        md: "20px",
-                        lg: "20px",
-                      }}
-                      height={{
-                        base: "16px",
-                        sm: "20px",
-                        md: "20px",
-                        lg: "20px",
-                      }}
-                    />
-                    {
+                    <Avatar.Root size="md">
+                      <Avatar.Fallback name={user.username} />
+                      {user.profilePic && (
+                        <Avatar.Image src={user.profilePic} />
+                      )}
+                    </Avatar.Root>
+                    <VStack align="start" gap="1">
+                      <Text
+                        fontWeight="semibold"
+                        fontSize={{
+                          base: "sm",
+                          sm: "sm",
+                          md: "md",
+                          lg: "md",
+                        }}
+                        color="muted.200"
+                      >
+                        {user.username}
+                      </Text>
                       <Text
                         fontSize={{
                           base: "xs",
                           sm: "xs",
-                          md: "md",
-                          lg: "md",
+                          md: "sm",
+                          lg: "sm",
                         }}
-                        display={{ base: "none", sm: "block" }}
+                        color="muted.100"
                       >
-                        {isFollowing ? "Following" : "Follow"}
+                        {user.email}
                       </Text>
-                    }
-                    {/* {isFollowing ? "Following" : "Follow"} */}
-                    {/* {isFollowing ? <FaUserCheck /> : <FaUserPlus />} */}
-                  </Button>
-                )}
-              </HStack>
-            </Card.Body>
-          </Card.Root>
-        );
-      })}
-    </VStack>
+                      <HStack gap="4">
+                        <Text
+                          fontSize={{
+                            base: "0.7rem",
+                            sm: "0.7rem",
+                            md: "xs",
+                            lg: "xs",
+                          }}
+                          color="brand.100"
+                        >
+                          {user.followers?.length || 0} followers
+                        </Text>
+                        <Text
+                          fontSize={{
+                            base: "0.7rem",
+                            sm: "0.7rem",
+                            md: "xs",
+                            lg: "xs",
+                          }}
+                          color="brand.100"
+                        >
+                          {user.following?.length || 0} following
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  </HStack>
+
+                  {!isOwnProfile && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      bg={isFollowing ? "brand.800" : "brand.600"}
+                      _focus={{
+                        outline: "none !important",
+                      }}
+                      onClick={() => handleFollow(user._id)}
+                      _hover={{
+                        boxShadow: "sm",
+                        borderColor: "brand.300",
+                      }}
+                      maxWidth={{
+                        base: "20px",
+                        sm: "100px",
+                        md: "150px",
+                        lg: "150px",
+                      }}
+                      maxHeight={{
+                        base: "30px",
+                        sm: "150px",
+                        md: "150px",
+                        lg: "150px",
+                      }}
+                      color="muted.200"
+                    >
+                      <Box
+                        as={isFollowing ? FaUserCheck : FaUserPlus}
+                        width={{
+                          base: "14px",
+                          sm: "20px",
+                          md: "20px",
+                          lg: "20px",
+                        }}
+                        height={{
+                          base: "16px",
+                          sm: "20px",
+                          md: "20px",
+                          lg: "20px",
+                        }}
+                      />
+                      {
+                        <Text
+                          fontSize={{
+                            base: "xs",
+                            sm: "xs",
+                            md: "md",
+                            lg: "md",
+                          }}
+                          display={{ base: "none", sm: "block" }}
+                        >
+                          {isFollowing ? "Following" : "Follow"}
+                        </Text>
+                      }
+                      {/* {isFollowing ? "Following" : "Follow"} */}
+                      {/* {isFollowing ? <FaUserCheck /> : <FaUserPlus />} */}
+                    </Button>
+                  )}
+                </HStack>
+              </Card.Body>
+            </Card.Root>
+          );
+        })}
+      </VStack>
+    );
+    
   };
 
 
