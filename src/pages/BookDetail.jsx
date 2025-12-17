@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -98,7 +98,7 @@ const ReviewSkeleton = () => (
 
 const BookDetail = () => {
   const { id } = useParams();
-  const { user: authUser, login } = useAuth();
+  const { user: authUser, login, updateUser } = useAuth();
 
   const [newReview, setNewReview] = useState({
     rating: 5,
@@ -144,6 +144,23 @@ const BookDetail = () => {
     return book.sinopsis.slice(0, 200) + "...";
   };
 
+  const [isInLibrary, setIsInLibrary] = useState(false);
+  const [isInTBR, setIsInTBR] = useState(false);
+
+  useEffect(() => {
+  if (authUser && book) {
+    const inLibrary = authUser.library?.some(
+      libBook => libBook._id === book._id || libBook === book._id
+    );
+    const inTBR = authUser.tbr?.some(
+      tbrBook => tbrBook._id === book._id || tbrBook === book._id
+    );
+    
+    setIsInLibrary(!!inLibrary);
+    setIsInTBR(!!inTBR);
+  }
+}, [authUser, book]);
+
   const handleSubmitReview = useCallback(async () => {
     if (!authUser) {
       toaster.create({
@@ -188,39 +205,66 @@ const BookDetail = () => {
 
   const handleAddToLibrary = useCallback(async () => {
     if (!authUser) {
-      
       toaster.create({
         title: "Authentication Required",
         description: "Please log in to add books to your library",
         type: "error",
       });
       return;
-    
     }
 
     try {
       const result = await addToLibrary(authUser._id, id);
+      console.log("Toggle library result:", result);
 
       if (result && result.user) {
+        console.log("Updated user from result:", result.user);
+
+        // Actualiza el contexto de autenticación
+        updateUser(result.user);
+
+        // Actualiza localStorage
         const token = localStorage.getItem("token");
-        login(result.user, token);
+        if (token) {
+          localStorage.setItem("user", JSON.stringify(result.user));
+        }
+
+        // Actualiza estado local
+        setIsInLibrary(result.isInLibrary || result.isInLibrary === undefined);
+
+        // Si se añadió a library, quitar de TBR
+        if (result.isInLibrary) {
+          setIsInTBR(false);
+        }
+
+        console.log(
+          "New states: isInLibrary=",
+          result.isInLibrary,
+          "isInTBR=",
+          result.isInTBR || false
+        );
       }
 
       toaster.create({
-        title: "Book added successfully",
-        description: "Book added to your library!",
+        title: result.isInLibrary
+          ? "Added to Library!"
+          : "Removed from Library",
+        description:
+          result.message ||
+          (result.isInLibrary
+            ? "Book added to your library!"
+            : "Book removed from your library"),
         type: "success",
       });
     } catch (err) {
-      console.error("Error adding to library:", err);
+      console.error("Error toggling library:", err);
       toaster.create({
-        title: "Error adding to library",
-        description: `Error: ${err.message}`,
+        title: "Error",
+        description: err.message || "Error managing your library",
         type: "error",
       });
-      
     }
-  }, [authUser, id, addToLibrary, login]);
+  }, [authUser, id, addToLibrary, updateUser]);
 
   const handleAddToTBR = useCallback(async () => {
     if (!authUser) {
@@ -233,21 +277,40 @@ const BookDetail = () => {
     }
 
     try {
-      await addToTBR(authUser._id, id);
+      const result = await addToTBR(authUser._id, id);
+
+      if (result && result.user) {
+        // Actualiza el contexto de autenticación
+        updateUser(result.user);
+
+        // Actualiza localStorage
+        const token = localStorage.getItem("token");
+        if (token) {
+          localStorage.setItem("user", JSON.stringify(result.user));
+        }
+
+        // Actualiza estado local
+        setIsInTBR(result.isInTBR || result.isInTBR === undefined);
+      }
+
       toaster.create({
-        title: "Book added successfully",
-        description: "Book added to your TBR!",
+        title: result.isInTBR ? "Added to TBR!" : "Removed from TBR",
+        description:
+          result.message ||
+          (result.isInTBR
+            ? "Book added to your TBR!"
+            : "Book removed from your TBR"),
         type: "success",
       });
     } catch (err) {
-      console.error("Error adding to TBR:", err);
+      console.error("Error toggling TBR:", err);
       toaster.create({
-        title: "Error adding to TBR",
-        description: `Error: ${err.message}`,
+        title: "Error",
+        description: err.message || "Error managing your TBR",
         type: "error",
       });
     }
-  }, [authUser, id, addToTBR]);
+  }, [authUser, id, addToTBR, updateUser]);
 
   if (loadBook) {
     return (
@@ -321,12 +384,12 @@ const BookDetail = () => {
             justifyContent="center"
           >
             <Button
-              bg="brand.800"
-              color="brand.100"
+              bg={isInLibrary ? "secondary.900" : "brand.800"}
+              color={isInLibrary ? "secondary.100" : "brand.100"}
               onClick={handleAddToLibrary}
               _hover={{
                 boxShadow: "sm",
-                borderColor: "brand.300",
+                borderColor: isInLibrary ? "secondary.300" : "brand.300",
               }}
               size={{ base: "sm", sm: "sm", md: "sm", lg: "md" }}
               width={{ base: "100%", sm: "auto" }}
@@ -360,17 +423,18 @@ const BookDetail = () => {
                   lg: "block",
                 }}
               >
-                Add to Library
+                {isInLibrary ? "In Library" : "Add to Library"}
               </Text>
             </Button>
             <Button
-              bg="brand.800"
-              color="brand.100"
+              display={isInLibrary ? "none" : "flex"}
+              bg={isInTBR ? "primary.900" : "brand.800"}
+              color={isInTBR ? "primary.100" : "brand.100"}
               variant="outline"
               onClick={handleAddToTBR}
               _hover={{
                 boxShadow: "sm",
-                borderColor: "brand.300",
+                borderColor: isInTBR ? "primary.300" : "brand.300",
               }}
               size={{ base: "sm", sm: "sm", md: "sm", lg: "md" }}
               width={{ base: "100%", sm: "auto" }}
@@ -404,7 +468,7 @@ const BookDetail = () => {
                   lg: "block",
                 }}
               >
-                Add to TBR
+                {isInTBR ? "In TBR" : "Add to TBR"}
               </Text>
             </Button>
           </HStack>
@@ -465,7 +529,7 @@ const BookDetail = () => {
               </Text>
             </HStack>
 
-             <Text
+            <Text
               fontSize={{
                 base: "md",
                 sm: "sm",
@@ -483,7 +547,7 @@ const BookDetail = () => {
               color="muted.200"
             >
               {book.sinopsis}
-            </Text> 
+            </Text>
             <Box
               width="100%"
               textAlign="left"
@@ -574,12 +638,12 @@ const BookDetail = () => {
               paddingTop="1.5rem"
             >
               <Button
-                bg="brand.800"
-                color="brand.100"
+                bg={isInLibrary ? "secondary.900" : "brand.800"}
+                color={isInLibrary ? "secondary.100" : "brand.100"}
                 onClick={handleAddToLibrary}
                 _hover={{
                   boxShadow: "sm",
-                  borderColor: "brand.300",
+                  borderColor: isInLibrary ? "secondary.300" : "brand.300",
                 }}
                 size={{ base: "sm", sm: "sm", md: "sm", lg: "md" }}
                 width={{ base: "100%", sm: "auto" }}
@@ -620,17 +684,18 @@ const BookDetail = () => {
                     lg: "lg",
                   }}
                 >
-                  Add to Library
+                  {isInLibrary ? "In Library" : "Add to Library"}
                 </Text>
               </Button>
               <Button
-                bg="brand.800"
-                color="brand.100"
+                display={isInLibrary ? "none" : "flex"}
+                bg={isInTBR ? "primary.900" : "brand.800"}
+                color={isInTBR ? "primary.100" : "brand.100"}
                 variant="outline"
                 onClick={handleAddToTBR}
                 _hover={{
                   boxShadow: "sm",
-                  borderColor: "brand.300",
+                  borderColor: isInTBR ? "primary.300" : "brand.300",
                 }}
                 size={{ base: "sm", sm: "sm", md: "sm", lg: "md" }}
                 width={{ base: "100%", sm: "auto" }}
@@ -671,7 +736,7 @@ const BookDetail = () => {
                     lg: "lg",
                   }}
                 >
-                  Add to TBR
+                  {isInTBR ? "In TBR" : "Add to TBR"}
                 </Text>
               </Button>
             </HStack>
@@ -747,9 +812,7 @@ const BookDetail = () => {
               />
             ) : (
               <Box textAlign="center" padding="8">
-                <Text color="muted.100">
-                  No reviews yet. Be the first to review this book!
-                </Text>
+                <Text color="muted.100">No reviews yet.</Text>
                 {authUser && (
                   <Button
                     mt="4"
